@@ -4,11 +4,20 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Social;
+use App\Models\User;
+use App\Services\FirebaseService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class SocialController extends Controller
 {
+    protected $firebase;
+
+    public function __construct(FirebaseService $firebase)
+    {
+        $this->firebase = $firebase;
+    }
+
     public function index()
     {
         $socials = Social::latest()->get();
@@ -20,11 +29,38 @@ class SocialController extends Controller
         return view('pages.socials.create');
     }
 
+    // public function store(Request $request)
+    // {
+    //     $request->validate(
+    //         [
+    //             'title' => 'required|string|max:255',
+    //             'file' => 'required|file|mimes:pdf|max:10240',
+    //         ],
+    //         [
+    //             'title.required' => 'Judul wajib diisi.',
+    //             'title.max' => 'Judul maksimal 255 karakter.',
+    //             'file.required' => 'File PDF wajib diunggah.',
+    //             'file.mimes' => 'File harus berupa PDF.',
+    //             'file.max' => 'File maksimal 10MB.',
+    //         ]
+    //     );
+
+    //     $filePath = $request->file('file')->store('social', 'public');
+
+    //     Social::create([
+    //         'title' => $request->title,
+    //         'file_path' => $filePath,
+    //     ]);
+
+    //     return redirect()->route('socials.create')->with('success', 'Program sosial berhasil dibuat.');
+    // }
+
     public function store(Request $request)
     {
         $request->validate(
             [
                 'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
                 'file' => 'required|file|mimes:pdf|max:10240',
             ],
             [
@@ -38,12 +74,24 @@ class SocialController extends Controller
 
         $filePath = $request->file('file')->store('social', 'public');
 
-        Social::create([
+        $social = Social::create([
             'title' => $request->title,
+            'description' => $request->description,
             'file_path' => $filePath,
         ]);
 
-        return redirect()->route('socials.create')->with('success', 'Program sosial berhasil dibuat.');
+        // ---------- KIRIM NOTIF KE SEMUA USER ----------
+        $tokens = User::whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
+
+        if (!empty($tokens)) {
+            $this->firebase->sendToTokens(
+                $tokens,
+                'Program Sosial', // TITLE
+                $social->title // BODY
+            );
+        }
+
+        return redirect()->route('socials.create')->with('success', 'Program sosial berhasil dibuat dan notifikasi dikirim.');
     }
 
     public function show(Social $social)
@@ -60,6 +108,7 @@ class SocialController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'file' => 'nullable|file|mimes:pdf|max:10240',
         ], [
             'title.required' => 'Judul wajib diisi.',
@@ -75,6 +124,7 @@ class SocialController extends Controller
         }
 
         $social->title = $request->title;
+        $social->description = $request->description;
         $social->save();
 
         return redirect()->route('socials.index')->with('success', 'Program sosial berhasil diperbarui.');

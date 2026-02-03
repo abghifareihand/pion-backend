@@ -56,37 +56,59 @@
                         <form method="POST" action="{{ route('votes.store') }}">
                             @csrf
 
-                            <!-- Input Title -->
-                            <div class="mb-3">
-                                <label>Title Vote</label>
-                                <input class="form-control" type="text" name="title" value="{{ old('title') }}"
-                                    required />
-                            </div>
-
-                            {{-- Select Candidates --}}
-                            <div class="mb-3">
-                                <label>Select Candidates</label>
-                                <div class="row">
-                                    @foreach ($users as $user)
-                                        <div class="col-md-6">
-                                            <label class="d-block" for="user_{{ $user->id }}">
-                                                <input class="checkbox_animated" id="user_{{ $user->id }}"
-                                                    type="checkbox" name="options[]" value="{{ $user->id }}"
-                                                    {{ in_array($user->id, old('options', [])) ? 'checked' : '' }}>
-                                                {{ $user->name }}
-                                            </label>
-                                        </div>
-                                    @endforeach
+                            {{-- Date Period --}}
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label>Date Period</label>
+                                        <input id="vote-period" class="datepicker-here form-control digits" type="text"
+                                            name="period" data-range="true" data-multiple-dates-separator=" - "
+                                            data-language="en" autocomplete="off" />
+                                    </div>
                                 </div>
                             </div>
 
-                            {{-- Date Period --}}
-                            <div class="mb-3">
-                                <label>Date Period</label>
-                                <input id="vote-period" class="datepicker-here form-control digits" type="text"
-                                    name="period" data-range="true" data-multiple-dates-separator=" - " data-language="en"
-                                    autocomplete="off" />
+                            <!-- Input Title -->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label>Title</label>
+                                        <input class="form-control" type="text" name="title"
+                                            value="{{ old('title') }}" required />
+                                    </div>
+                                </div>
+                            </div>
 
+                            <!-- Input Description -->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label>Description</label>
+                                        <textarea class="form-control" name="description" rows="3">{{ old('description') }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            {{-- Select Candidates --}}
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label>Select Candidates</label>
+                                        <div class="row">
+                                            @foreach ($users as $user)
+                                                <div class="col-md-6">
+                                                    <label class="d-block" for="user_{{ $user->id }}">
+                                                        <input class="checkbox_animated" id="user_{{ $user->id }}"
+                                                            type="checkbox" name="options[]" value="{{ $user->id }}"
+                                                            {{ in_array($user->id, old('options', [])) ? 'checked' : '' }}>
+                                                        {{ $user->name }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
 

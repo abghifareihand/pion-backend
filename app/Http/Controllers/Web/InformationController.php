@@ -61,6 +61,7 @@ class InformationController extends Controller
         $request->validate(
             [
                 'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
                 'file' => 'required|file|mimes:pdf|max:10240',
             ],
             [
@@ -76,6 +77,7 @@ class InformationController extends Controller
 
         $information = Information::create([
             'title' => $request->title,
+            'description' => $request->description,
             'file_path' => $filePath,
         ]);
 
@@ -107,6 +109,7 @@ class InformationController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'file' => 'nullable|file|mimes:pdf|max:10240',
         ], [
             'title.required' => 'Judul wajib diisi.',
@@ -122,6 +125,7 @@ class InformationController extends Controller
         }
 
         $information->title = $request->title;
+        $information->description = $request->description;
         $information->save();
 
         return redirect()->route('informations.index')->with('success', 'Informasi berhasil diperbarui.');

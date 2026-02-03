@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('socials', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('file_path'); // PDF
+            $table->text('description')->nullable();
+            $table->string('file_path');
             $table->timestamps();
         });
     }

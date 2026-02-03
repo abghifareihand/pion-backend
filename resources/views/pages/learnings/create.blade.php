@@ -63,7 +63,18 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label>Title</label>
-                                        <input class="form-control" type="text" name="title" value="{{ old('title') }}" required />
+                                        <input class="form-control" type="text" name="title"
+                                            value="{{ old('title') }}" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Input Description -->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label>Description</label>
+                                        <textarea class="form-control" name="description" rows="3">{{ old('description') }}</textarea>
                                     </div>
                                 </div>
                             </div>

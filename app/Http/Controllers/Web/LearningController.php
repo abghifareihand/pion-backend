@@ -61,6 +61,7 @@ class LearningController extends Controller
         $request->validate(
             [
                 'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
                 'file' => 'required|file|mimes:pdf|max:10240',
             ],
             [
@@ -76,6 +77,7 @@ class LearningController extends Controller
 
         $learning = Learning::create([
             'title' => $request->title,
+            'description' => $request->description,
             'file_path' => $filePath,
         ]);
 
@@ -107,6 +109,7 @@ class LearningController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'file' => 'nullable|file|mimes:pdf|max:10240',
         ], [
             'title.required' => 'Judul wajib diisi.',
@@ -122,6 +125,7 @@ class LearningController extends Controller
         }
 
         $learning->title = $request->title;
+        $learning->description = $request->description;
         $learning->save();
 
         return redirect()->route('learnings.index')->with('success', 'Materi belajar berhasil diperbarui.');

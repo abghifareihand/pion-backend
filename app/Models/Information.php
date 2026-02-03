@@ -8,6 +8,7 @@ class Information extends Model
 {
     protected $fillable = [
         'title',
+        'description',
         'file_path'
     ];
 }

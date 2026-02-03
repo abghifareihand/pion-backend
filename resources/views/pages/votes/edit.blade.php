@@ -62,46 +62,71 @@
                             @csrf
                             @method('PUT')
 
-                            <!-- Title -->
-                            <div class="mb-3">
-                                <label>Title Vote</label>
-                                <input class="form-control" type="text" name="title"
-                                    value="{{ old('title', $vote->title) }}" required />
-                            </div>
-
-                            <!-- Candidates (read-only) -->
-                            <div class="mb-3">
-                                <label>Candidates</label>
-                                <div class="form-control-plaintext py-0">
-                                    @foreach ($vote->options as $option)
-                                        {{ $loop->iteration }}. {{ $option->label }}<br>
-                                    @endforeach
+                            <!-- Date Period -->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label>Period</label>
+                                        <input id="vote-period" class="datepicker-here form-control digits" type="text"
+                                            name="period" value="{{ $period }}" data-range="true"
+                                            data-multiple-dates-separator=" - " data-language="en" autocomplete="off" />
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Date Period -->
-                            <div class="mb-3">
-                                <label>Period</label>
-                                <input id="vote-period" class="datepicker-here form-control digits" type="text"
-                                    name="period" value="{{ $period }}" data-range="true"
-                                    data-multiple-dates-separator=" - " data-language="en" autocomplete="off" />
+                            <!-- Title -->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label>Title</label>
+                                        <input class="form-control" type="text" name="title"
+                                            value="{{ old('title', $vote->title) }}" required />
+                                    </div>
+                                </div>
                             </div>
 
+                            <!-- Input Description -->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label>Description</label>
+                                        <textarea class="form-control" name="description" rows="3">{{ old('description', $vote->description) }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Candidates (read-only) -->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label>Candidates</label>
+                                        <div class="form-control-plaintext py-0">
+                                            @foreach ($vote->options as $option)
+                                                {{ $loop->iteration }}. {{ $option->label }}<br>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Status -->
-                            <div class="mb-3">
-                                <label>Status</label>
-                                <div class="media-body">
-                                    <label class="switch">
-                                        <!-- hidden input supaya selalu ada value -->
-                                        <input type="hidden" name="is_active" value="0">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label>Status</label>
+                                        <div class="media-body">
+                                            <label class="switch">
+                                                <!-- hidden input supaya selalu ada value -->
+                                                <input type="hidden" name="is_active" value="0">
 
-                                        <!-- checkbox toggle -->
-                                        <input type="checkbox" name="is_active" value="1"
-                                            {{ $vote->is_active ? 'checked' : '' }}>
+                                                <!-- checkbox toggle -->
+                                                <input type="checkbox" name="is_active" value="1"
+                                                    {{ $vote->is_active ? 'checked' : '' }}>
 
-                                        <span class="switch-state"></span>
-                                    </label>
+                                                <span class="switch-state"></span>
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

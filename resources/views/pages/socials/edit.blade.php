@@ -69,6 +69,16 @@
                                 </div>
                             </div>
 
+                            <!-- Input Description -->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label>Description</label>
+                                        <textarea class="form-control" name="description" rows="3">{{ old('description', $social->description) }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Current File -->
                             <div class="row">
                                 <div class="col">

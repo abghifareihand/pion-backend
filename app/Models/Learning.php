@@ -8,6 +8,7 @@ class Learning extends Model
 {
     protected $fillable = [
         'title',
+        'description',
         'file_path'
     ];
 }
