@@ -6,6 +6,7 @@
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/date-picker.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/daterange-picker.css') }}">
 @endpush
 
 @section('content')
@@ -63,7 +64,7 @@
                             @method('PUT')
 
                             <!-- Date Period -->
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
                                         <label>Period</label>
@@ -72,7 +73,16 @@
                                             data-multiple-dates-separator=" - " data-language="en" autocomplete="off" />
                                     </div>
                                 </div>
+                            </div> --}}
+
+
+                            <!-- Date Period 2 -->
+                            <div class="mb-3">
+                                <label>Date Period</label>
+                                <input class="form-control digits" type="text" name="period" id="vote-period2"
+                                    value="{{ $period }}" autocomplete="off" required />
                             </div>
+
 
                             <!-- Title -->
                             <div class="row">
@@ -176,6 +186,58 @@
                 $('#vote-period').val(
                     "{{ $vote->start_at->format('d/m/Y') }} - {{ $vote->end_at->format('d/m/Y') }}"
                 );
+            });
+        </script>
+
+        <script src="{{ asset('assets/js/datepicker/daterange-picker/moment.min.js') }}"></script>
+        <script src="{{ asset('assets/js/datepicker/daterange-picker/daterangepicker.js') }}"></script>
+        <script src="{{ asset('assets/js/datepicker/daterange-picker/daterange-picker.custom.js') }}"></script>
+        <script>
+            $(function() {
+                const $input = $('#vote-period2');
+
+                // ambil value awal dari blade (dd/mm/yyyy - dd/mm/yyyy)
+                const initialValue = "{{ $period }}";
+
+                let startDate = null;
+                let endDate = null;
+
+                if (initialValue) {
+                    const parts = initialValue.split(' - ');
+                    if (parts.length === 2) {
+                        startDate = moment(parts[0], 'DD/MM/YYYY');
+                        endDate = moment(parts[1], 'DD/MM/YYYY');
+                    }
+                }
+
+                $input.daterangepicker({
+                    autoUpdateInput: false,
+                    startDate: startDate,
+                    endDate: endDate,
+                    locale: {
+                        format: 'DD/MM/YYYY',
+                        separator: ' - '
+                    }
+                });
+
+                // tampilkan value awal (penting)
+                if (startDate && endDate) {
+                    $input.val(startDate.format('DD/MM/YYYY') + ' - ' + endDate.format('DD/MM/YYYY'));
+                }
+
+                // saat user apply
+                $input.on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(
+                        picker.startDate.format('DD/MM/YYYY') +
+                        ' - ' +
+                        picker.endDate.format('DD/MM/YYYY')
+                    );
+                });
+
+                // blok input manual
+                $input.on('keydown paste', function(e) {
+                    e.preventDefault();
+                });
             });
         </script>
     @endpush

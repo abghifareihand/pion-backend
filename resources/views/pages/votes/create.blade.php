@@ -6,6 +6,7 @@
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/date-picker.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/daterange-picker.css') }}">
 @endpush
 
 @section('content')
@@ -56,8 +57,8 @@
                         <form method="POST" action="{{ route('votes.store') }}">
                             @csrf
 
-                            {{-- Date Period --}}
-                            <div class="row">
+                            <!-- Date Period -->
+                            {{-- <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
                                         <label>Date Period</label>
@@ -66,7 +67,15 @@
                                             data-language="en" autocomplete="off" />
                                     </div>
                                 </div>
+                            </div> --}}
+
+                            <!-- Date Period 2 -->
+                            <div class="mb-3">
+                                <label>Date Period</label>
+                                <input class="form-control digits" type="text" name="period" id="vote-period2"
+                                    autocomplete="off" required />
                             </div>
+
 
                             <!-- Input Title -->
                             <div class="row">
@@ -134,13 +143,44 @@
     @push('scripts')
         <script src="{{ asset('assets/js/datepicker/date-picker/datepicker.js') }}"></script>
         <script src="{{ asset('assets/js/datepicker/date-picker/datepicker.en.js') }}"></script>
-
         <script>
             $('#vote-period').datepicker({
                 range: true,
                 multipleDatesSeparator: ' - ',
                 language: 'en',
                 dateFormat: 'dd/mm/yyyy'
+            });
+        </script>
+
+        <script src="{{ asset('assets/js/datepicker/daterange-picker/moment.min.js') }}"></script>
+        <script src="{{ asset('assets/js/datepicker/daterange-picker/daterangepicker.js') }}"></script>
+        <script src="{{ asset('assets/js/datepicker/daterange-picker/daterange-picker.custom.js') }}"></script>
+        <script>
+            $(function() {
+                const $input = $('#vote-period2');
+
+                // Init daterangepicker
+                $input.daterangepicker({
+                    autoUpdateInput: false,
+                    locale: {
+                        format: 'DD/MM/YYYY',
+                        separator: ' - '
+                    }
+                });
+
+                // Set value saat apply
+                $input.on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(
+                        picker.startDate.format('DD/MM/YYYY') +
+                        ' - ' +
+                        picker.endDate.format('DD/MM/YYYY')
+                    );
+                });
+
+                // ❌ Blok input manual (ketik & paste)
+                $input.on('keydown paste', function(e) {
+                    e.preventDefault();
+                });
             });
         </script>
     @endpush
