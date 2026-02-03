@@ -110,6 +110,18 @@
                         </ul>
                     </li>
 
+                    <!-- Broadcasts -->
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{ prefixActive('broadcasts') }}" href="javascript:void(0)"><i
+                                data-feather="tv"></i><span>Broadcasts</span></a>
+                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('broadcasts') }};">
+                            <li><a href="{{ route('broadcasts.index') }}" class="{{ routeActive('broadcasts.index') }}">Data
+                                    Broadcast</a></li>
+                            <li><a href="{{ route('broadcasts.create') }}" class="{{ routeActive('broadcasts.create') }}">Create
+                                    Broadcast</a></li>
+                        </ul>
+                    </li>
+
                     <!-- Vision -->
                     <li>
                         <a class="nav-link menu-title link-nav {{ routeActive('vision.edit') }}"

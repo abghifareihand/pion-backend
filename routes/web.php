@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\AuthController;
+use App\Http\Controllers\Web\BroadcastController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\FinancialController;
 use App\Http\Controllers\Web\InformatinController;
@@ -110,6 +111,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{vote}/edit', [VoteController::class, 'edit'])->name('edit');
         Route::put('/{vote}', [VoteController::class, 'update'])->name('update');
         Route::delete('/{vote}', [VoteController::class, 'destroy'])->name('destroy');
+    });
+
+    // Broadcasts Routes
+    Route::prefix('broadcasts')->name('broadcasts.')->group(function () {
+        Route::get('/', [BroadcastController::class, 'index'])->name('index');
+        Route::get('/create', [BroadcastController::class, 'create'])->name('create');
+        Route::post('/store', [BroadcastController::class, 'store'])->name('store');
+        Route::delete('/{broadcast}', [BroadcastController::class, 'destroy'])->name('destroy');
     });
 
     // Vision Mission Routes
