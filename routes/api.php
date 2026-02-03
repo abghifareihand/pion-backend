@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\FinancialController;
 use App\Http\Controllers\Api\LearningController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\SocialController;
+use App\Http\Controllers\Api\VisionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -58,4 +59,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [SocialController::class, 'index']);
         Route::get('/{social}', [SocialController::class, 'show']);
     });
+
+    // ----- Vision Route -----
+    Route::get('/vision', [VisionController::class, 'show']);
 });
