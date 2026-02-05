@@ -63,10 +63,13 @@
                             </div>
 
                             <!-- Input Body -->
-                            <div class="mb-3">
-                                <label>Body Broadcast</label>
-                                <input class="form-control" type="text" name="body" value="{{ old('body') }}"
-                                    required />
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label>Body Broadcast</label>
+                                        <textarea class="form-control" name="body" rows="3">{{ old('body') }}</textarea>
+                                    </div>
+                                </div>
                             </div>
 
                             {{-- Select User --}}
