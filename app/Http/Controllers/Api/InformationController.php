@@ -11,14 +11,37 @@ class InformationController extends Controller
     /**
      * GET /api/informations
      */
-    public function index()
+    public function index(Request $request)
     {
-        $informations = Information::orderBy('created_at', 'desc')->paginate(10);
+        $search = $request->query('search');
+
+        // Build query
+        $query = Information::query()
+            ->orderBy('created_at', 'desc');
+
+        // Apply search if available
+        if ($search) {
+            $query->where('title', 'like', "%{$search}%");
+            // Jika mau search di description juga:
+            // ->orWhere('description', 'like', "%{$search}%")
+        }
+
+        // Paginate
+        $informations = $query->paginate(10);
+
+        // Map hanya field yang diperlukan di list
+        $data = $informations->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'created_at' => $item->created_at,
+            ];
+        });
 
         return response()->json([
             'status' => true,
             'message' => 'Informations fetched successfully',
-            'data' => $informations->items(),
+            'data' => $data,
             'meta' => [
                 'current_page' => $informations->currentPage(),
                 'last_page' => $informations->lastPage(),
@@ -38,7 +61,14 @@ class InformationController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Information fetched successfully',
-            'data' => $information,
+            'data' => [
+                'id' => $information->id,
+                'title' => $information->title,
+                'description' => $information->description,
+                'file_url' => $information->file_path ? asset('storage/' . $information->file_path) : null,
+                'created_at' => $information->created_at,
+                'updated_at' => $information->updated_at,
+            ],
         ]);
     }
 }
