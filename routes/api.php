@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\InformationController;
 use App\Http\Controllers\Api\FinancialController;
 use App\Http\Controllers\Api\LearningController;
 use App\Http\Controllers\Api\OrganizationController;
+use App\Http\Controllers\Api\ResetPasswordController;
 use App\Http\Controllers\Api\SocialController;
 use App\Http\Controllers\Api\VisionController;
 use Illuminate\Http\Request;
@@ -15,7 +16,16 @@ use Illuminate\Support\Facades\Route;
 // Routes Public (belum login)
 // ==============================
 Route::prefix('auth')->group(function () {
+    // ✅ ROUTE UNTUK AUTHENTICATION
     Route::post('/login', [AuthController::class, 'login']);
+
+    // ✅ ROUTE UNTUK FORGOT PASSWORD
+    // STEP 1 — Request OTP
+    Route::post('/request-otp', [ResetPasswordController::class, 'requestOtp'])->middleware('throttle:3,5');
+    // STEP 2 — Verify OTP (generate reset_token)
+    Route::post('/verify-otp', [ResetPasswordController::class, 'verifyOtp']);
+    // STEP 3 — Reset password pakai reset_token
+    Route::post('/reset-password', [ResetPasswordController::class, 'resetPassword']);
 });
 
 // ==============================

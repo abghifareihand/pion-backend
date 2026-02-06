@@ -30,6 +30,13 @@ class DatabaseSeeder extends Seeder
         // 10 user biasa
         $users = [
             [
+                'name' => 'Abghi Fareihan',
+                'username' => 'abghifareihand',
+                'email' => 'abghidesailie@gmail.com',
+                'phone' => '087777711022',
+                'pin' => '123456',
+            ],
+            [
                 'name' => 'Agus Santoso',
                 'username' => 'agus',
                 'email' => 'agus@gmail.com',
