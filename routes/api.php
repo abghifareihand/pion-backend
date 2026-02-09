@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\FeedController;
 use App\Http\Controllers\Api\InformationController;
 use App\Http\Controllers\Api\FinancialController;
 use App\Http\Controllers\Api\LearningController;
@@ -69,6 +70,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [SocialController::class, 'index']);
         Route::get('/{social}', [SocialController::class, 'show']);
     });
+
+    // ----- Feed Route -----
+    Route::get('/feed', [FeedController::class, 'index']);
 
     // ----- Vision Route -----
     Route::get('/vision', [VisionController::class, 'show']);
