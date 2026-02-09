@@ -74,7 +74,7 @@ class BroadcastController extends Controller
             $this->firebase->sendToTokens($tokens, $request->title, $request->body);
         });
 
-        return redirect()->route('broadcasts.create')->with('success', 'Broadcast berhasil dibuat dan dikirim.');
+        return redirect()->route('broadcasts.index')->with('success', 'Broadcast berhasil dibuat dan dikirim.');
     }
 
 

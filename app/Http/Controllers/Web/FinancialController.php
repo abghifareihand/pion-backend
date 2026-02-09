@@ -92,7 +92,7 @@ class FinancialController extends Controller
             );
         }
 
-        return redirect()->route('financials.create')->with('success', 'Laporan keuangan berhasil dibuat dan notifikasi dikirim..');
+        return redirect()->route('financials.index')->with('success', 'Laporan keuangan berhasil dibuat dan notifikasi dikirim.');
     }
 
     public function show(Financial $financial)

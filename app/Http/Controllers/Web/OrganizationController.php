@@ -91,7 +91,7 @@ class OrganizationController extends Controller
             );
         }
 
-        return redirect()->route('organizations.create')->with('success', 'Struktur organisasi berhasil dibuat dan notifikasi dikirim.');
+        return redirect()->route('organizations.index')->with('success', 'Struktur organisasi berhasil dibuat dan notifikasi dikirim.');
     }
 
     public function show(Organization $organization)

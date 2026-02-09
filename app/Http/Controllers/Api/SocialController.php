@@ -9,16 +9,39 @@ use Illuminate\Http\Request;
 class SocialController extends Controller
 {
     /**
-     * GET /api/informations
+     * GET /api/socials
      */
-    public function index()
+    public function index(Request $request)
     {
-        $socials = Social::orderBy('created_at', 'desc')->paginate(10);
+        $search = $request->query('search');
+
+        // Build query
+        $query = Social::query()
+            ->orderBy('created_at', 'desc');
+
+        // Apply search if available
+        if ($search) {
+            $query->where('title', 'like', "%{$search}%");
+            // Jika mau search di description juga:
+            // ->orWhere('description', 'like', "%{$search}%")
+        }
+
+        // Paginate
+        $socials = $query->paginate(10);
+
+        // Map hanya field yang diperlukan di list
+        $data = $socials->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'created_at' => $item->created_at,
+            ];
+        });
 
         return response()->json([
             'status' => true,
             'message' => 'Socials fetched successfully',
-            'data' => $socials->items(),
+            'data' => $data,
             'meta' => [
                 'current_page' => $socials->currentPage(),
                 'last_page' => $socials->lastPage(),
@@ -31,14 +54,21 @@ class SocialController extends Controller
 
 
     /**
-     * GET /api/informations/{id}
+     * GET /api/socials/{id}
      */
     public function show(Social $social)
     {
         return response()->json([
             'status' => true,
             'message' => 'Social fetched successfully',
-            'data' => $social,
+            'data' => [
+                'id' => $social->id,
+                'title' => $social->title,
+                'description' => $social->description,
+                'file_url' => $social->file_path ? asset('storage/' . $social->file_path) : null,
+                'created_at' => $social->created_at,
+                'updated_at' => $social->updated_at,
+            ],
         ]);
     }
 }

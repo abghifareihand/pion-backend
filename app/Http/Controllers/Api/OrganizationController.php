@@ -11,14 +11,37 @@ class OrganizationController extends Controller
     /**
      * GET /api/organizations
      */
-    public function index()
+    public function index(Request $request)
     {
-        $organizations = Organization::orderBy('created_at', 'desc')->paginate(10);
+        $search = $request->query('search');
+
+        // Build query
+        $query = Organization::query()
+            ->orderBy('created_at', 'desc');
+
+        // Apply search if available
+        if ($search) {
+            $query->where('title', 'like', "%{$search}%");
+            // Jika mau search di description juga:
+            // ->orWhere('description', 'like', "%{$search}%")
+        }
+
+        // Paginate
+        $organizations = $query->paginate(10);
+
+        // Map hanya field yang diperlukan di list
+        $data = $organizations->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'created_at' => $item->created_at,
+            ];
+        });
 
         return response()->json([
             'status' => true,
             'message' => 'Organizations fetched successfully',
-            'data' => $organizations->items(),
+            'data' => $data,
             'meta' => [
                 'current_page' => $organizations->currentPage(),
                 'last_page' => $organizations->lastPage(),
@@ -38,7 +61,14 @@ class OrganizationController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Organization fetched successfully',
-            'data' => $organization,
+            'data' => [
+                'id' => $organization->id,
+                'title' => $organization->title,
+                'description' => $organization->description,
+                'file_url' => $organization->file_path ? asset('storage/' . $organization->file_path) : null,
+                'created_at' => $organization->created_at,
+                'updated_at' => $organization->updated_at,
+            ],
         ]);
     }
 }

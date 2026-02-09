@@ -91,7 +91,7 @@ class SocialController extends Controller
             );
         }
 
-        return redirect()->route('socials.create')->with('success', 'Program sosial berhasil dibuat dan notifikasi dikirim.');
+        return redirect()->route('socials.index')->with('success', 'Program sosial berhasil dibuat dan notifikasi dikirim.');
     }
 
     public function show(Social $social)

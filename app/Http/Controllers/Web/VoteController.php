@@ -137,7 +137,7 @@ class VoteController extends Controller
             });
         });
 
-        return redirect()->route('votes.create')->with('success', 'Voting berhasil dibuat dan notifikasi dikirim.');
+        return redirect()->route('votes.index')->with('success', 'Voting berhasil dibuat dan notifikasi dikirim.');
     }
 
     public function show(Vote $vote)
@@ -185,7 +185,7 @@ class VoteController extends Controller
 
         ]);
 
-        return redirect()->route('votes.edit', $vote->id)->with('success', 'Voting berhasil diperbarui.');
+        return redirect()->route('votes.index')->with('success', 'Voting berhasil diperbarui.');
     }
 
 

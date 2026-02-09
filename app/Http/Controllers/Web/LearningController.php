@@ -92,7 +92,7 @@ class LearningController extends Controller
             );
         }
 
-        return redirect()->route('learnings.create')->with('success', 'Materi belajar berhasil dibuat dan notifikasi dikirim.');
+        return redirect()->route('learnings.index')->with('success', 'Materi belajar berhasil dibuat dan notifikasi dikirim.');
     }
 
     public function show(Learning $learning)

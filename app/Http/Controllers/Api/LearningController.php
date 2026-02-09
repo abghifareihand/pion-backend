@@ -11,14 +11,37 @@ class LearningController extends Controller
     /**
      * GET /api/learnings
      */
-    public function index()
+    public function index(Request $request)
     {
-        $learnings = Learning::orderBy('created_at', 'desc')->paginate(10);
+        $search = $request->query('search');
+
+        // Build query
+        $query = Learning::query()
+            ->orderBy('created_at', 'desc');
+
+        // Apply search if available
+        if ($search) {
+            $query->where('title', 'like', "%{$search}%");
+            // Jika mau search di description juga:
+            // ->orWhere('description', 'like', "%{$search}%")
+        }
+
+        // Paginate
+        $learnings = $query->paginate(10);
+
+        // Map hanya field yang diperlukan di list
+        $data = $learnings->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'created_at' => $item->created_at,
+            ];
+        });
 
         return response()->json([
             'status' => true,
             'message' => 'Learnings fetched successfully',
-            'data' => $learnings->items(),
+            'data' => $data,
             'meta' => [
                 'current_page' => $learnings->currentPage(),
                 'last_page' => $learnings->lastPage(),
@@ -38,7 +61,14 @@ class LearningController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Learning fetched successfully',
-            'data' => $learning,
+            'data' => [
+                'id' => $learning->id,
+                'title' => $learning->title,
+                'description' => $learning->description,
+                'file_url' => $learning->file_path ? asset('storage/' . $learning->file_path) : null,
+                'created_at' => $learning->created_at,
+                'updated_at' => $learning->updated_at,
+            ],
         ]);
     }
 }

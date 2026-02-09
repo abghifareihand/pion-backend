@@ -92,7 +92,7 @@ class InformationController extends Controller
             );
         }
 
-        return redirect()->route('informations.create')->with('success', 'Informasi berhasil dibuat dan notifikasi dikirim.');
+        return redirect()->route('informations.index')->with('success', 'Informasi berhasil dibuat dan notifikasi dikirim.');
     }
 
     public function show(Information $information)

@@ -11,14 +11,37 @@ class FinancialController extends Controller
     /**
      * GET /api/financials
      */
-    public function index()
+    public function index(Request $request)
     {
-        $financials = Financial::orderBy('created_at', 'desc')->paginate(10);
+        $search = $request->query('search');
+
+        // Build query
+        $query = Financial::query()
+            ->orderBy('created_at', 'desc');
+
+        // Apply search if available
+        if ($search) {
+            $query->where('title', 'like', "%{$search}%");
+            // Jika mau search di description juga:
+            // ->orWhere('description', 'like', "%{$search}%")
+        }
+
+        // Paginate
+        $financials = $query->paginate(10);
+
+        // Map hanya field yang diperlukan di list
+        $data = $financials->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'created_at' => $item->created_at,
+            ];
+        });
 
         return response()->json([
             'status' => true,
             'message' => 'Financials fetched successfully',
-            'data' => $financials->items(),
+            'data' => $data,
             'meta' => [
                 'current_page' => $financials->currentPage(),
                 'last_page' => $financials->lastPage(),
@@ -38,7 +61,14 @@ class FinancialController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Financial fetched successfully',
-            'data' => $financial,
+            'data' => [
+                'id' => $financial->id,
+                'title' => $financial->title,
+                'description' => $financial->description,
+                'file_url' => $financial->file_path ? asset('storage/' . $financial->file_path) : null,
+                'created_at' => $financial->created_at,
+                'updated_at' => $financial->updated_at,
+            ],
         ]);
     }
 }
