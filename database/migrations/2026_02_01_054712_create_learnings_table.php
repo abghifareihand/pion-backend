@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('learnings', function (Blueprint $table) {
             $table->id();
+            $table->string('type')->index();
             $table->string('title');
             $table->text('description')->nullable();
+            $table->string('image_path')->nullable();
             $table->string('file_path');
             $table->timestamps();
         });

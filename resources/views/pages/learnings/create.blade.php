@@ -79,6 +79,16 @@
                                 </div>
                             </div>
 
+                            <!-- Choose Image -->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label>Choose Image</label>
+                                        <input class="form-control" type="file" name="image" accept=".jpg,.jpeg,.png">
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Choose File -->
                             <div class="row">
                                 <div class="col">

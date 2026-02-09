@@ -28,17 +28,33 @@
                     <div class="card-body">
                         <h5 class="mb-3">{{ $learning->title }}</h5>
 
-                        <p>
-                            <strong>File : </strong>
-                            <a href="{{ asset('storage/' . $learning->file_path) }}" target="_blank">
-                                Download
-                            </a>
-                        </p>
+                        {{-- Tampilkan Image jika ada --}}
+                        @if ($learning->image_path)
+                            <div class="mb-3">
+                                <strong>Image:</strong> {{-- <-- label dulu --}}
+                                <div>
+                                    <img src="{{ asset('storage/' . $learning->image_path) }}" alt="{{ $learning->title }}"
+                                        style="max-width: 400px; height: 400px;">
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- Tampilkan File --}}
+                        @if ($learning->file_path)
+                            <div class="mb-3">
+                                <strong>File:</strong> {{-- label dulu --}}
+                                <div style="margin-top: 8px;">
+                                    <a href="{{ asset('storage/' . $learning->file_path) }}" target="_blank">
+                                        Download
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
 
                         {{-- Optional: Embed PDF --}}
                         @if (Str::endsWith($learning->file_path, '.pdf'))
-                            <iframe src="{{ asset('storage/' . $learning->file_path) }}"
-                                style="width:100%; height:800px;" frameborder="0"></iframe>
+                            <iframe src="{{ asset('storage/' . $learning->file_path) }}" style="width:100%; height:800px;"
+                                frameborder="0"></iframe>
                         @endif
                     </div>
                 </div>

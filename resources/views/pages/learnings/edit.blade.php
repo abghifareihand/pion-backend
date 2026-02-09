@@ -79,6 +79,31 @@
                                 </div>
                             </div>
 
+                            <!-- Current Image -->
+                            <div class="row">
+                                <div class="col">
+                                    @if ($learning->image_path)
+                                        <div class="mb-3">
+                                            <label>Current Image</label>
+                                            <p>
+                                                <img src="{{ asset('storage/' . $learning->image_path) }}"
+                                                    alt="Current Image" style="max-width: 200px; height: auto;">
+                                            </p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Choose New Image -->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label>Choose New Image (optional)</label>
+                                        <input class="form-control" type="file" name="image" accept=".jpg,.jpeg,.png">
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Current File -->
                             <div class="row">
                                 <div class="col">

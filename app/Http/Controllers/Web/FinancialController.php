@@ -62,7 +62,8 @@ class FinancialController extends Controller
             [
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
-                'file' => 'required|file|mimes:pdf|max:10240',
+                'file' => 'required|file|mimes:pdf|max:10240', // MAX 10MB
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120', // MAX 5MB
             ],
             [
                 'title.required' => 'Judul wajib diisi.',
@@ -70,15 +71,25 @@ class FinancialController extends Controller
                 'file.required' => 'File PDF wajib diunggah.',
                 'file.mimes' => 'File harus berupa PDF.',
                 'file.max' => 'File maksimal 10MB.',
+                'image.mimes' => 'Image harus JPG, JPEG, atau PNG.',
+                'image.max' => 'Image maksimal 5MB.',
             ]
         );
 
-        $filePath = $request->file('file')->store('financial', 'public');
+        // Upload file PDF
+        $filePath = $request->file('file')->store('financial/files', 'public');
+
+        // Upload image jika ada
+        $imagePath = $request->hasFile('image')
+            ? $request->file('image')->store('financial/images', 'public')
+            : null;
 
         $financial = Financial::create([
+            'type' => 'financial', // 👈 penting untuk feed / notif
             'title' => $request->title,
             'description' => $request->description,
             'file_path' => $filePath,
+            'image_path' => $imagePath,
         ]);
 
         // ---------- KIRIM NOTIF KE SEMUA USER ----------
@@ -88,7 +99,11 @@ class FinancialController extends Controller
             $this->firebase->sendToTokens(
                 $tokens,
                 'Keuangan', // TITLE
-                $financial->title // BODY
+                $financial->title, // BODY
+                [
+                    'id' => $financial->id,
+                    'type' => $financial->type, // 👈 buat auto routing di mobile
+                ]
             );
         }
 
@@ -111,17 +126,28 @@ class FinancialController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'file' => 'nullable|file|mimes:pdf|max:10240',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ], [
             'title.required' => 'Judul wajib diisi.',
             'title.max' => 'Judul maksimal 255 karakter.',
             'file.mimes' => 'File harus berupa PDF.',
             'file.max' => 'File maksimal 10MB.',
+            'image.mimes' => 'Image harus JPG, JPEG, atau PNG.',
+            'image.max' => 'Image maksimal 5MB.',
         ]);
 
+        // Update PDF jika ada
         if ($request->hasFile('file')) {
-            // hapus file lama
             Storage::disk('public')->delete($financial->file_path);
-            $financial->file_path = $request->file('file')->store('financial', 'public');
+            $financial->file_path = $request->file('file')->store('financial/files', 'public');
+        }
+
+        // Update Image jika ada
+        if ($request->hasFile('image')) {
+            if ($financial->image_path) {
+                Storage::disk('public')->delete($financial->image_path);
+            }
+            $financial->image_path = $request->file('image')->store('financial/images', 'public');
         }
 
         $financial->title = $request->title;
@@ -134,6 +160,10 @@ class FinancialController extends Controller
     public function destroy(Financial $financial)
     {
         Storage::disk('public')->delete($financial->file_path);
+        if ($financial->image_path) {
+            Storage::disk('public')->delete($financial->image_path);
+        }
+
         $financial->delete();
 
         return redirect()->route('financials.index')->with('success', 'Laporan keuangan berhasil dihapus.');

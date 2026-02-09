@@ -62,7 +62,8 @@ class LearningController extends Controller
             [
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
-                'file' => 'required|file|mimes:pdf|max:10240',
+                'file' => 'required|file|mimes:pdf|max:10240', // MAX 10MB
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120', // MAX 5MB
             ],
             [
                 'title.required' => 'Judul wajib diisi.',
@@ -70,15 +71,25 @@ class LearningController extends Controller
                 'file.required' => 'File PDF wajib diunggah.',
                 'file.mimes' => 'File harus berupa PDF.',
                 'file.max' => 'File maksimal 10MB.',
+                'image.mimes' => 'Image harus JPG, JPEG, atau PNG.',
+                'image.max' => 'Image maksimal 5MB.',
             ]
         );
 
-        $filePath = $request->file('file')->store('learning', 'public');
+        // Upload file PDF
+        $filePath = $request->file('file')->store('learning/files', 'public');
+
+        // Upload image jika ada
+        $imagePath = $request->hasFile('image')
+            ? $request->file('image')->store('learning/images', 'public')
+            : null;
 
         $learning = Learning::create([
+            'type' => 'learning', // 👈 penting untuk feed / notif
             'title' => $request->title,
             'description' => $request->description,
             'file_path' => $filePath,
+            'image_path' => $imagePath,
         ]);
 
         // ---------- KIRIM NOTIF KE SEMUA USER ----------
@@ -88,7 +99,11 @@ class LearningController extends Controller
             $this->firebase->sendToTokens(
                 $tokens,
                 'Materi Belajar', // TITLE
-                $learning->title // BODY
+                $learning->title, // BODY
+                [
+                    'id' => $learning->id,
+                    'type' => $learning->type, // 👈 buat auto routing di mobile
+                ]
             );
         }
 
@@ -111,17 +126,28 @@ class LearningController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'file' => 'nullable|file|mimes:pdf|max:10240',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ], [
             'title.required' => 'Judul wajib diisi.',
             'title.max' => 'Judul maksimal 255 karakter.',
             'file.mimes' => 'File harus berupa PDF.',
             'file.max' => 'File maksimal 10MB.',
+            'image.mimes' => 'Image harus JPG, JPEG, atau PNG.',
+            'image.max' => 'Image maksimal 5MB.',
         ]);
 
+        // Update PDF jika ada
         if ($request->hasFile('file')) {
-            // hapus file lama
             Storage::disk('public')->delete($learning->file_path);
-            $learning->file_path = $request->file('file')->store('learning', 'public');
+            $learning->file_path = $request->file('file')->store('learning/files', 'public');
+        }
+
+        // Update Image jika ada
+        if ($request->hasFile('image')) {
+            if ($learning->image_path) {
+                Storage::disk('public')->delete($learning->image_path);
+            }
+            $learning->image_path = $request->file('image')->store('learning/images', 'public');
         }
 
         $learning->title = $request->title;
@@ -134,6 +160,10 @@ class LearningController extends Controller
     public function destroy(Learning $learning)
     {
         Storage::disk('public')->delete($learning->file_path);
+        if ($learning->image_path) {
+            Storage::disk('public')->delete($learning->image_path);
+        }
+
         $learning->delete();
 
         return redirect()->route('learnings.index')->with('success', 'Materi belajar berhasil dihapus.');

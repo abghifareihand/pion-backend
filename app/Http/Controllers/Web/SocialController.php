@@ -61,7 +61,8 @@ class SocialController extends Controller
             [
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
-                'file' => 'required|file|mimes:pdf|max:10240',
+                'file' => 'required|file|mimes:pdf|max:10240', // MAX 10MB
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120', // MAX 5MB
             ],
             [
                 'title.required' => 'Judul wajib diisi.',
@@ -69,15 +70,25 @@ class SocialController extends Controller
                 'file.required' => 'File PDF wajib diunggah.',
                 'file.mimes' => 'File harus berupa PDF.',
                 'file.max' => 'File maksimal 10MB.',
+                'image.mimes' => 'Image harus JPG, JPEG, atau PNG.',
+                'image.max' => 'Image maksimal 5MB.',
             ]
         );
 
-        $filePath = $request->file('file')->store('social', 'public');
+        // Upload file PDF
+        $filePath = $request->file('file')->store('social/files', 'public');
+
+        // Upload image jika ada
+        $imagePath = $request->hasFile('image')
+            ? $request->file('image')->store('social/images', 'public')
+            : null;
 
         $social = Social::create([
+            'type' => 'social', // 👈 penting untuk feed / notif
             'title' => $request->title,
             'description' => $request->description,
             'file_path' => $filePath,
+            'image_path' => $imagePath,
         ]);
 
         // ---------- KIRIM NOTIF KE SEMUA USER ----------
@@ -87,7 +98,11 @@ class SocialController extends Controller
             $this->firebase->sendToTokens(
                 $tokens,
                 'Program Sosial', // TITLE
-                $social->title // BODY
+                $social->title, // BODY
+                [
+                    'id' => $social->id,
+                    'type' => $social->type, // 👈 buat auto routing di mobile
+                ]
             );
         }
 
@@ -110,17 +125,28 @@ class SocialController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'file' => 'nullable|file|mimes:pdf|max:10240',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ], [
             'title.required' => 'Judul wajib diisi.',
             'title.max' => 'Judul maksimal 255 karakter.',
             'file.mimes' => 'File harus berupa PDF.',
             'file.max' => 'File maksimal 10MB.',
+            'image.mimes' => 'Image harus JPG, JPEG, atau PNG.',
+            'image.max' => 'Image maksimal 5MB.',
         ]);
 
+        // Update PDF jika ada
         if ($request->hasFile('file')) {
-            // hapus file lama
             Storage::disk('public')->delete($social->file_path);
-            $social->file_path = $request->file('file')->store('social', 'public');
+            $social->file_path = $request->file('file')->store('social/files', 'public');
+        }
+
+        // Update Image jika ada
+        if ($request->hasFile('image')) {
+            if ($social->image_path) {
+                Storage::disk('public')->delete($social->image_path);
+            }
+            $social->image_path = $request->file('image')->store('social/images', 'public');
         }
 
         $social->title = $request->title;
@@ -133,6 +159,10 @@ class SocialController extends Controller
     public function destroy(Social $social)
     {
         Storage::disk('public')->delete($social->file_path);
+        if ($social->image_path) {
+            Storage::disk('public')->delete($social->image_path);
+        }
+
         $social->delete();
 
         return redirect()->route('socials.index')->with('success', 'Program sosial berhasil dihapus.');

@@ -33,6 +33,7 @@ class OrganizationController extends Controller
         $data = $organizations->map(function ($item) {
             return [
                 'id' => $item->id,
+                'type' => $item->type,
                 'title' => $item->title,
                 'created_at' => $item->created_at,
             ];
@@ -63,8 +64,10 @@ class OrganizationController extends Controller
             'message' => 'Organization fetched successfully',
             'data' => [
                 'id' => $organization->id,
+                'type' => $organization->type,
                 'title' => $organization->title,
                 'description' => $organization->description,
+                'image_url' => $organization->image_path ? asset('storage/' . $organization->image_path) : null,
                 'file_url' => $organization->file_path ? asset('storage/' . $organization->file_path) : null,
                 'created_at' => $organization->created_at,
                 'updated_at' => $organization->updated_at,

@@ -111,7 +111,7 @@
                     </li>
 
                     <!-- Broadcasts -->
-                    <li class="dropdown">
+                    {{-- <li class="dropdown">
                         <a class="nav-link menu-title {{ prefixActive('broadcasts') }}" href="javascript:void(0)"><i
                                 data-feather="tv"></i><span>Broadcasts</span></a>
                         <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('broadcasts') }};">
@@ -120,7 +120,7 @@
                             <li><a href="{{ route('broadcasts.create') }}" class="{{ routeActive('broadcasts.create') }}">Create
                                     Broadcast</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
 
                     <!-- Vision -->
                     <li>

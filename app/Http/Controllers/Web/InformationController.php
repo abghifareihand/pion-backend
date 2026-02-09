@@ -30,39 +30,14 @@ class InformationController extends Controller
         return view('pages.informations.create');
     }
 
-    // public function store(Request $request)
-    // {
-    //     $request->validate(
-    //         [
-    //             'title' => 'required|string|max:255',
-    //             'file' => 'required|file|mimes:pdf|max:10240',
-    //         ],
-    //         [
-    //             'title.required' => 'Judul wajib diisi.',
-    //             'title.max' => 'Judul maksimal 255 karakter.',
-    //             'file.required' => 'File PDF wajib diunggah.',
-    //             'file.mimes' => 'File harus berupa PDF.',
-    //             'file.max' => 'File maksimal 10MB.',
-    //         ]
-    //     );
-
-    //     $filePath = $request->file('file')->store('information', 'public');
-
-    //     Information::create([
-    //         'title' => $request->title,
-    //         'file_path' => $filePath,
-    //     ]);
-
-    //     return redirect()->route('informations.create')->with('success', 'Informasi berhasil dibuat.');
-    // }
-
     public function store(Request $request)
     {
         $request->validate(
             [
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
-                'file' => 'required|file|mimes:pdf|max:10240',
+                'file' => 'required|file|mimes:pdf|max:10240', // MAX 10MB
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120', // MAX 5MB
             ],
             [
                 'title.required' => 'Judul wajib diisi.',
@@ -70,15 +45,26 @@ class InformationController extends Controller
                 'file.required' => 'File PDF wajib diunggah.',
                 'file.mimes' => 'File harus berupa PDF.',
                 'file.max' => 'File maksimal 10MB.',
+                'image.mimes' => 'Image harus JPG, JPEG, atau PNG.',
+                'image.max' => 'Image maksimal 5MB.',
             ]
         );
 
-        $filePath = $request->file('file')->store('information', 'public');
+        // Upload file PDF
+        $filePath = $request->file('file')->store('information/files', 'public');
 
+        // Upload image jika ada
+        $imagePath = $request->hasFile('image')
+            ? $request->file('image')->store('information/images', 'public')
+            : null;
+
+        // Create Information + type otomatis
         $information = Information::create([
+            'type' => 'information', // 👈 penting untuk feed / notif
             'title' => $request->title,
             'description' => $request->description,
             'file_path' => $filePath,
+            'image_path' => $imagePath,
         ]);
 
         // ---------- KIRIM NOTIF KE SEMUA USER ----------
@@ -88,7 +74,11 @@ class InformationController extends Controller
             $this->firebase->sendToTokens(
                 $tokens,
                 'Informasi', // TITLE
-                $information->title // BODY
+                $information->title, // BODY
+                [
+                    'id' => $information->id,
+                    'type' => $information->type, // 👈 buat auto routing di mobile
+                ]
             );
         }
 
@@ -111,17 +101,28 @@ class InformationController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'file' => 'nullable|file|mimes:pdf|max:10240',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ], [
             'title.required' => 'Judul wajib diisi.',
             'title.max' => 'Judul maksimal 255 karakter.',
             'file.mimes' => 'File harus berupa PDF.',
             'file.max' => 'File maksimal 10MB.',
+            'image.mimes' => 'Image harus JPG, JPEG, atau PNG.',
+            'image.max' => 'Image maksimal 5MB.',
         ]);
 
+        // Update PDF jika ada
         if ($request->hasFile('file')) {
-            // hapus file lama
             Storage::disk('public')->delete($information->file_path);
-            $information->file_path = $request->file('file')->store('information', 'public');
+            $information->file_path = $request->file('file')->store('information/files', 'public');
+        }
+
+        // Update Image jika ada
+        if ($request->hasFile('image')) {
+            if ($information->image_path) {
+                Storage::disk('public')->delete($information->image_path);
+            }
+            $information->image_path = $request->file('image')->store('information/images', 'public');
         }
 
         $information->title = $request->title;
@@ -134,6 +135,10 @@ class InformationController extends Controller
     public function destroy(Information $information)
     {
         Storage::disk('public')->delete($information->file_path);
+        if ($information->image_path) {
+            Storage::disk('public')->delete($information->image_path);
+        }
+
         $information->delete();
 
         return redirect()->route('informations.index')->with('success', 'Informasi berhasil dihapus.');

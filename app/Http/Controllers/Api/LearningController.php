@@ -33,6 +33,7 @@ class LearningController extends Controller
         $data = $learnings->map(function ($item) {
             return [
                 'id' => $item->id,
+                'type' => $item->type,
                 'title' => $item->title,
                 'created_at' => $item->created_at,
             ];
@@ -63,8 +64,10 @@ class LearningController extends Controller
             'message' => 'Learning fetched successfully',
             'data' => [
                 'id' => $learning->id,
+                'type' => $learning->type,
                 'title' => $learning->title,
                 'description' => $learning->description,
+                'image_url' => $learning->image_path ? asset('storage/' . $learning->image_path) : null,
                 'file_url' => $learning->file_path ? asset('storage/' . $learning->file_path) : null,
                 'created_at' => $learning->created_at,
                 'updated_at' => $learning->updated_at,

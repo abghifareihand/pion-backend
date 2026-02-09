@@ -33,6 +33,7 @@ class InformationController extends Controller
         $data = $informations->map(function ($item) {
             return [
                 'id' => $item->id,
+                'type' => $item->type,
                 'title' => $item->title,
                 'created_at' => $item->created_at,
             ];
@@ -63,8 +64,10 @@ class InformationController extends Controller
             'message' => 'Information fetched successfully',
             'data' => [
                 'id' => $information->id,
+                'type' => $information->type,
                 'title' => $information->title,
                 'description' => $information->description,
+                'image_url' => $information->image_path ? asset('storage/' . $information->image_path) : null,
                 'file_url' => $information->file_path ? asset('storage/' . $information->file_path) : null,
                 'created_at' => $information->created_at,
                 'updated_at' => $information->updated_at,

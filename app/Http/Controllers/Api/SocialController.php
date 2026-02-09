@@ -33,6 +33,7 @@ class SocialController extends Controller
         $data = $socials->map(function ($item) {
             return [
                 'id' => $item->id,
+                'type' => $item->type,
                 'title' => $item->title,
                 'created_at' => $item->created_at,
             ];
@@ -63,8 +64,10 @@ class SocialController extends Controller
             'message' => 'Social fetched successfully',
             'data' => [
                 'id' => $social->id,
+                'type' => $social->type,
                 'title' => $social->title,
                 'description' => $social->description,
+                'image_url' => $social->image_path ? asset('storage/' . $social->image_path) : null,
                 'file_url' => $social->file_path ? asset('storage/' . $social->file_path) : null,
                 'created_at' => $social->created_at,
                 'updated_at' => $social->updated_at,

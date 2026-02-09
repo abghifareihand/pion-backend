@@ -28,12 +28,28 @@
                     <div class="card-body">
                         <h5 class="mb-3">{{ $organization->title }}</h5>
 
-                        <p>
-                            <strong>File : </strong>
-                            <a href="{{ asset('storage/' . $organization->file_path) }}" target="_blank">
-                                Download
-                            </a>
-                        </p>
+                        {{-- Tampilkan Image jika ada --}}
+                        @if ($organization->image_path)
+                            <div class="mb-3">
+                                <strong>Image:</strong> {{-- <-- label dulu --}}
+                                <div>
+                                    <img src="{{ asset('storage/' . $organization->image_path) }}"
+                                        alt="{{ $organization->title }}" style="max-width: 400px; height: 400px;">
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- Tampilkan File --}}
+                        @if ($organization->file_path)
+                            <div class="mb-3">
+                                <strong>File:</strong> {{-- label dulu --}}
+                                <div style="margin-top: 8px;">
+                                    <a href="{{ asset('storage/' . $organization->file_path) }}" target="_blank">
+                                        Download
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
 
                         {{-- Optional: Embed PDF --}}
                         @if (Str::endsWith($organization->file_path, '.pdf'))
