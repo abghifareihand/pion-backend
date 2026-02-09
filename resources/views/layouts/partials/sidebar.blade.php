@@ -98,6 +98,18 @@
                         </ul>
                     </li>
 
+                    <!-- Unions -->
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{ prefixActive('unions') }}" href="javascript:void(0)"><i
+                                data-feather="share-2"></i><span>Unions</span></a>
+                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('unions') }};">
+                            <li><a href="{{ route('unions.index') }}" class="{{ routeActive('unions.index') }}">Data
+                                    Union</a></li>
+                            <li><a href="{{ route('unions.create') }}"
+                                    class="{{ routeActive('unions.create') }}">Create Union</a></li>
+                        </ul>
+                    </li>
+
                     <!-- Votes -->
                     <li class="dropdown">
                         <a class="nav-link menu-title {{ prefixActive('votes') }}" href="javascript:void(0)"><i

@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\LearningController;
 use App\Http\Controllers\Web\OrganizationController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\SocialController;
+use App\Http\Controllers\Web\UnionController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\VisionController;
 use App\Http\Controllers\Web\VoteController;
@@ -100,6 +101,17 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{financial}/edit', [FinancialController::class, 'edit'])->name('edit');
         Route::put('/{financial}', [FinancialController::class, 'update'])->name('update');
         Route::delete('/{financial}', [FinancialController::class, 'destroy'])->name('destroy');
+    });
+
+    // Unions Routes
+    Route::prefix('unions')->name('unions.')->group(function () {
+        Route::get('/', [UnionController::class, 'index'])->name('index');
+        Route::get('/create', [UnionController::class, 'create'])->name('create');
+        Route::post('/store', [UnionController::class, 'store'])->name('store');
+        Route::get('/{union}', [UnionController::class, 'show'])->name('show');
+        Route::get('/{union}/edit', [UnionController::class, 'edit'])->name('edit');
+        Route::put('/{union}', [UnionController::class, 'update'])->name('update');
+        Route::delete('/{union}', [UnionController::class, 'destroy'])->name('destroy');
     });
 
     // Votes Routes
