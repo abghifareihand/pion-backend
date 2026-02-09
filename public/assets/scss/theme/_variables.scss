@@ -3,23 +3,23 @@ $theme-font-color: #2b2b2b;
 $theme-body-font-color: #242934;
 $theme-body-sub-title-color: rgba($theme-body-font-color, 0.7);
 // Theme colors variables
-$primary-color: #24695c;
-$secondary-color:#ba895d;
-$success-color: #1b4c43;
+$primary-color: #AA2224;
+$secondary-color: #0D6EFD;
+$success-color: #16A34A;
 $warning-color: #e2c636;
-$danger-color: #d22d3d;
+$danger-color: #DC2626;
 $light-color : #f4f4f4;
-$light-gray  : #e6edef;
-$light-semi-gray   :#efefef;
+$light-gray : #e6edef;
+$light-semi-gray :#efefef;
 $dark-light :$theme-font-color;
-$dark-gray 	: #898989;
-$dark-color   : #2c323f;
-$gray-60   :#cccccc ;
+$dark-gray : #898989;
+$dark-color : #2c323f;
+$gray-60 :#cccccc;
 $card-body-color : #f9f9fa;
 $transparent-color: transparent;
-$auth-bg-color:#fafafa;
+$auth-bg-color: #fafafa;
 $light : #fdfeff;
-$semi-dark  :#59667a;
+$semi-dark :#59667a;
 $light-text: #999;
 $light-background: #f5f7fb;
 $light-font: #717171;
@@ -35,11 +35,11 @@ $color-scarpa: #4c5667;
 $color-fiord: #455a64;
 $dark-blue: #00008B;
 $black : #000;
-$white:#fff;
-$yellow:#f4c705;
-$btn-bhome-bg-c:#ff6060;
-$btn-search-bg-c:#ffd042;
-$btn-opacity-down-primary:#F7F0FF;
+$white: #fff;
+$yellow: #f4c705;
+$btn-bhome-bg-c: #ff6060;
+$btn-search-bg-c: #ffd042;
+$btn-opacity-down-primary: #F7F0FF;
 // error page color end
 
 // gradient colors
@@ -52,12 +52,12 @@ $google-plus: #c64e40;
 $linkedin: #0077B5;
 
 //error input color start
-$light-body-bg-color:#fafdff;
+$light-body-bg-color: #fafdff;
 
 //fonts
-$font-montserrat:'Montserrat', sans-serif;
-$font-roboto:'Roboto', sans-serif;
-$font-rubik:'Rubik', sans-serif;
+$font-montserrat: 'Montserrat', sans-serif;
+$font-roboto: 'Roboto', sans-serif;
+$font-rubik: 'Rubik', sans-serif;
 $font-nunito: Nunito;
 $font-raleway: Raleway;
 $font-serif: sans-serif;
@@ -70,13 +70,13 @@ $font-ICO: IcoFont;
 $dark-body-background: #202938;
 $dark-card-background: #111727;
 $dark-card-inbox: #323846;
-$dark-small-font-color:#98a6ad;
-$dark-all-font-color: rgba(255,255,255,0.7);
-$light-all-font-color: rgba(255,255,255,0.2);
-$sidebar-submenu-font-color:rgba(255,255,255,0.7);
+$dark-small-font-color: #98a6ad;
+$dark-all-font-color: rgba(255, 255, 255, 0.7);
+$light-all-font-color: rgba(255, 255, 255, 0.2);
+$sidebar-submenu-font-color: rgba(255, 255, 255, 0.7);
 $dark-border-color: $dark-body-background;
 // $dark-card-border:#374558;
-$dark-card-border: rgba($primary-color,0.2);
+$dark-card-border: rgba($primary-color, 0.2);
 $dark-editor-document: #2b2b2b;
 $bg-dark-color: #1f2533;
 $dark-datatable-odd: #1f232b;
@@ -119,57 +119,57 @@ $list-group-margin: 10px;
 
 
 // Tables settings
-$table-b-margin:             0px;
-$table-heading-color:        $theme-body-font-color;
-$table-row-color:            $theme-body-font-color;
-$table-footer-font-weight:   bold;
-$table-inverse-color:        $white;
-$table-hover-color:          $light;
-$table-padding:              0.75rem;
-$table-xl-padding:           1.25rem 2rem;
-$table-xl-font:              120%;
-$table-lg-padding:           .9rem 2rem;
-$table-lg-font:              110%;
-$table-de-padding:           .75rem 2rem;
-$table-de-font:              100%;
-$table-sm-padding:           .5rem 2rem;
-$table-sm-font:              90%;
-$table-xs-padding:           0.2rem 2rem;
-$table-xs-font:              80%;
-$horizontal-border-color:    #f2f4ff;
-$horizontal-padding:         .75rem 2rem;
-$table-inverse-bg-color:     #292b2c;
+$table-b-margin: 0px;
+$table-heading-color: $theme-body-font-color;
+$table-row-color: $theme-body-font-color;
+$table-footer-font-weight: bold;
+$table-inverse-color: $white;
+$table-hover-color: $light;
+$table-padding: 0.75rem;
+$table-xl-padding: 1.25rem 2rem;
+$table-xl-font: 120%;
+$table-lg-padding: .9rem 2rem;
+$table-lg-font: 110%;
+$table-de-padding: .75rem 2rem;
+$table-de-font: 100%;
+$table-sm-padding: .5rem 2rem;
+$table-sm-font: 90%;
+$table-xs-padding: 0.2rem 2rem;
+$table-xs-font: 80%;
+$horizontal-border-color: #f2f4ff;
+$horizontal-padding: .75rem 2rem;
+$table-inverse-bg-color: #292b2c;
 
 
 //According setting
-$according-card-top-margin           : 10px;
-$according-btn-weight                : 500;
-$according-btn-color                 : $theme-body-font-color;
-$according-card-header-padding       : 1rem 1.25rem;
-$according-card-header-icon          : $font-ICO;
-$according-open-icon                 : "\eb73";
-$according-close-icon                : "\eb7a";
+$according-card-top-margin : 10px;
+$according-btn-weight : 500;
+$according-btn-color : $theme-body-font-color;
+$according-card-header-padding : 1rem 1.25rem;
+$according-card-header-icon : $font-ICO;
+$according-open-icon : "\eb73";
+$according-close-icon : "\eb7a";
 
 //Alert settings
-$alert-hover-color        :$dark-color;
-$alert-border-radious     :0.15rem;
-$alert-padding            :15px;
-$alert-msg-icon-size      :16px;
+$alert-hover-color :$dark-color;
+$alert-border-radious :0.15rem;
+$alert-padding :15px;
+$alert-msg-icon-size :16px;
 
 //badge settings
-$badge-padding        :0.44em 0.7em;
-$badge-svg-size       :10px;
+$badge-padding :0.44em 0.7em;
+$badge-svg-size :10px;
 
 //form input settings
-$form-group-margin-bottom        : 1.25em;
-$col-form-label-font-size        : 14px;
-$form-control-font-size          : 14px;
-$form-control-border-radious     : 2px;
-$form-control-border-color     : $light-gray;
+$form-group-margin-bottom : 1.25em;
+$col-form-label-font-size : 14px;
+$form-control-font-size : 14px;
+$form-control-border-radious : 2px;
+$form-control-border-color : $light-gray;
 
 //breadcrumb setting
-$breadcrumb-ancher-color    : $white;
-$breadcrumb-ancher-dark-color    : $black;
+$breadcrumb-ancher-color : $white;
+$breadcrumb-ancher-dark-color : $black;
 
 //buttons setting
 $btn-font-size : 14px;
@@ -177,17 +177,17 @@ $btn-padding : 0.375rem 1.75rem;
 $btn-lg-font-size: 18px;
 $btn-sm-font-size: 12px;
 $btn-xs-font-size: 10px;
-$btn-xs-padding:  0.2rem 0.7rem;
+$btn-xs-padding: 0.2rem 0.7rem;
 
 
 //Card settings
-$card-padding        :30px;
-$card-margin-bottom  :30px;
-$card-border-color   :1px solid $light-gray;
+$card-padding :30px;
+$card-margin-bottom :30px;
+$card-border-color :1px solid $light-gray;
 $card-border-radious :0;
-$border-secondary:#ede7e4 ;
+$border-secondary: #ede7e4;
 $common-shadow-color : rgba($light-font, 0.08);
-$card-box-shadow     : 0 25px 50px rgba(8,21,66,.06);
+$card-box-shadow : 0 25px 50px rgba(8, 21, 66, .06);
 $card-header-font-weight : 600;
 $card-header-bg-color : $white;
 $card-header-font-transform : capitalize;
@@ -199,13 +199,13 @@ $card-footer-bg-color : $white;
 
 //footer settings
 $footer_bg_color : $white;
-$footer_box_shadow : 0 0 20px 16px rgba(4,122,251,0.04);
+$footer_box_shadow : 0 0 20px 16px rgba(4, 122, 251, 0.04);
 $footer_link_align : right;
 $footer_dark_color : $theme-font-color;
 $footer_dark__txt_color : $white;
 
 //form settings
-$form-group-margin-bottom  :20px;
+$form-group-margin-bottom :20px;
 $sm-form-margin-bottom : 14px;
 $form-placeholder-color : $dark-gray;
 $form-placeholder-font-size : 14px;
@@ -264,7 +264,7 @@ $sidebar-arrow-margin-top: 2px;
 $sidebar-arrow-size: 15px;
 $sidebar-arrow-color: $theme-body-font-color;
 $sidebar-open-icon: "\f107";
-$sidebar-close-icon:"\f105";
+$sidebar-close-icon: "\f105";
 $sidebar-icon-font-family: $font-awesome;
 $sidebar-height: calc(100vh - 355px);
 // $sidebar-height: calc(100vh - 115px);
@@ -272,7 +272,7 @@ $sidebar-height: calc(100vh - 355px);
 //Header settings
 $main-header-position: fixed;
 $main-header-top: 0;
-$main-header-shadow:  0 0 20px rgba(25,124,207,0.08);
+$main-header-shadow: 0 0 20px rgba(25, 124, 207, 0.08);
 $bookmark-icon-color: #fa9f44;
 
 //page settings
@@ -282,7 +282,7 @@ $page-body-margin-bottom: 0px;
 
 $page-header-padding : 30px;
 
-$common-box-shadow: 2px 3.464px 8px 0px rgba( 22, 145, 248, 0.18 );
+$common-box-shadow: 2px 3.464px 8px 0px rgba(22, 145, 248, 0.18);
 $page-title-font-size: 24px;
 $page-title-margin-bottom: 0;
 $page-title-font-weight: 600;
@@ -301,6 +301,6 @@ $main-header-left-bg-color : $white;
 $main-header-padding : 27px 22px;
 $main-header-z-index : 9;
 $main-header-right-padding: 24px 40px;
-$main-header-right-nav-icon-size :  18px;
-$main-header-right-nav-icon-color :  $theme-font-color;
-$main-header-right-nav-icon-align :  middle;
+$main-header-right-nav-icon-size : 18px;
+$main-header-right-nav-icon-color : $theme-font-color;
+$main-header-right-nav-icon-align : middle;

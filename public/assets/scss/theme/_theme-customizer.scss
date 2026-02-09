@@ -43,18 +43,18 @@
     }
     span{
       position: absolute;
-      right:-80px;     
+      right:-80px;
       width: max-content;
       text-align: right;
       padding: 7px 10px;
       display: block;
       top: 8px;
       border-radius: 5px;
-      transform: scale(0);     
+      transform: scale(0);
       transition: all 0.3s ease;
       opacity: 0;
       color: $white;
-      background-color:$primary-color;     
+      background-color:$primary-color;
       // box-shadow: 0 0 37px rgb(8 21 66 / 10%);
     }
     &:after{
@@ -72,12 +72,12 @@
       span{
         opacity:1;
         right:68px;
-        transform: scale(1);     
+        transform: scale(1);
         transition: all 0.3s ease;
       }
       &:after{
-        opacity: 1;       
-        transform: scale(1);       
+        opacity: 1;
+        transform: scale(1);
         border-top: 8px solid transparent;
         border-left: 10px solid $primary-color;
         border-bottom: 8px solid transparent;
@@ -194,8 +194,8 @@
             height:40px;
             width:40px;
             border-radius:5px;
-            display:inline-block;            
-            margin-right:3px;           
+            display:inline-block;
+            margin-right:3px;
             border: 1px solid #b8b8b8;
             padding:3px;
             background-color: $light-background;
@@ -247,7 +247,7 @@
       border: 1px solid #b8b8b8;
       padding: 3px;
       > div{
-        background-color: #24695c;
+        background-color: #AA2224;
         height: 100%;
         width: 100%;
         border-radius: 3px;
@@ -260,7 +260,7 @@
           li{
             height: 1px;
             width: 65%;
-            background-color: #24695c;
+            background-color: #AA2224;
             border-radius: 5px;
             padding: 0;
             margin-left: 10px;
@@ -270,7 +270,7 @@
               position: absolute;
               height: 1px;
               width: 3px;
-              background-color: #24695c;
+              background-color: #AA2224;
               left: -6px;
               border-radius: 5px;
             }
@@ -432,7 +432,7 @@
           width: 4px;
           height: 4px;
           border-radius: 5px;
-          top: -2px;          
+          top: -2px;
           background-color: $danger-color;
           margin-right: 1px;
           padding: 0;

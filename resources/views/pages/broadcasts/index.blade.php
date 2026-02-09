@@ -70,7 +70,7 @@
 
                                             <td>
                                                 <!-- Edit button -->
-                                                <a href="" class="btn btn-primary btn-sm">
+                                                <a href="" class="btn btn-success btn-sm">
                                                     Edit
                                                 </a>
 

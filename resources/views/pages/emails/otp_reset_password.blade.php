@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>OTP Reset Password</title>
@@ -29,14 +30,15 @@
                     <!-- OTP CODE -->
                     <tr>
                         <td align="center" style="padding:24px 0;">
-                            <div style="
+                            <div
+                                style="
                                 font-size:32px;
                                 font-weight:bold;
                                 letter-spacing:6px;
                                 color:#111827;
                                 background:#f9fafb;
                                 padding:16px 32px;
-                                border:2px dashed #24695c;
+                                border:2px dashed #AA2224;
                                 border-radius:8px;
                                 display:inline-block;
                             ">
@@ -66,4 +68,5 @@
         </tr>
     </table>
 </body>
+
 </html>

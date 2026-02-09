@@ -21,7 +21,7 @@ function addCalendar(calendar) {
 function findCalendar(id) {
     var found;
 
-    CalendarList.forEach(function(calendar) {
+    CalendarList.forEach(function (calendar) {
         if (calendar.id === id) {
             found = calendar;
         }
@@ -41,7 +41,7 @@ function hexToRGBA(hex) {
     return rgba;
 }
 
-(function() {
+(function () {
     var calendar;
     var id = 0;
 
@@ -50,9 +50,9 @@ function hexToRGBA(hex) {
     calendar.id = String(id);
     calendar.name = 'My Calendar';
     calendar.color = '#ffffff';
-    calendar.bgColor = '#24695c';
-    calendar.dragBgColor = '#24695c';
-    calendar.borderColor = '#24695c';
+    calendar.bgColor = '#AA2224';
+    calendar.dragBgColor = '#AA2224';
+    calendar.borderColor = '#AA2224';
     addCalendar(calendar);
 
     calendar = new CalendarInfo();
@@ -60,9 +60,9 @@ function hexToRGBA(hex) {
     calendar.id = String(id);
     calendar.name = 'Company';
     calendar.color = '#ffffff';
-    calendar.bgColor = '#ba895d';
-    calendar.dragBgColor = '#ba895d';
-    calendar.borderColor = '#ba895d';
+    calendar.bgColor = '#0D6EFD';
+    calendar.dragBgColor = '#0D6EFD';
+    calendar.borderColor = '#0D6EFD';
     addCalendar(calendar);
 
     calendar = new CalendarInfo();
@@ -90,9 +90,9 @@ function hexToRGBA(hex) {
     calendar.id = String(id);
     calendar.name = 'Travel';
     calendar.color = '#ffffff';
-    calendar.bgColor = '#1b4c43';
-    calendar.dragBgColor = '#1b4c43';
-    calendar.borderColor = '#1b4c43';
+    calendar.bgColor = '#16A34A';
+    calendar.dragBgColor = '#16A34A';
+    calendar.borderColor = '#16A34A';
     addCalendar(calendar);
 
     calendar = new CalendarInfo();
@@ -120,8 +120,8 @@ function hexToRGBA(hex) {
     calendar.id = String(id);
     calendar.name = 'National Holidays';
     calendar.color = '#ffffff';
-    calendar.bgColor = '#d22d3d';
-    calendar.dragBgColor = '#d22d3d';
-    calendar.borderColor = '#d22d3d';
+    calendar.bgColor = '#DC2626 ';
+    calendar.dragBgColor = '#DC2626 ';
+    calendar.borderColor = '#DC2626 ';
     addCalendar(calendar);
 })();

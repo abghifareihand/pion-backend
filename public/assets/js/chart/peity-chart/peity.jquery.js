@@ -4,10 +4,10 @@
 // http://benpickles.github.io/peity
 //
 // Released under MIT license.
-(function($, document, Math, undefined) {
-  var peity = $.fn.peity = function(type, options) {
+(function ($, document, Math, undefined) {
+  var peity = $.fn.peity = function (type, options) {
     if (svgSupported) {
-      this.each(function() {
+      this.each(function () {
         var $this = $(this)
         var chart = $this.data('_peity')
 
@@ -25,7 +25,7 @@
           )
 
           $this
-            .change(function() { chart.draw() })
+            .change(function () { chart.draw() })
             .data('_peity', chart)
         }
 
@@ -36,7 +36,7 @@
     return this;
   };
 
-  var Peity = function($el, type, opts) {
+  var Peity = function ($el, type, opts) {
     this.$el = $el
     this.type = type
     this.opts = opts
@@ -44,7 +44,7 @@
 
   var PeityPrototype = Peity.prototype
 
-  var svgElement = PeityPrototype.svgElement = function(tag, attrs) {
+  var svgElement = PeityPrototype.svgElement = function (tag, attrs) {
     return $(
       document.createElementNS('http://www.w3.org/2000/svg', tag)
     ).attr(attrs)
@@ -53,21 +53,21 @@
   // https://gist.github.com/madrobby/3201472
   var svgSupported = 'createElementNS' in document && svgElement('svg', {})[0].createSVGRect
 
-  PeityPrototype.draw = function() {
+  PeityPrototype.draw = function () {
     var opts = this.opts
     peity.graphers[this.type].call(this, opts)
     if (opts.after) opts.after.call(this, opts)
   }
 
-  PeityPrototype.fill = function() {
+  PeityPrototype.fill = function () {
     var fill = this.opts.fill
 
     return $.isFunction(fill)
       ? fill
-      : function(_, i) { return fill[i % fill.length] }
+      : function (_, i) { return fill[i % fill.length] }
   }
 
-  PeityPrototype.prepare = function(width, height) {
+  PeityPrototype.prepare = function (width, height) {
     if (!this.$svg) {
       this.$el.hide().after(
         this.$svg = svgElement('svg', {
@@ -85,8 +85,8 @@
       })
   }
 
-  PeityPrototype.values = function() {
-    return $.map(this.$el.text().split(this.opts.delimiter), function(value) {
+  PeityPrototype.values = function () {
+    return $.map(this.$el.text().split(this.opts.delimiter), function (value) {
       return parseFloat(value)
     })
   }
@@ -94,7 +94,7 @@
   peity.defaults = {}
   peity.graphers = {}
 
-  peity.register = function(type, defaults, grapher) {
+  peity.register = function (type, defaults, grapher) {
     this.defaults[type] = defaults
     this.graphers[type] = grapher
   }
@@ -102,16 +102,16 @@
   peity.register(
     'pie',
     {
-      fill: ['#24695c', '#ba895d', '#222222'],
+      fill: ['#AA2224', '#0D6EFD', '#222222'],
       radius: 8
     },
-    function(opts) {
+    function (opts) {
       if (!opts.delimiter) {
         var delimiter = this.$el.text().match(/[^0-9\.]/)
         opts.delimiter = delimiter ? delimiter[0] : ","
       }
 
-      var values = $.map(this.values(), function(n) {
+      var values = $.map(this.values(), function (n) {
         return n > 0 ? n : 0
       })
 
@@ -157,7 +157,7 @@
       var pi = Math.PI
       var fill = this.fill()
 
-      var scale = this.scale = function(value, radius) {
+      var scale = this.scale = function (value, radius) {
         var radians = value / sum * pi * 2 - pi / 2
 
         return [
@@ -233,7 +233,7 @@
   peity.register(
     'donut',
     $.extend(true, {}, peity.defaults.pie),
-    function(opts) {
+    function (opts) {
       peity.graphers.pie.call(this, opts)
     }
   )
@@ -242,14 +242,14 @@
     "line",
     {
       delimiter: ",",
-      fill: "#24695c",
+      fill: "#AA2224",
       height: 16,
       min: 0,
-      stroke: "#ba895d",
+      stroke: "#0D6EFD",
       strokeWidth: 1,
       width: 32
     },
-    function(opts) {
+    function (opts) {
       var values = this.values()
       if (values.length == 1) values.push(values[0])
       var max = Math.max.apply(Math, opts.max == undefined ? values : values.concat(opts.max))
@@ -261,11 +261,11 @@
         , height = $svg.height() - strokeWidth
         , diff = max - min
 
-      var xScale = this.x = function(input) {
+      var xScale = this.x = function (input) {
         return input * (width / (values.length - 1))
       }
 
-      var yScale = this.y = function(input) {
+      var yScale = this.y = function (input) {
         var y = height
 
         if (diff) {
@@ -320,7 +320,7 @@
       padding: 0.1,
       width: 32
     },
-    function(opts) {
+    function (opts) {
       var values = this.values()
         , max = Math.max.apply(Math, opts.max == undefined ? values : values.concat(opts.max))
         , min = Math.min.apply(Math, opts.min == undefined ? values : values.concat(opts.min))
@@ -332,11 +332,11 @@
         , padding = opts.padding
         , fill = this.fill()
 
-      var xScale = this.x = function(input) {
+      var xScale = this.x = function (input) {
         return input * width / values.length
       }
 
-      var yScale = this.y = function(input) {
+      var yScale = this.y = function (input) {
         return height - (
           diff
             ? ((input - min) / diff) * height

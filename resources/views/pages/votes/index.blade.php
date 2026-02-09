@@ -86,7 +86,7 @@
 
                                             <td>
                                                 <!-- Edit button -->
-                                                <a href="{{ route('votes.edit', $vote->id) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('votes.edit', $vote->id) }}" class="btn btn-success btn-sm">
                                                     Edit
                                                 </a>
 

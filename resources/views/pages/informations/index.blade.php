@@ -70,7 +70,7 @@
                                             <td>
                                                 <!-- Edit button -->
                                                 <a href="{{ route('informations.edit', $info->id) }}"
-                                                    class="btn btn-primary btn-sm">
+                                                    class="btn btn-success btn-sm">
                                                     Edit
                                                 </a>
 
