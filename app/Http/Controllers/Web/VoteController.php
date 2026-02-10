@@ -125,7 +125,11 @@ class VoteController extends Controller
 
             // ---------- KIRIM NOTIF KE SEMUA USER ----------
             DB::afterCommit(function () use ($vote) {
-                $tokens = User::whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
+                // $tokens = User::whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
+                $tokens = User::whereNotNull('fcm_token')
+                    ->pluck('fcm_token')
+                    ->filter(fn($t) => !empty($t)) // skip null / empty
+                    ->toArray();
 
                 if (!empty($tokens)) {
                     app(FirebaseService::class)->sendToTokens(

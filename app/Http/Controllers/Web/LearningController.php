@@ -93,7 +93,11 @@ class LearningController extends Controller
         ]);
 
         // ---------- KIRIM NOTIF KE SEMUA USER ----------
-        $tokens = User::whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
+        // $tokens = User::whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
+        $tokens = User::whereNotNull('fcm_token')
+            ->pluck('fcm_token')
+            ->filter(fn($t) => !empty($t)) // skip null / empty
+            ->toArray();
 
         if (!empty($tokens)) {
             $this->firebase->sendToTokens(
