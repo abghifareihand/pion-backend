@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
-            $table->string('title'); // Judul voting
+            $table->string('title');
             $table->text('description')->nullable();
-            $table->timestamp('start_at')->nullable();
-            $table->timestamp('end_at')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

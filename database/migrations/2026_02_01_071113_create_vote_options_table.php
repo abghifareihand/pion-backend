@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('label'); // nama kandidat
             $table->timestamps();
 
+            // Penting: Satu user cuma bisa milih 1x di satu voting yang sama
             $table->unique(['vote_id', 'user_id']);
         });
     }

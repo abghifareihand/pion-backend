@@ -7,9 +7,11 @@ use App\Http\Controllers\Web\FinancialController;
 use App\Http\Controllers\Web\InformatinController;
 use App\Http\Controllers\Web\InformationController;
 use App\Http\Controllers\Web\LearningController;
+use App\Http\Controllers\Web\MemberRegistrationController;
 use App\Http\Controllers\Web\OrganizationController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\SocialController;
+use App\Http\Controllers\Web\TicketController;
 use App\Http\Controllers\Web\UnionController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\VisionController;
@@ -123,6 +125,27 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{vote}/edit', [VoteController::class, 'edit'])->name('edit');
         Route::put('/{vote}', [VoteController::class, 'update'])->name('update');
         Route::delete('/{vote}', [VoteController::class, 'destroy'])->name('destroy');
+    });
+
+    // Tickets Routes
+    Route::prefix('tickets')->name('tickets.')->group(function () {
+        Route::get('/', [TicketController::class, 'index'])->name('index');
+        Route::get('/{ticket}', [TicketController::class, 'show'])->name('show');
+        Route::get('/{ticket}/edit', [TicketController::class, 'edit'])->name('edit');
+        Route::post('/{ticket}/reply', [TicketController::class, 'reply'])->name('reply');
+        Route::put('/{ticket}', [TicketController::class, 'update'])->name('update');
+        Route::delete('/{ticket}', [TicketController::class, 'destroy'])->name('destroy');
+        Route::get('/{ticket}/pdf-preview', [TicketController::class, 'previewPdf'])->name('pdf');
+    });
+
+    // Member Member Registrations Routes
+    Route::prefix('members')->name('members.')->group(function () {
+        Route::get('/', [MemberRegistrationController::class, 'index'])->name('index');
+        Route::get('/{member}', [MemberRegistrationController::class, 'show'])->name('show');
+        Route::get('/{member}/edit', [MemberRegistrationController::class, 'edit'])->name('edit');
+        Route::put('/{member}', [MemberRegistrationController::class, 'update'])->name('update');
+        Route::post('/{member}/approve', [MemberRegistrationController::class, 'approve'])->name('approve');
+        Route::get('/{member}/pdf-preview', [MemberRegistrationController::class, 'previewPdf'])->name('pdf');
     });
 
     // Broadcasts Routes

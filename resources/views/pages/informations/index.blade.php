@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Data Information
+    Data Informasi
 @endsection
 
 @push('css')
@@ -17,11 +17,11 @@
                 <div class="card p-3">
                     <div class="d-flex justify-content-between align-items-center">
                         {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Data Information</h5>
+                        <h5 class="fw-bold mb-0">Data Informasi</h5>
 
                         {{-- Tombol di kanan --}}
                         <a class="btn btn-primary" href="{{ route('informations.create') }}">
-                            <i class="fa fa-plus me-1"></i> Create
+                            <i class="fa fa-plus me-1"></i> Buat
                         </a>
                     </div>
                 </div>
@@ -46,9 +46,9 @@
                                 <thead>
                                     <tr>
                                         <th class="dt-col-no">No</th>
-                                        <th>Title</th>
+                                        <th>Judul</th>
                                         <th>File</th>
-                                        <th>Uploaded At</th>
+                                        <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -70,18 +70,18 @@
                                             <td>
                                                 <!-- Edit button -->
                                                 <a href="{{ route('informations.edit', $info->id) }}"
-                                                    class="btn btn-success btn-sm">
+                                                    class="btn btn-success btn-xs">
                                                     Edit
                                                 </a>
 
                                                 <!-- Show button -->
                                                 <a href="{{ route('informations.show', $info->id) }}"
-                                                    class="btn btn-secondary btn-sm">
+                                                    class="btn btn-secondary btn-xs">
                                                     Show
                                                 </a>
 
                                                 <!-- Delete button -->
-                                                <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                                <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
                                                     data-bs-target="#deleteModal"
                                                     data-action="{{ route('informations.destroy', $info) }}"
                                                     data-name="{{ $info->title }}">

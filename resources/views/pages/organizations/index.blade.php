@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Data Organization
+    Data Struktur Organisasi
 @endsection
 
 @push('css')
@@ -17,11 +17,11 @@
                 <div class="card p-3">
                     <div class="d-flex justify-content-between align-items-center">
                         {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Data Organization</h5>
+                        <h5 class="fw-bold mb-0">Data Struktur Organisasi</h5>
 
                         {{-- Tombol di kanan --}}
                         <a class="btn btn-primary" href="{{ route('organizations.create') }}">
-                            <i class="fa fa-plus me-1"></i> Create
+                            <i class="fa fa-plus me-1"></i> Buat
                         </a>
                     </div>
                 </div>
@@ -29,75 +29,76 @@
 
             <div class="col-sm-12">
                 <div class="card">
-                        <div class="card-body">
+                    <div class="card-body">
 
-                            {{-- Alert sukses --}}
-                            @if (session('success'))
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    {{ session('success') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                                </div>
-                            @endif
-
-                            {{-- Table untuk list organization --}}
-                            <div class="table-responsive">
-                                <table class="display" id="basic-1">
-                                    <thead>
-                                        <tr>
-                                            <th class="dt-col-no">No</th>
-                                            <th>Title</th>
-                                            <th>File</th>
-                                            <th>Uploaded At</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($organizations as $organization)
-                                            <tr>
-                                                <td class="dt-col-no">{{ $loop->iteration }}</td>
-
-                                                <td>{{ $organization->title }}</td>
-
-                                                <td>
-                                                    <a href="{{ asset('storage/' . $organization->file_path) }}" target="_blank">
-                                                        Download
-                                                    </a>
-                                                </td>
-
-                                                <td>{{ $organization->created_at->format('d/m/y H:i') }}</td>
-
-                                                <td>
-                                                    <!-- Edit button -->
-                                                    <a href="{{ route('organizations.edit', $organization->id) }}"
-                                                        class="btn btn-success btn-sm">
-                                                        Edit
-                                                    </a>
-
-                                                    <!-- Show button -->
-                                                    <a href="{{ route('organizations.show', $organization->id) }}"
-                                                        class="btn btn-secondary btn-sm">
-                                                        Show
-                                                    </a>
-
-                                                    <!-- Delete button -->
-                                                    <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteModal"
-                                                        data-action="{{ route('organizations.destroy', $organization) }}"
-                                                        data-name="{{ $organization->title }}">
-                                                        Delete
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="5" class="text-center text-muted">No organization data</td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+                        {{-- Alert sukses --}}
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
                             </div>
-                            {{-- End Table --}}
+                        @endif
+
+                        {{-- Table untuk list organization --}}
+                        <div class="table-responsive">
+                            <table class="display" id="basic-1">
+                                <thead>
+                                    <tr>
+                                        <th class="dt-col-no">No</th>
+                                        <th>Judul</th>
+                                        <th>File</th>
+                                        <th>Created At</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($organizations as $organization)
+                                        <tr>
+                                            <td class="dt-col-no">{{ $loop->iteration }}</td>
+
+                                            <td>{{ $organization->title }}</td>
+
+                                            <td>
+                                                <a href="{{ asset('storage/' . $organization->file_path) }}"
+                                                    target="_blank">
+                                                    Download
+                                                </a>
+                                            </td>
+
+                                            <td>{{ $organization->created_at->format('d/m/y H:i') }}</td>
+
+                                            <td>
+                                                <!-- Edit button -->
+                                                <a href="{{ route('organizations.edit', $organization->id) }}"
+                                                    class="btn btn-success btn-xs">
+                                                    Edit
+                                                </a>
+
+                                                <!-- Show button -->
+                                                <a href="{{ route('organizations.show', $organization->id) }}"
+                                                    class="btn btn-secondary btn-xs">
+                                                    Show
+                                                </a>
+
+                                                <!-- Delete button -->
+                                                <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal"
+                                                    data-action="{{ route('organizations.destroy', $organization) }}"
+                                                    data-name="{{ $organization->title }}">
+                                                    Delete
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted">No organization data</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                        {{-- End Table --}}
                     </div>
                 </div>
             </div>

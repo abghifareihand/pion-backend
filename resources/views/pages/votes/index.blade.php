@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Data Vote
+    Data Pemilu
 @endsection
 
 @push('css')
@@ -17,11 +17,11 @@
                 <div class="card p-3">
                     <div class="d-flex justify-content-between align-items-center">
                         {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Data Vote</h5>
+                        <h5 class="fw-bold mb-0">Data Pemilu</h5>
 
                         {{-- Tombol di kanan --}}
                         <a class="btn btn-primary" href="{{ route('votes.create') }}">
-                            <i class="fa fa-plus me-1"></i> Create
+                            <i class="fa fa-plus me-1"></i> Buat
                         </a>
                     </div>
                 </div>
@@ -46,10 +46,10 @@
                                 <thead>
                                     <tr>
                                         <th class="dt-col-no">No</th>
-                                        <th>Title</th>
-                                        <th>Total Candidates</th>
-                                        <th>Period</th>
+                                        <th>Judul</th>
+                                        <th>Total Kandidat</th>
                                         <th>Status</th>
+                                        <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -62,42 +62,36 @@
 
                                             <td>
                                                 <span class="badge bg-info">
-                                                    {{ $vote->options_count }}
-                                                    {{ Str::plural('Candidate', $vote->options_count) }}
+                                                    {{ $vote->options_count }} KANDIDAT
                                                 </span>
                                             </td>
 
 
                                             <td>
-                                                <small>
-                                                    {{ optional($vote->start_at)->format('d/m/Y') }}
-                                                    -
-                                                    {{ optional($vote->end_at)->format('d/m/Y') }}
-                                                </small>
-                                            </td>
-
-                                            <td>
                                                 @if ($vote->is_active)
                                                     <span class="badge bg-success">Active</span>
                                                 @else
-                                                    <span class="badge bg-secondary">Inactive</span>
+                                                    <span class="badge bg-danger">Not Active</span>
                                                 @endif
                                             </td>
 
+                                            <td>{{ $vote->created_at->format('d/m/y H:i') }}</td>
+
                                             <td>
                                                 <!-- Edit button -->
-                                                <a href="{{ route('votes.edit', $vote->id) }}" class="btn btn-success btn-sm">
+                                                <a href="{{ route('votes.edit', $vote->id) }}"
+                                                    class="btn btn-success btn-xs">
                                                     Edit
                                                 </a>
 
                                                 <!-- Show button -->
                                                 <a href="{{ route('votes.show', $vote->id) }}"
-                                                    class="btn btn-secondary btn-sm">
+                                                    class="btn btn-secondary btn-xs">
                                                     Show
                                                 </a>
 
                                                 <!-- Delete button -->
-                                                <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                                <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
                                                     data-bs-target="#deleteModal"
                                                     data-action="{{ route('votes.destroy', $vote->id) }}"
                                                     data-name="{{ $vote->title }}">

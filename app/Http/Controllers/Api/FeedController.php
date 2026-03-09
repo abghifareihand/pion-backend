@@ -15,59 +15,93 @@ class FeedController extends Controller
     /**
      * GET /api/feed
      */
+    // public function index()
+    // {
+    //     // Ambil semua data dari tabel feed (exclude 'information')
+    //     $financials = Financial::all()->map(fn($item) => [
+    //         'id' => $item->id,
+    //         'type' => $item->type,
+    //         'title' => $item->title,
+    //         'created_at' => $item->created_at,
+    //         'image_path' => $item->image_path,
+    //     ]);
+
+    //     $learnings = Learning::all()->map(fn($item) => [
+    //         'id' => $item->id,
+    //         'type' => $item->type,
+    //         'title' => $item->title,
+    //         'created_at' => $item->created_at,
+    //         'image_path' => $item->image_path,
+    //     ]);
+
+    //     $organizations = Organization::all()->map(fn($item) => [
+    //         'id' => $item->id,
+    //         'type' => $item->type,
+    //         'title' => $item->title,
+    //         'created_at' => $item->created_at,
+    //         'image_path' => $item->image_path,
+    //     ]);
+
+    //     $socials = Social::all()->map(fn($item) => [
+    //         'id' => $item->id,
+    //         'type' => $item->type,
+    //         'title' => $item->title,
+    //         'created_at' => $item->created_at,
+    //         'image_path' => $item->image_path,
+    //     ]);
+
+    //     // Gabungkan semua collection
+    //     $feedItems = $financials
+    //         ->merge($learnings)
+    //         ->merge($organizations)
+    //         ->merge($socials)
+    //         ->sortByDesc('created_at')
+    //         ->take(10)
+    //         ->values(); // reset key
+
+    //     // Map field untuk response
+    //     $data = $feedItems->map(fn($item) => [
+    //         'id' => $item['id'],
+    //         'type' => $item['type'],
+    //         'title' => $item['title'],
+    //         'created_at' => $item['created_at'],
+    //         'image_url' => $item['image_path'] ? asset('storage/' . $item['image_path']) : null,
+    //     ]);
+
+
+    //     return response()->json([
+    //         'status' => true,
+    //         'message' => 'Feed fetched successfully',
+    //         'data' => $data,
+    //     ]);
+    // }
+
     public function index()
     {
-        // Ambil semua data dari tabel feed (exclude 'information')
-        $financials = Financial::all()->map(fn($item) => [
-            'id' => $item->id,
-            'type' => $item->type,
-            'title' => $item->title,
-            'created_at' => $item->created_at,
-            'image_path' => $item->image_path,
-        ]);
+        $financials = Financial::all();
+        $learnings = Learning::all();
+        $organizations = Organization::all();
+        $socials = Social::all();
 
-        $learnings = Learning::all()->map(fn($item) => [
-            'id' => $item->id,
-            'type' => $item->type,
-            'title' => $item->title,
-            'created_at' => $item->created_at,
-            'image_path' => $item->image_path,
-        ]);
-
-        $organizations = Organization::all()->map(fn($item) => [
-            'id' => $item->id,
-            'type' => $item->type,
-            'title' => $item->title,
-            'created_at' => $item->created_at,
-            'image_path' => $item->image_path,
-        ]);
-
-        $socials = Social::all()->map(fn($item) => [
-            'id' => $item->id,
-            'type' => $item->type,
-            'title' => $item->title,
-            'created_at' => $item->created_at,
-            'image_path' => $item->image_path,
-        ]);
-
-        // Gabungkan semua collection
         $feedItems = $financials
             ->merge($learnings)
             ->merge($organizations)
             ->merge($socials)
             ->sortByDesc('created_at')
             ->take(10)
-            ->values(); // reset key
+            ->values();
 
-        // Map field untuk response
-        $data = $feedItems->map(fn($item) => [
-            'id' => $item['id'],
-            'type' => $item['type'],
-            'title' => $item['title'],
-            'created_at' => $item['created_at'],
-            'image_url' => $item['image_path'] ? asset('storage/' . $item['image_path']) : null,
-        ]);
-
+        $data = $feedItems->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'type' => $item->type,
+                'title' => $item->title,
+                'created_at' => $item->created_at,
+                'image_url' => $item->image_path
+                    ? asset('storage/' . $item->image_path)
+                    : null,
+            ];
+        });
 
         return response()->json([
             'status' => true,

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Data User
+    Data Anggota
 @endsection
 
 @push('css')
@@ -17,11 +17,11 @@
                 <div class="card p-3">
                     <div class="d-flex justify-content-between align-items-center">
                         {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Data User</h5>
+                        <h5 class="fw-bold mb-0">Data Anggota</h5>
 
                         {{-- Tombol di kanan --}}
                         <a class="btn btn-primary" href="{{ route('users.create') }}">
-                            <i class="fa fa-plus me-1"></i> Create
+                            <i class="fa fa-plus me-1"></i> Buat
                         </a>
                     </div>
                 </div>
@@ -46,10 +46,9 @@
                                 <thead>
                                     <tr>
                                         <th class="dt-col-no">No</th>
-                                        <th>Name</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
+                                        <th>Nama</th>
+                                        <th>NIK</th>
+                                        <th>No. Telp</th>
                                         <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
@@ -61,9 +60,7 @@
 
                                             <td>{{ $user->name }}</td>
 
-                                            <td>{{ $user->username }}</td>
-
-                                            <td>{{ $user->email }}</td>
+                                            <td>{{ $user->nik }}</td>
 
                                             <td>{{ $user->phone }}</td>
 
@@ -72,18 +69,18 @@
                                             <td>
                                                 <!-- Edit button -->
                                                 <a href="{{ route('users.edit', $user->id) }}"
-                                                    class="btn btn-success btn-sm">
+                                                    class="btn btn-success btn-xs">
                                                     Edit
                                                 </a>
 
                                                 <!-- Show button -->
                                                 <a href="{{ route('users.show', $user->id) }}"
-                                                    class="btn btn-secondary btn-sm">
+                                                    class="btn btn-secondary btn-xs">
                                                     Show
                                                 </a>
 
                                                 <!-- Delete button -->
-                                                <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                                <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
                                                     data-bs-target="#deleteModal"
                                                     data-action="{{ route('users.destroy', $user->id) }}"
                                                     data-name="{{ $user->name }}">

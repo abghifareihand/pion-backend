@@ -13,13 +13,32 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            // Auth & Basic
             $table->string('name');
-            $table->string('username')->unique();
-            $table->string('email')->unique();
+            $table->string('nik')->unique();
+            $table->string('username')->unique()->nullable();
+            $table->string('kta_number')->unique()->nullable();
+            $table->string('barcode_number')->unique()->nullable();
+            $table->string('email')->unique()->nullable();
+
+            // Profil Lengkap (Pindahan dari Member Regis)
+            $table->string('department')->nullable();
             $table->string('phone')->nullable();
-            $table->enum('role', ['admin', 'user'])->default('user');
-            $table->string('pin', 6)->nullable();
+            $table->string('birth_place')->nullable();
+            $table->date('birth_date')->nullable();
+            $table->text('address')->nullable();
+            $table->enum('gender', ['male', 'female'])->nullable();
+            $table->string('religion')->nullable();
+            $table->string('education')->nullable();
+
+            $table->string('image_path')->nullable();
+
+            // Security app
             $table->string('password');
+            $table->string('pin');
+
+            // System
+            $table->enum('role', ['admin', 'user'])->default('user');
             $table->string('fcm_token')->nullable();
             $table->rememberToken();
             $table->timestamps();

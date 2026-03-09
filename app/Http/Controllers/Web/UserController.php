@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-
 class UserController extends Controller
 {
     public function index()
@@ -24,32 +23,51 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username',
-            'email' => 'required|email|max:255|unique:users,email',
-            'phone' => 'nullable|string|max:20',
-            'pin' => 'nullable|string|size:6',
-            'password' => 'required|string|min:6',
+            'name'         => 'required|string|max:255',
+            'nik'          => 'required|string|max:255|unique:users,nik',
+            'kta_number'   => 'required|string|max:255|unique:users,kta_number',
+            'barcode_number' => 'required|string|max:255|unique:users,barcode_number',
+            'email'        => 'nullable|email|max:255|unique:users,email',
+            'phone'        => 'nullable|string|max:20',
+            'department'   => 'nullable|string',
+            'birth_place'  => 'nullable|string',
+            'birth_date'   => 'nullable|date',
+            'gender'       => 'nullable|in:male,female',
+            'religion'     => 'nullable|string',
+            'education'    => 'nullable|string',
+            'address'      => 'nullable|string',
+            'pin'          => 'required|string|size:6',
+            'password'     => 'required|string|min:6',
         ], [
-            'name.required' => 'Nama wajib diisi.',
-            'username.required' => 'Username wajib diisi.',
-            'username.unique' => 'Username sudah digunakan.',
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email sudah digunakan.',
-            'password.required' => 'Password wajib diisi.',
-            'password.min' => 'Password minimal 6 karakter.',
-            'pin.size' => 'PIN harus 6 digit.',
+            'name.required'       => 'Nama wajib diisi.',
+            'nik.required'        => 'NIK wajib diisi.',
+            'nik.unique'          => 'NIK sudah digunakan.',
+            'kta_number.required' => 'KTA wajib diisi.',
+            'kta_number.unique'   => 'Nomor KTA sudah digunakan oleh member lain.',
+            'barcode_number.unique' => 'Nomor barcode sudah digunakan.',
+            'email.unique'        => 'Email sudah digunakan.',
+            'password.required'   => 'Password wajib diisi.',
+            'pin.size'            => 'PIN harus 6 digit.',
         ]);
 
         User::create([
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'role' => 'user',
-            'pin' => $request->pin,
-            'password' => Hash::make($request->password),
+            'name'         => $request->name,
+            'nik'          => $request->nik,
+            'username'     => $request->nik,
+            'kta_number'   => $request->kta_number,
+            'barcode_number' => $request->barcode_number,
+            'email'        => $request->email,
+            'phone'        => $request->phone,
+            'department'   => $request->department,
+            'birth_place'  => $request->birth_place,
+            'birth_date'   => $request->birth_date,
+            'gender'       => $request->gender,
+            'religion'     => $request->religion,
+            'education'    => $request->education,
+            'address'      => $request->address,
+            'role'         => 'user',
+            'pin'          => Hash::make($request->pin),
+            'password'     => Hash::make($request->password),
         ]);
 
         return redirect()->route('users.index')->with('success', 'User berhasil dibuat.');
@@ -68,29 +86,56 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string|max:20',
-            'pin' => 'nullable|string|size:6',
-            'password' => 'nullable|string|min:6',
+            'name'         => 'required|string|max:255',
+            'nik'          => 'required|string|max:255|unique:users,nik,' . $user->id,
+            'kta_number'   => 'required|string|max:255|unique:users,kta_number,' . $user->id,
+            'barcode_number' => 'required|string|max:255|unique:users,barcode_number,' . $user->id,
+            'email'        => 'nullable|email|max:255|unique:users,email,' . $user->id,
+            'phone'        => 'nullable|string|max:20',
+            'department'   => 'nullable|string',
+            'birth_place'  => 'nullable|string',
+            'birth_date'   => 'nullable|date',
+            'gender'       => 'nullable|in:male,female',
+            'religion'     => 'nullable|string',
+            'education'    => 'nullable|string',
+            'address'      => 'nullable|string',
+            'pin'          => 'nullable|string|size:6',
+            'password'     => 'nullable|string|min:6',
         ], [
-            'name.required' => 'Nama wajib diisi.',
-            'username.required' => 'Username wajib diisi.',
-            'username.unique' => 'Username sudah digunakan.',
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email sudah digunakan.',
-            'password.min' => 'Password minimal 6 karakter.',
-            'pin.size' => 'PIN harus 6 digit.',
+            'name.required'     => 'Nama wajib diisi.',
+            'nik.required'      => 'NIK wajib diisi.',
+            'nik.unique'        => 'NIK sudah digunakan.',
+            'kta_number.required' => 'KTA wajib diisi.',
+            'kta_number.unique' => 'Nomor KTA sudah digunakan oleh member lain.',
+            'barcode_number.unique' => 'Nomor barcode sudah digunakan.',
+            'email.unique'      => 'Email sudah digunakan.',
+            'password.required' => 'Password wajib diisi.',
+            'pin.size'          => 'PIN harus 6 digit.',
         ]);
 
-        $user->name = $request->name;
-        $user->username = $request->username;
-        $user->email = $request->email;
-        $user->phone = $request->phone;
-        $user->pin = $request->pin;
+        // Update data profil
+        $user->fill([
+            'name'         => $request->name,
+            'nik'          => $request->nik,
+            'kta_number'   => $request->kta_number,
+            'barcode_number' => $request->barcode_number,
+            'email'        => $request->email,
+            'phone'        => $request->phone,
+            'department'   => $request->department,
+            'birth_place'  => $request->birth_place,
+            'birth_date'   => $request->birth_date,
+            'gender'       => $request->gender,
+            'religion'     => $request->religion,
+            'education'    => $request->education,
+            'address'      => $request->address,
+        ]);
 
+        // Update PIN jika diisi
+        if ($request->filled('pin')) {
+            $user->pin = Hash::make($request->pin);
+        }
+
+        // Update Password jika diisi
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Detail Union
+    Detail Serikat SP PION
 @endsection
 
 @push('css')
@@ -14,9 +14,9 @@
             <div class="col-md-12">
                 <div class="card p-3 mb-3">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="fw-bold mb-0">Detail Union</h5>
+                        <h5 class="fw-bold mb-0">Detail Serikat SP PION</h5>
                         <a class="btn btn-primary" href="{{ route('unions.index') }}">
-                            <i class="fa fa-arrow-left me-1"></i> Back
+                            <i class="fa fa-arrow-left me-1"></i> Kembali
                         </a>
                     </div>
                 </div>
@@ -26,27 +26,33 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="mb-3">{{ $union->title }}</h5>
+                        <div class="col-sm-12">
+                            <div class="mb-3">
+                                <label>Judul</label>
+                                <div class="form-control-plaintext py-0">
+                                    {{ $union->title }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="mb-3">
+                                <label>Deskripsi</label>
+                                <div class="form-control-plaintext py-0">
+                                    {{ $union->description ?? '-' }}
+                                </div>
+                            </div>
+                        </div>
 
                         {{-- Tampilkan Image jika ada --}}
                         @if ($union->image_path)
-                            <div class="mb-3">
-                                <strong>Image:</strong> {{-- <-- label dulu --}}
-                                <div>
-                                    <img src="{{ asset('storage/' . $union->image_path) }}" alt="{{ $union->title }}"
-                                        style="max-width: 400px; height: 400px;">
-                                </div>
-                            </div>
-                        @endif
-
-                        {{-- Tampilkan File --}}
-                        @if ($union->file_path)
-                            <div class="mb-3">
-                                <strong>File:</strong> {{-- label dulu --}}
-                                <div style="margin-top: 8px;">
-                                    <a href="{{ asset('storage/' . $union->file_path) }}" target="_blank">
-                                        Download
-                                    </a>
+                            <div class="col-sm-6">
+                                <div class="mb-3">
+                                    <label>Foto</label>
+                                    <div>
+                                        <img src="{{ asset('storage/' . $union->image_path) }}"
+                                            alt="{{ $union->title }}" style="max-width: 400px; height: auto;">
+                                    </div>
                                 </div>
                             </div>
                         @endif

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Create Vote
+    Buat Pemilu
 @endsection
 
 @push('css')
@@ -17,11 +17,11 @@
                 <div class="card p-3">
                     <div class="d-flex justify-content-between align-items-center">
                         {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Create Vote</h5>
+                        <h5 class="fw-bold mb-0">Buat Pemilu</h5>
 
                         {{-- Tombol di kanan --}}
                         <a class="btn btn-primary" href="{{ route('votes.index') }}">
-                            <i class="fa fa-arrow-left me-1"></i> Back
+                            <i class="fa fa-arrow-left me-1"></i> Kembali
                         </a>
                     </div>
                 </div>
@@ -57,31 +57,11 @@
                         <form method="POST" action="{{ route('votes.store') }}">
                             @csrf
 
-                            <!-- Date Period -->
-                            {{-- <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Date Period</label>
-                                        <input id="vote-period" class="datepicker-here form-control digits" type="text"
-                                            name="period" data-range="true" data-multiple-dates-separator=" - "
-                                            data-language="en" autocomplete="off" />
-                                    </div>
-                                </div>
-                            </div> --}}
-
-                            <!-- Date Period 2 -->
-                            <div class="mb-3">
-                                <label>Date Period</label>
-                                <input class="form-control digits" type="text" name="period" id="vote-period2"
-                                    autocomplete="off" required />
-                            </div>
-
-
                             <!-- Input Title -->
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label>Title</label>
+                                        <label>Judul</label>
                                         <input class="form-control" type="text" name="title"
                                             value="{{ old('title') }}" required />
                                     </div>
@@ -92,7 +72,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label>Description</label>
+                                        <label>Deskripsi</label>
                                         <textarea class="form-control" name="description" rows="3">{{ old('description') }}</textarea>
                                     </div>
                                 </div>
@@ -103,7 +83,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label>Select Candidates</label>
+                                        <label>Pilih Kandidat</label>
                                         <div class="row">
                                             @foreach ($users as $user)
                                                 <div class="col-md-6">
@@ -141,47 +121,5 @@
     </div>
 
     @push('scripts')
-        <script src="{{ asset('assets/js/datepicker/date-picker/datepicker.js') }}"></script>
-        <script src="{{ asset('assets/js/datepicker/date-picker/datepicker.en.js') }}"></script>
-        <script>
-            $('#vote-period').datepicker({
-                range: true,
-                multipleDatesSeparator: ' - ',
-                language: 'en',
-                dateFormat: 'dd/mm/yyyy'
-            });
-        </script>
-
-        <script src="{{ asset('assets/js/datepicker/daterange-picker/moment.min.js') }}"></script>
-        <script src="{{ asset('assets/js/datepicker/daterange-picker/daterangepicker.js') }}"></script>
-        <script src="{{ asset('assets/js/datepicker/daterange-picker/daterange-picker.custom.js') }}"></script>
-        <script>
-            $(function() {
-                const $input = $('#vote-period2');
-
-                // Init daterangepicker
-                $input.daterangepicker({
-                    autoUpdateInput: false,
-                    locale: {
-                        format: 'DD/MM/YYYY',
-                        separator: ' - '
-                    }
-                });
-
-                // Set value saat apply
-                $input.on('apply.daterangepicker', function(ev, picker) {
-                    $(this).val(
-                        picker.startDate.format('DD/MM/YYYY') +
-                        ' - ' +
-                        picker.endDate.format('DD/MM/YYYY')
-                    );
-                });
-
-                // ❌ Blok input manual (ketik & paste)
-                $input.on('keydown paste', function(e) {
-                    e.preventDefault();
-                });
-            });
-        </script>
     @endpush
 @endsection

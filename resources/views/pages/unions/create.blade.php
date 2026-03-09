@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Create Unions
+    Buat Serikat SP PION
 @endsection
 
 @push('css')
@@ -15,11 +15,11 @@
                 <div class="card p-3">
                     <div class="d-flex justify-content-between align-items-center">
                         {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Create Unions</h5>
+                        <h5 class="fw-bold mb-0">Buat Serikat SP PION</h5>
 
                         {{-- Tombol di kanan --}}
                         <a class="btn btn-primary" href="{{ route('unions.index') }}">
-                            <i class="fa fa-arrow-left me-1"></i> Back
+                            <i class="fa fa-arrow-left me-1"></i> Kembali
                         </a>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label>Title</label>
+                                        <label>Judul</label>
                                         <input class="form-control" type="text" name="title"
                                             value="{{ old('title') }}" required />
                                     </div>
@@ -73,7 +73,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label>Description</label>
+                                        <label>Deskripsi</label>
                                         <textarea class="form-control" name="description" rows="3">{{ old('description') }}</textarea>
                                     </div>
                                 </div>
@@ -83,7 +83,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label>Choose Image</label>
+                                        <label>Pilih Foto</label>
                                         <input class="form-control" type="file" name="image" accept=".jpg,.jpeg,.png">
                                     </div>
                                 </div>
@@ -93,7 +93,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label>Choose File</label>
+                                        <label>Pilih File</label>
                                         <input class="form-control" type="file" name="file" accept=".pdf,.doc,.docx"
                                             required>
                                     </div>

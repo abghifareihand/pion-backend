@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Data Social
+    Data Program Sosial
 @endsection
 
 @push('css')
@@ -17,11 +17,11 @@
                 <div class="card p-3">
                     <div class="d-flex justify-content-between align-items-center">
                         {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Data Social</h5>
+                        <h5 class="fw-bold mb-0">Data Program Sosial</h5>
 
                         {{-- Tombol di kanan --}}
                         <a class="btn btn-primary" href="{{ route('socials.create') }}">
-                            <i class="fa fa-plus me-1"></i> Create
+                            <i class="fa fa-plus me-1"></i> Buat
                         </a>
                     </div>
                 </div>
@@ -29,75 +29,75 @@
 
             <div class="col-sm-12">
                 <div class="card">
-                        <div class="card-body">
+                    <div class="card-body">
 
-                            {{-- Alert sukses --}}
-                            @if (session('success'))
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    {{ session('success') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                                </div>
-                            @endif
-
-                            {{-- Table untuk list social --}}
-                            <div class="table-responsive">
-                                <table class="display" id="basic-1">
-                                    <thead>
-                                        <tr>
-                                            <th class="dt-col-no">No</th>
-                                            <th>Title</th>
-                                            <th>File</th>
-                                            <th>Uploaded At</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($socials as $social)
-                                            <tr>
-                                                <td class="dt-col-no">{{ $loop->iteration }}</td>
-
-                                                <td>{{ $social->title }}</td>
-
-                                                <td>
-                                                    <a href="{{ asset('storage/' . $social->file_path) }}" target="_blank">
-                                                        Download
-                                                    </a>
-                                                </td>
-
-                                                <td>{{ $social->created_at->format('d/m/y H:i') }}</td>
-
-                                                <td>
-                                                    <!-- Edit button -->
-                                                    <a href="{{ route('socials.edit', $social->id) }}"
-                                                        class="btn btn-success btn-sm">
-                                                        Edit
-                                                    </a>
-
-                                                    <!-- Show button -->
-                                                    <a href="{{ route('socials.show', $social->id) }}"
-                                                        class="btn btn-secondary btn-sm">
-                                                        Show
-                                                    </a>
-
-                                                    <!-- Delete button -->
-                                                    <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteModal"
-                                                        data-action="{{ route('socials.destroy', $social) }}"
-                                                        data-name="{{ $social->title }}">
-                                                        Delete
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="5" class="text-center text-muted">No social data</td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+                        {{-- Alert sukses --}}
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
                             </div>
-                            {{-- End Table --}}
+                        @endif
+
+                        {{-- Table untuk list social --}}
+                        <div class="table-responsive">
+                            <table class="display" id="basic-1">
+                                <thead>
+                                    <tr>
+                                        <th class="dt-col-no">No</th>
+                                        <th>Judul</th>
+                                        <th>File</th>
+                                        <th>Created At</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($socials as $social)
+                                        <tr>
+                                            <td class="dt-col-no">{{ $loop->iteration }}</td>
+
+                                            <td>{{ $social->title }}</td>
+
+                                            <td>
+                                                <a href="{{ asset('storage/' . $social->file_path) }}" target="_blank">
+                                                    Download
+                                                </a>
+                                            </td>
+
+                                            <td>{{ $social->created_at->format('d/m/y H:i') }}</td>
+
+                                            <td>
+                                                <!-- Edit button -->
+                                                <a href="{{ route('socials.edit', $social->id) }}"
+                                                    class="btn btn-success btn-xs">
+                                                    Edit
+                                                </a>
+
+                                                <!-- Show button -->
+                                                <a href="{{ route('socials.show', $social->id) }}"
+                                                    class="btn btn-secondary btn-xs">
+                                                    Show
+                                                </a>
+
+                                                <!-- Delete button -->
+                                                <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal"
+                                                    data-action="{{ route('socials.destroy', $social) }}"
+                                                    data-name="{{ $social->title }}">
+                                                    Delete
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted">No social data</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                        {{-- End Table --}}
                     </div>
                 </div>
             </div>
