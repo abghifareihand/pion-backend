@@ -176,7 +176,7 @@
                                             <option value="Buddha" {{ old('religion') == 'Buddha' ? 'selected' : '' }}>
                                                 Buddha</option>
                                             <option value="Khonghucu"
-                                                {{ old('religion') == 'Khonghucu' ? 'selected' : '' }}>Khonghucu</option>
+                                                {{ old('religion') == 'Konghucu' ? 'selected' : '' }}>Konghucu</option>
                                             <option value="Lainnya" {{ old('religion') == 'Lainnya' ? 'selected' : '' }}>
                                                 Lainnya</option>
                                         </select>

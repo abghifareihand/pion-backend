@@ -177,7 +177,7 @@
                                                     'Katolik',
                                                     'Hindu',
                                                     'Buddha',
-                                                    'Khonghucu',
+                                                    'Konghucu',
                                                     'Lainnya',
                                                 ];
                                             @endphp
