@@ -187,8 +187,16 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label>Pendidikan</label>
-                                        <input class="form-control" type="text" name="education"
-                                            value="{{ old('education') }}" />
+                                        <select class="form-select" name="education" required>
+                                            <option value="">-- Pilih Pendidikan --</option>
+                                            <option value="SD" {{ old('education') == 'SD' ? 'selected' : '' }}>SD</option>
+                                            <option value="SMP" {{ old('education') == 'SMP' ? 'selected' : '' }}>SMP</option>
+                                            <option value="SMA/SMK" {{ old('education') == 'SMA/SMK' ? 'selected' : '' }}>SMA/SMK</option>
+                                            <option value="D3" {{ old('education') == 'D3' ? 'selected' : '' }}>D3</option>
+                                            <option value="S1" {{ old('education') == 'S1' ? 'selected' : '' }}>S1</option>
+                                            <option value="S2" {{ old('education') == 'S2' ? 'selected' : '' }}>S2</option>
+                                            <option value="S3" {{ old('education') == 'S3' ? 'selected' : '' }}>S3</option>
+                                        </select>
                                     </div>
                                 </div>
 

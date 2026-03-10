@@ -197,8 +197,28 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label>Pendidikan</label>
-                                        <input class="form-control" type="text" name="education"
-                                            value="{{ old('education', $user->education) }}" />
+                                        {{-- <input class="form-control" type="text" name="education"
+                                            value="{{ old('education', $user->education) }}" /> --}}
+                                         <select class="form-select" name="education" required>
+                                            <option value="">-- Pilih Pendidikan --</option>
+                                            @php
+                                                $educations = [
+                                                    'SD',
+                                                    'SMP',
+                                                    'SMA/SMK',
+                                                    'D3',
+                                                    'S1',
+                                                    'S2',
+                                                    'S3',
+                                                ];
+                                            @endphp
+                                            @foreach ($educations as $item)
+                                                <option value="{{ $item }}"
+                                                    {{ old('education', $user->education) == $item ? 'selected' : '' }}>
+                                                    {{ $item }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
 
