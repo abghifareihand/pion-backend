@@ -45,8 +45,8 @@
                                         <th>Tipe</th>
                                         <th>Status</th>
                                         <th>Created At</th>
+                                        <th>PDF</th>
                                         <th>Action</th>
-                                        <th class="text-center">PDF</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -94,6 +94,27 @@
 
                                             <td>{{ $ticket->created_at->format('d/m/y H:i') }}</td>
 
+
+
+                                            <td>
+                                                <a href="{{ route('tickets.pdf', $ticket->id) }}"
+                                                    class="btn btn-pill btn-success btn-xs">
+                                                    Dengan File
+                                                </a>
+
+                                                <a href="{{ route('tickets.pdf', $ticket->id) }}?hide_attachment=1"
+                                                    class="btn btn-warning btn-xs text-dark">
+                                                    Tanpa File
+                                                </a>
+
+                                                @if ($ticket->attachment)
+                                                    <a href="{{ url('storage/' . $ticket->attachment) }}" target="_blank"
+                                                        class="btn btn-light btn-xs text-dark">
+                                                        Lihat File
+                                                    </a>
+                                                @endif
+                                            </td>
+
                                             <td>
                                                 <!-- Reply button -->
                                                 <a href="{{ route('tickets.edit', $ticket->id) }}"
@@ -110,26 +131,7 @@
                                                 </a>
                                             </td>
 
-                                            <td class="text-center">
-                                                <div class="btn-group" role="group">
-                                                    <button class="btn btn-primary btn-xs dropdown-toggle"
-                                                        id="btnGroupDrop1" type="button" data-bs-toggle="dropdown"
-                                                        aria-haspopup="true" aria-expanded="false"><i
-                                                            class="fa fa-print me-1"></i> Print</button>
-                                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('tickets.pdf', $ticket->id) }}" target="_blank">
-                                                            <i class="fa fa-image me-2"></i> With Image
-                                                        </a>
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('tickets.pdf', $ticket->id) }}?hide_attachment=1"
-                                                            target="_blank">
-                                                            <i class="fa fa-file-text-o me-2"></i> No
-                                                            Image
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </td>
+
 
 
 

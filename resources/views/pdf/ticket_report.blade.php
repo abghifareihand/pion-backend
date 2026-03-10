@@ -265,22 +265,26 @@
 
                         <div class="attachment-wrapper" style="display: table; width: auto; margin-top: 5px;">
                             @if (in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'webp']))
-                                <img src="{{ public_path('storage/' . $ticket->attachment) }}" class="img-attachment">
+                                <a href="{{ $fullUrl }}" target="_blank" style="text-decoration:none;">
+                                    <img src="{{ public_path('storage/' . $ticket->attachment) }}"
+                                        class="img-attachment" style="display:block;">
+                                </a>
                             @else
                                 <a href="{{ $fullUrl }}" target="_blank"
-                                    style="text-decoration: none; color: inherit;">
-                                    <table style="width: auto; border: none;">
+                                    style="text-decoration: none; color: inherit; display:inline-block; cursor:pointer;">
+                                    <table style="width:auto; border:0; border-collapse:collapse;">
                                         <tr>
-                                            <td style="width: 40px; border: none; padding: 5px;">
-                                                <img src="{{ public_path('assets/images/pion/icon_pdf.png') }}"
-                                                    style="width: 30px;">
-                                            </td>
-                                            <td style="border: none; padding: 5px; vertical-align: middle;">
-                                                <span
-                                                    style="font-size: 12px; color: #1a73e8; font-weight: bold;">Dokumen
-                                                    Lampiran (PDF)</span><br>
-                                                <span
-                                                    style="font-size: 10px; color: #666;">{{ basename($ticket->attachment) }}</span>
+                                            <td style="border:0; padding:5px; vertical-align:middle;">
+                                                <a href="{{ $fullUrl }}" target="_blank"
+                                                    style="text-decoration:none;">
+                                                    <span style="font-size:12px; color:#1a73e8; font-weight:bold;">
+                                                        Dokumen Lampiran (PDF)
+                                                    </span><br>
+
+                                                    <span style="font-size:10px; color:#666;">
+                                                        {{ basename($ticket->attachment) }}
+                                                    </span>
+                                                </a>
                                             </td>
                                         </tr>
                                     </table>
