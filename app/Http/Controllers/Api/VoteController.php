@@ -66,7 +66,9 @@ class VoteController extends Controller
         $totalUsers = User::where('role', 'user')->count();
 
         // 1. Load options TANPA relasi user (karena kita sudah punya 'label')
-        $vote->load('options');
+        $vote->load(['options' => function ($query) {
+            $query->orderBy('label', 'asc');
+        }]);
 
         // 2. Hitung total suara
         $vote->loadCount('results');
