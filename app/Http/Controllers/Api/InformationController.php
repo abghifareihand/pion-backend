@@ -35,6 +35,7 @@ class InformationController extends Controller
                 'id' => $item->id,
                 'type' => $item->type,
                 'title' => $item->title,
+                'image_url' => $item->image_path ? asset('storage/' . $item->image_path) : null,
                 'created_at' => $item->created_at,
             ];
         });
