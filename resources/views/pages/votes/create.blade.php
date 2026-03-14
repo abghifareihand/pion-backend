@@ -58,65 +58,49 @@
                             @csrf
 
                             <!-- Input Title -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Judul</label>
-                                        <input class="form-control" type="text" name="title"
-                                            value="{{ old('title') }}" required />
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <label>Judul</label>
+                                <input class="form-control" type="text" name="title"
+                                    value="{{ old('title') }}" required />
                             </div>
 
                             <!-- Input Description -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Deskripsi</label>
-                                        <textarea class="form-control" name="description" rows="3">{{ old('description') }}</textarea>
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <label>Deskripsi</label>
+                                <textarea class="form-control" name="description" rows="3">{{ old('description') }}</textarea>
                             </div>
 
 
                             {{-- Select Candidates --}}
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Pilih Kandidat (Maksimal 8)</label>
-                                        <div class="row">
-                                            @foreach ($users as $user)
-                                                <div class="col-md-6 mb-3">
-                                                    <div class="candidate-container p-2 border rounded">
-                                                        <label class="d-flex align-items-center mb-1 cursor-pointer" for="user_{{ $user->id }}">
-                                                            <input class="checkbox_animated candidate-checkbox" id="user_{{ $user->id }}"
-                                                                type="checkbox" name="options[]" value="{{ $user->id }}"
-                                                                {{ in_array($user->id, old('options', [])) ? 'checked' : '' }}>
-                                                            <span class="ms-2">{{ $user->name }}</span>
-                                                        </label>
-                                                        
-                                                        <div class="vision-field mt-2 {{ in_array($user->id, old('options', [])) ? '' : 'd-none' }}" id="vision_container_{{ $user->id }}">
-                                                            <label class="small text-muted mb-1">Visi Misi Kandidat</label>
-                                                            <textarea class="form-control form-control-sm" name="visions[{{ $user->id }}]" rows="2" placeholder="Masukkan visi misi untuk {{ $user->name }}...">{{ old('visions.' . $user->id) }}</textarea>
-                                                        </div>
-                                                    </div>
+                            <div class="mb-3">
+                                <label>Pilih Kandidat (Maksimal 8)</label>
+                                <div class="row">
+                                    @foreach ($users as $user)
+                                        <div class="col-md-6 mb-3">
+                                            <div class="candidate-container p-2 border rounded">
+                                                <label class="d-flex align-items-center mb-1 cursor-pointer" for="user_{{ $user->id }}">
+                                                    <input class="checkbox_animated candidate-checkbox" id="user_{{ $user->id }}"
+                                                        type="checkbox" name="options[]" value="{{ $user->id }}"
+                                                        {{ in_array($user->id, old('options', [])) ? 'checked' : '' }}>
+                                                    <span class="ms-2">{{ $user->name }}</span>
+                                                </label>
+                                                
+                                                <div class="vision-field mt-2 {{ in_array($user->id, old('options', [])) ? '' : 'd-none' }}" id="vision_container_{{ $user->id }}">
+                                                    <label class="small text-muted mb-1">Visi Misi Kandidat</label>
+                                                    <textarea class="form-control form-control-sm" name="visions[{{ $user->id }}]" rows="2" placeholder="Masukkan visi misi untuk {{ $user->name }}...">{{ old('visions.' . $user->id) }}</textarea>
                                                 </div>
-                                            @endforeach
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
 
 
                             <!-- Button Submit -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="text-end">
-                                        <button class="btn btn-success" type="submit">
-                                            <i class="fa fa-save me-1"></i> Submit
-                                        </button>
-                                    </div>
-                                </div>
+                            <div class="text-end">
+                                <button class="btn btn-success" type="submit">
+                                    <i class="fa fa-save me-1"></i> Submit
+                                </button>
                             </div>
                         </form>
                         {{-- End Form --}}

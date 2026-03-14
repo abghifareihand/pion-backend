@@ -85,34 +85,22 @@
                             </div> --}}
 
                             <!-- Input Vision -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Visi</label>
-                                        <textarea id="vision-editor" name="title" cols="10" rows="2" required>{{ old('title', $vision->title) }}</textarea>
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <label>Visi</label>
+                                <textarea id="vision-editor" name="title" cols="10" rows="2" required>{{ old('title', $vision->title) }}</textarea>
                             </div>
 
                             <!-- Input Mission -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Misi</label>
-                                        <textarea id="mision-editor" name="subtitle" cols="10" rows="2" required>{{ old('subtitle', $vision->subtitle) }}</textarea>
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <label>Misi</label>
+                                <textarea id="mision-editor" name="subtitle" cols="10" rows="2" required>{{ old('subtitle', $vision->subtitle) }}</textarea>
                             </div>
 
                             <!-- Button Update -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="text-end">
-                                        <button class="btn btn-success" type="submit">
-                                            <i class="fa fa-save me-1"></i> Update
-                                        </button>
-                                    </div>
-                                </div>
+                            <div class="text-end">
+                                <button class="btn btn-success" type="submit">
+                                    <i class="fa fa-save me-1"></i> Update
+                                </button>
                             </div>
                         </form>
                         {{-- End Form --}}

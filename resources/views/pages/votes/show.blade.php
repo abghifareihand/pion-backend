@@ -80,31 +80,29 @@
                                         : 0;
                             @endphp
 
-                            <div class="row">
-                                @foreach ($vote->options as $option)
-                                    @php
-                                        $optionPercentage =
-                                            $totalVotesCount > 0
-                                                ? round(($option->results_count / $totalVotesCount) * 100, 1)
-                                                : 0;
-                                    @endphp
-                                    <div class="col-md-12 mb-4">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <span class="fw-bold">{{ $loop->iteration }}. {{ $option->label }}</span>
-                                            <span class="fw-bold">
-                                                {{ $option->results_count }} Suara ({{ $optionPercentage }}%)
-                                            </span>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-primary" role="progressbar"
-                                                style="width: {{ $optionPercentage }}%"
-                                                aria-valuenow="{{ $optionPercentage }}" aria-valuemin="0"
-                                                aria-valuemax="100">
-                                            </div>
+                            @foreach ($vote->options as $option)
+                                @php
+                                    $optionPercentage =
+                                        $totalVotesCount > 0
+                                            ? round(($option->results_count / $totalVotesCount) * 100, 1)
+                                            : 0;
+                                @endphp
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="fw-bold">{{ $loop->iteration }}. {{ $option->label }}</span>
+                                        <span class="fw-bold">
+                                            {{ $option->results_count }} Suara ({{ $optionPercentage }}%)
+                                        </span>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-primary" role="progressbar"
+                                            style="width: {{ $optionPercentage }}%"
+                                            aria-valuenow="{{ $optionPercentage }}" aria-valuemin="0"
+                                            aria-valuemax="100">
                                         </div>
                                     </div>
-                                @endforeach
-                            </div>
+                                </div>
+                            @endforeach
                         </div>
 
                         <div class="card shadow-sm rounded-3">

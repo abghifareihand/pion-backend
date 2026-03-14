@@ -63,13 +63,9 @@
                             </div>
 
                             <!-- Input Body -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Isi Broadcast</label>
-                                        <textarea class="form-control" name="body" rows="3">{{ old('body') }}</textarea>
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <label>Isi Broadcast</label>
+                                <textarea class="form-control" name="body" rows="3">{{ old('body') }}</textarea>
                             </div>
 
                             {{-- Select User --}}
@@ -90,15 +86,11 @@
                             </div>
 
                             <!-- Button Submit -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="text-end">
-                                        <button class="btn btn-success" type="submit"
-                                            onclick="this.disabled=true; this.form.submit();">
-                                            <i class="fa fa-save me-1"></i> Kirim
-                                        </button>
-                                    </div>
-                                </div>
+                            <div class="text-end">
+                                <button class="btn btn-success" type="submit"
+                                    onclick="this.disabled=true; this.form.submit();">
+                                    <i class="fa fa-save me-1"></i> Kirim
+                                </button>
                             </div>
 
                         </form>

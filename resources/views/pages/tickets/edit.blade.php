@@ -116,41 +116,34 @@
 
                         <form method="POST" action="{{ route('tickets.reply', $ticket->id) }}" class="form theme-form">
                             @csrf
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label class="fw-bold">Reply Pesan Kamu</label>
-                                        <textarea class="form-control" name="message" rows="4" placeholder="Tulis pesan balasan atau solusi..." required>{{ old('message') }}</textarea>
-                                    </div>
-                                </div>
+                            <!-- Input Reply -->
+                            <div class="mb-3">
+                                <label class="fw-bold">Reply Pesan Kamu</label>
+                                <textarea class="form-control" name="message" rows="4" placeholder="Tulis pesan balasan atau solusi..." required>{{ old('message') }}</textarea>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="fw-bold">Update Status Pesan</label>
-                                        <select class="form-select" name="status" required>
-                                            <option value="responded"
-                                                {{ $ticket->status == 'responded' ? 'selected' : '' }}>Responded (Tetap
-                                                Aktif)</option>
-                                            <option value="processed"
-                                                {{ $ticket->status == 'processed' ? 'selected' : '' }}>Processed</option>
-                                            <option value="done" {{ $ticket->status == 'done' ? 'selected' : '' }}>Done
-                                                (Masalah Selesai)</option>
-                                            <option value="rejected" {{ $ticket->status == 'rejected' ? 'selected' : '' }}>
-                                                Rejected</option>
-                                        </select>
-                                        <small class="text-muted italic">* Pilih 'Done' jika tidak ada lagi yang perlu
-                                            dibahas.</small>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 d-flex align-items-end justify-content-end">
-                                    <div class="mb-3">
-                                        <button class="btn btn-success px-5 py-2" type="submit">
-                                            <i class="fa fa-paper-plane me-2"></i> Kirim Pesan
-                                        </button>
-                                    </div>
-                                </div>
+                            <!-- Status and Button -->
+                            <div class="mb-3">
+                                <label class="fw-bold">Update Status Pesan</label>
+                                <select class="form-select mb-2" name="status" required>
+                                    <option value="responded"
+                                        {{ $ticket->status == 'responded' ? 'selected' : '' }}>Responded (Tetap
+                                        Aktif)</option>
+                                    <option value="processed"
+                                        {{ $ticket->status == 'processed' ? 'selected' : '' }}>Processed</option>
+                                    <option value="done" {{ $ticket->status == 'done' ? 'selected' : '' }}>Done
+                                        (Masalah Selesai)</option>
+                                    <option value="rejected" {{ $ticket->status == 'rejected' ? 'selected' : '' }}>
+                                        Rejected</option>
+                                </select>
+                                <small class="text-muted italic d-block mb-3">* Pilih 'Done' jika tidak ada lagi yang perlu
+                                    dibahas.</small>
+                            </div>
+
+                            <div class="text-end">
+                                <button class="btn btn-success px-5 py-2" type="submit">
+                                    <i class="fa fa-paper-plane me-2"></i> Kirim Pesan
+                                </button>
                             </div>
                         </form>
                     </div>
