@@ -53,9 +53,20 @@
                         <h5 class="fw-bold mb-0">Data Anggota</h5>
 
                         {{-- Tombol di kanan --}}
-                        <a class="btn btn-primary" href="{{ route('users.create') }}">
-                            <i class="fa fa-plus me-1"></i> Buat
-                        </a>
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-info text-white" href="{{ route('users.template') }}">
+                                <i class="fa fa-download me-1"></i> Template
+                            </a>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#importModal">
+                                <i class="fa fa-upload me-1"></i> Import
+                            </button>
+                            <a class="btn btn-warning text-white" href="{{ route('users.export') }}">
+                                <i class="fa fa-file-excel-o me-1"></i> Export
+                            </a>
+                            <a class="btn btn-primary" href="{{ route('users.create') }}">
+                                <i class="fa fa-plus me-1"></i> Buat
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -68,6 +79,22 @@
                         @if (session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if (session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if (session('error_html'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {!! session('error_html') !!}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
                             </div>
@@ -141,7 +168,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="13" class="text-center text-muted">No user data</td>
+                                            <td colspan="13" class="text-center text-muted">Data anggota tidak ditemukan</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -178,6 +205,36 @@
         </div>
     </div>
     {{-- End Modal Delete --}}
+
+    {{-- Modal Import Excel --}}
+    <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importModalLabel">Impor Data Anggota</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('users.import') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Pilih File Excel (.xlsx, .xls)</label>
+                            <input type="file" name="file" class="form-control" required accept=".xlsx, .xls">
+                            <small class="text-muted mt-2 d-block">
+                                * Gunakan template yang sudah disediakan untuk menghindari kesalahan data.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-light" type="button" data-bs-dismiss="modal">Tutup</button>
+                        <button class="btn btn-primary" type="submit">Unggah & Impor</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{-- End Modal Import --}}
 
 
     @push('scripts')

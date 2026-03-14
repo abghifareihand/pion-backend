@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Exports\UsersExport;
+use App\Exports\UserTemplateExport;
+use App\Imports\UsersImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -161,5 +165,39 @@ class UserController extends Controller
     {
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
+    }
+
+    public function export()
+    {
+        return Excel::download(new UsersExport, 'data_anggota_' . date('Y-m-d_H-i-s') . '.xlsx');
+    }
+
+    public function downloadTemplate()
+    {
+        return Excel::download(new UserTemplateExport, 'template_import_pion_anggota.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ], [
+            'file.required' => 'File Excel wajib diunggah.',
+            'file.mimes'    => 'Format file harus .xlsx, .xls, atau .csv'
+        ]);
+
+        try {
+            Excel::import(new UsersImport, $request->file('file'));
+            return redirect()->route('users.index')->with('success', 'Data anggota berhasil diimpor.');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $error_msg = 'Terjadi kesalahan pada data Excel: <br>';
+            foreach ($failures as $failure) {
+                $error_msg .= 'Baris ' . $failure->row() . ': ' . implode(', ', $failure->errors()) . '<br>';
+            }
+            return redirect()->route('users.index')->with('error_html', $error_msg);
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('error', 'Gagal mengimpor data: ' . $e->getMessage());
+        }
     }
 }
