@@ -152,12 +152,23 @@
                         </ul>
                     </li>
 
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{ prefixActive('devices') }}" href="javascript:void(0)">
+                            <i data-feather="smartphone"></i><span>Perangkat</span>
+                        </a>
+                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('devices') }};">
+                            <li><a href="{{ route('devices.index') }}"
+                                    class="{{ routeActive('devices.index') }}">Data Perangkat</a></li>
+                        </ul>
+                    </li>
+
                     <li>
                         <a class="nav-link menu-title link-nav {{ routeActive('vision.edit') }}"
                             href="{{ route('vision.edit') }}">
                             <i data-feather="target"></i><span>Visi Misi</span>
                         </a>
                     </li>
+
 
                     <li>
                         <a class="nav-link menu-title link-nav {{ routeActive('profile.index') }}"

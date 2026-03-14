@@ -57,7 +57,15 @@ class User extends Authenticatable
      */
     public function referrals()
     {
-        return $this->hasMany(MemberRegistration::class, 'referrer_id');
+        return $this->hasMany(MemberRegistration::class , 'referrer_id');
+    }
+
+    /**
+     * Relasi ke Device (Satu user punya satu device)
+     */
+    public function device()
+    {
+        return $this->hasOne(UserDevice::class , 'user_id', 'id');
     }
 
     /**

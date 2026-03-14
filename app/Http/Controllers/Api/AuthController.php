@@ -12,81 +12,26 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    // public function login(Request $request)
-    // {
-    //     $request->validate([
-    //         'username'   => 'required|string',
-    //         'password'   => 'required|string',
-    //     ]);
-
-    //     $user = User::where('username', $request->username)->first();
-
-
-    //     // ❌ Kalau user tidak ditemukan
-    //     if (!$user) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Username atau password salah',
-    //         ], 401);
-    //     }
-
-    //     // 🔐 Cek password
-    //     if (!Hash::check($request->password, $user->password)) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Username atau password salah',
-    //         ], 401);
-    //     }
-
-
-    //     // ✅ Cegah login kalau role = admin
-    //     if ($user->role === 'admin') {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Akun admin hanya bisa login melalui dashboard web'
-    //         ], 403);
-    //     }
-
-    //     // ✅ Buat token login
-    //     $token = $user->createToken('auth_token')->plainTextToken;
-
-    //     return response()->json([
-    //         'status' => true,
-    //         'message' => 'Login berhasil',
-    //         'data'    => [
-    //             'user'  => $user,
-    //             'token' => $token,
-    //         ],
-    //     ], 200);
-    // }
-
     public function login(Request $request)
     {
         $request->validate([
-            'kta_number' => 'required|string', // User input nomor KTA di sini
-            'password'   => 'required|string',
+            'kta_number' => 'required|string',
+            'password' => 'required|string',
+            'device_id' => 'required|string',
         ]);
 
-        // 🔍 Cari user SPESIFIK berdasarkan kta_number
+        // 🔍 Cari user berdasarkan kta_number
         $user = User::where('kta_number', $request->kta_number)->first();
 
-        // ❌ Kalau nomor KTA tidak ditemukan di Database
-        if (!$user) {
+        // ❌ Cek User & Password
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => false,
-                'message' => 'Nomor KTA tidak terdaftar',
+                'message' => 'Nomor KTA atau password salah',
             ], 401);
         }
 
-        // 🔐 Cek password
-        if (!Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Password yang Anda masukkan salah',
-            ], 401);
-        }
-
-        // ✅ Proteksi Role (Admin tidak boleh login di Apps)
+        // ✅ Proteksi Role Admin
         if ($user->role === 'admin') {
             return response()->json([
                 'status' => false,
@@ -94,14 +39,39 @@ class AuthController extends Controller
             ], 403);
         }
 
+        // --- 🛡️ LOGIKA CEK DEVICE (MENGGUNAKAN RELASI) ---
+
+        // Mengakses relasi $user->device (hasOne)
+        $currentDevice = $user->device;
+
+        if ($currentDevice) {
+            // Jika sudah ada device terdaftar, tapi ID-nya beda dengan yang login sekarang
+            if ($currentDevice->device_id !== $request->device_id) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Akun Anda sudah terhubung di perangkat lain. Silakan hubungi admin untuk reset.'
+                ], 403);
+            }
+        // Jika ID sama, kita biarkan lolos (dia login ulang di HP yang sama)
+        }
+        else {
+            // Jika user ini belum punya record device (pertama kali login)
+            $user->device()->create([
+                'device_id' => $request->device_id,
+                'device_name' => $request->device_name ?? 'Unknown Device',
+            ]);
+        }
+
+        // --- 🛡️ AKHIR LOGIKA CEK DEVICE ---
+
         // ✅ Generate Token Sanctum
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'status' => true,
             'message' => 'Login berhasil',
-            'data'    => [
-                'user'  => $user,
+            'data' => [
+                'user' => $user,
                 'token' => $token,
             ],
         ], 200);
@@ -138,28 +108,28 @@ class AuthController extends Controller
         $user = $request->user();
 
         $validator = Validator::make($request->all(), [
-            'name'        => 'sometimes|string|max:255',
-            'nik_ktp'     => 'sometimes|string|max:20|unique:users,nik_ktp,' . $user->id,
+            'name' => 'sometimes|string|max:255',
+            'nik_ktp' => 'sometimes|string|max:20|unique:users,nik_ktp,' . $user->id,
             'nik_karyawan' => 'sometimes|string|max:20|unique:users,nik_karyawan,' . $user->id,
-            'email'       => 'sometimes|nullable|email|unique:users,email,' . $user->id,
-            'department'  => 'sometimes|nullable|string|max:255',
-            'phone'       => 'sometimes|nullable|string|max:20',
+            'email' => 'sometimes|nullable|email|unique:users,email,' . $user->id,
+            'department' => 'sometimes|nullable|string|max:255',
+            'phone' => 'sometimes|nullable|string|max:20',
             'birth_place' => 'sometimes|nullable|string|max:255',
-            'birth_date'  => 'sometimes|nullable|date',
-            'address'     => 'sometimes|nullable|string',
-            'gender'      => 'sometimes|nullable|in:male,female',
-            'religion'    => 'sometimes|nullable|string|max:100',
-            'education'   => 'sometimes|nullable|string|max:100',
-            'image_path'  => 'sometimes|nullable|image|mimes:jpg,jpeg,png|max:5120',
+            'birth_date' => 'sometimes|nullable|date',
+            'address' => 'sometimes|nullable|string',
+            'gender' => 'sometimes|nullable|in:male,female',
+            'religion' => 'sometimes|nullable|string|max:100',
+            'education' => 'sometimes|nullable|string|max:100',
+            'image_path' => 'sometimes|nullable|image|mimes:jpg,jpeg,png|max:5120',
         ], [
-            'image_path.max'   => 'Ukuran foto maksimal adalah 5MB.',
+            'image_path.max' => 'Ukuran foto maksimal adalah 5MB.',
             'image_path.image' => 'File yang diunggah harus berupa gambar.',
             'image_path.mimes' => 'Format foto yang didukung hanya JPG, JPEG, dan PNG.',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => false,
+                'status' => false,
                 'message' => $validator->errors()->first()
             ], 422);
         }
@@ -196,7 +166,7 @@ class AuthController extends Controller
         $user->update($data);
 
         return response()->json([
-            'status'  => true,
+            'status' => true,
             'message' => 'Profil berhasil diperbarui'
         ], 200);
     }

@@ -79,17 +79,14 @@
                             </div>
                         @endif
 
-                        @if (session('error'))
+                        {{-- Alert Error --}}
+                        @if ($errors->any())
                             <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
-                                {{ session('error') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        @if (session('error_html'))
-                            <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
-                                {!! session('error_html') !!}
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
                             </div>

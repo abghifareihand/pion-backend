@@ -3,8 +3,8 @@
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\BroadcastController;
 use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\DeviceController;
 use App\Http\Controllers\Web\FinancialController;
-use App\Http\Controllers\Web\InformatinController;
 use App\Http\Controllers\Web\InformationController;
 use App\Http\Controllers\Web\LearningController;
 use App\Http\Controllers\Web\MemberRegistrationController;
@@ -165,5 +165,11 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('vision')->name('vision.')->group(function () {
         Route::get('/edit', [VisionController::class, 'edit'])->name('edit');
         Route::put('/update', [VisionController::class, 'update'])->name('update');
+    });
+
+    // Device Routes
+    Route::prefix('devices')->name('devices.')->group(function () {
+        Route::get('/', [DeviceController::class, 'index'])->name('index');
+        Route::delete('/{device}', [DeviceController::class, 'destroy'])->name('destroy');
     });
 });
