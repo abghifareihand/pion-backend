@@ -79,53 +79,49 @@
                                 </div>
                             </div>
 
-                            <!-- Current Image -->
+                            <!-- Section Foto -->
                             <div class="row">
                                 <div class="col">
-                                    @if ($information->image_path)
-                                        <div class="mb-3">
-                                            <label>Foto Sekarang</label>
-                                            <p>
-                                                <img src="{{ asset('storage/' . $information->image_path) }}"
-                                                    alt="Current Image" style="max-width: 200px; height: auto;">
-                                            </p>
+                                    <div class="mb-3 p-3 border rounded">
+                                        @if ($information->image_path)
+                                            <div class="mb-3">
+                                                <label class="fw-bold">Foto Sekarang</label>
+                                                <p class="mb-0">
+                                                    <img src="{{ asset('storage/' . $information->image_path) }}"
+                                                        alt="Current Image" style="max-width: 200px; height: auto;"
+                                                        class="img-thumbnail">
+                                                </p>
+                                            </div>
+                                        @endif
+                                        <div>
+                                            <label>Pilih Foto Baru (opsional)</label>
+                                            <input class="form-control" type="file" name="image"
+                                                accept=".jpg,.jpeg,.png">
                                         </div>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <!-- Choose New Image -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Pilih Foto Baru (opsional)</label>
-                                        <input class="form-control" type="file" name="image" accept=".jpg,.jpeg,.png">
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Current File -->
+                            <!-- Section File -->
                             <div class="row">
                                 <div class="col">
-                                    @if ($information->file_path)
-                                        <div class="mb-3">
-                                            <label>File Sekarang</label>
-                                            <p>
-                                                <a href="{{ asset('storage/' . $information->file_path) }}" target="_blank">
-                                                    Download
-                                                </a>
-                                            </p>
+                                    <div class="mb-3 p-3 border rounded">
+                                        @if ($information->file_path)
+                                            <div class="mb-3">
+                                                <label class="fw-bold">File Sekarang</label>
+                                                <p class="mb-0">
+                                                    <a href="{{ asset('storage/' . $information->file_path) }}"
+                                                        target="_blank" class="btn btn-outline-primary btn-sm">
+                                                        <i class="fa fa-eye me-1"></i> Lihat
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        @endif
+                                        <div>
+                                            <label>Pilih File Baru (opsional)</label>
+                                            <input class="form-control" type="file" name="file"
+                                                accept=".pdf,.doc,.docx">
                                         </div>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <!-- Choose New File -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Pilih File Baru (opsional)</label>
-                                        <input class="form-control" type="file" name="file" accept=".pdf,.doc,.docx">
                                     </div>
                                 </div>
                             </div>

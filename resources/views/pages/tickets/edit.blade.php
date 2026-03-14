@@ -12,7 +12,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="fw-bold mb-0">Reply Pesan</h5>
                         <a class="btn btn-primary" href="{{ route('tickets.index') }}">
-                            <i class="fa fa-arrow-left me-1"></i> Back
+                            <i class="fa fa-arrow-left me-1"></i> Kembali
                         </a>
                     </div>
                 </div>
@@ -147,7 +147,7 @@
                                 <div class="col-md-6 d-flex align-items-end justify-content-end">
                                     <div class="mb-3">
                                         <button class="btn btn-success px-5 py-2" type="submit">
-                                            <i class="fa fa-paper-plane me-2"></i> Send Message
+                                            <i class="fa fa-paper-plane me-2"></i> Kirim Pesan
                                         </button>
                                     </div>
                                 </div>

@@ -7,6 +7,22 @@
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+    <style>
+        .table-responsive table {
+            white-space: nowrap;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Ensure action buttons don't stack */
+        .btn-group-action {
+            display: flex;
+            gap: 3px;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -44,7 +60,7 @@
                                         <th>Nama</th>
                                         <th>Status</th>
                                         <th>Pendaftar</th>
-                                        <th>Created At</th>
+                                        <th>Tanggal Daftar</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -67,7 +83,7 @@
 
                                             <td>{{ $member->created_at->format('d/m/y H:i') }}</td>
 
-                                            <td>
+                                            <td class="btn-group-action">
                                                 <!-- Edit button -->
                                                 <a href="{{ route('members.edit', $member->id) }}"
                                                     class="btn btn-success btn-xs">
@@ -77,19 +93,19 @@
                                                 <!-- Show button -->
                                                 <a href="{{ route('members.show', $member->id) }}"
                                                     class="btn btn-secondary btn-xs">
-                                                    Show
+                                                    Lihat
                                                 </a>
 
                                                 <!-- Preview pdf button -->
                                                 <a href="{{ route('members.pdf', $member->id) }}" target="_blank"
                                                     class="btn btn-primary btn-xs">
-                                                    Print PDF
+                                                    Cetak PDF
                                                 </a>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="8" class="text-center text-muted p-4">No ticket data found</td>
+                                            <td colspan="7" class="text-center text-muted p-4">Data tidak ditemukan</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -108,18 +124,18 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Confirm Delete</h5>
+                    <h5 class="modal-title">Konfirmasi Hapus</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this ticket <strong id="deleteItemName"></strong> ?</p>
+                    <p>Apakah Anda yakin ingin menghapus data member <strong id="deleteItemName"></strong>?</p>
                 </div>
                 <div class="modal-footer">
                     <form id="deleteForm" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
-                        <button class="btn btn-danger" type="submit">Delete</button>
+                        <button class="btn btn-light" type="button" data-bs-dismiss="modal">Tutup</button>
+                        <button class="btn btn-danger" type="submit">Hapus</button>
                     </form>
                 </div>
             </div>

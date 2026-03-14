@@ -15,11 +15,11 @@
                 <div class="card p-3">
                     <div class="d-flex justify-content-between align-items-center">
                         {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Create Broadcast</h5>
+                        <h5 class="fw-bold mb-0">Tambah Broadcast</h5>
 
                         {{-- Tombol di kanan --}}
                         <a class="btn btn-primary" href="{{ route('broadcasts.index') }}">
-                            <i class="fa fa-arrow-left me-1"></i> Back
+                            <i class="fa fa-arrow-left me-1"></i> Kembali
                         </a>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
 
                             <!-- Input Title -->
                             <div class="mb-3">
-                                <label>Title Broadcast</label>
+                                <label>Judul Broadcast</label>
                                 <input class="form-control" type="text" name="title" value="{{ old('title') }}"
                                     required />
                             </div>
@@ -66,7 +66,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label>Body Broadcast</label>
+                                        <label>Isi Broadcast</label>
                                         <textarea class="form-control" name="body" rows="3">{{ old('body') }}</textarea>
                                     </div>
                                 </div>
@@ -74,7 +74,7 @@
 
                             {{-- Select User --}}
                             <div class="mb-3">
-                                <label>Select User</label>
+                                <label>Pilih User</label>
                                 <div class="row">
                                     @foreach ($users as $user)
                                         <div class="col-md-6">
@@ -95,7 +95,7 @@
                                     <div class="text-end">
                                         <button class="btn btn-success" type="submit"
                                             onclick="this.disabled=true; this.form.submit();">
-                                            <i class="fa fa-save me-1"></i> Submit
+                                            <i class="fa fa-save me-1"></i> Kirim
                                         </button>
                                     </div>
                                 </div>

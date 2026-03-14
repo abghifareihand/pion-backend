@@ -7,6 +7,22 @@
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+    <style>
+        .table-responsive table {
+            white-space: nowrap;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Ensure action buttons don't stack */
+        .btn-group-action {
+            display: flex;
+            gap: 3px;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -48,7 +64,8 @@
                                         <th class="dt-col-no">No</th>
                                         <th>Judul</th>
                                         <th>File</th>
-                                        <th>Created At</th>
+                                        <th>Foto</th>
+                                        <th>Tanggal Dibuat</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -60,14 +77,28 @@
                                             <td>{{ $learn->title }}</td>
 
                                             <td>
-                                                <a href="{{ asset('storage/' . $learn->file_path) }}" target="_blank">
-                                                    Download
-                                                </a>
+                                                @if ($learn->file_path)
+                                                    <a href="{{ asset('storage/' . $learn->file_path) }}" target="_blank">
+                                                        Lihat
+                                                    </a>
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
+                                            </td>
+
+                                            <td>
+                                                @if ($learn->image_path)
+                                                    <a href="{{ asset('storage/' . $learn->image_path) }}" target="_blank">
+                                                        Lihat
+                                                    </a>
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
                                             </td>
 
                                             <td>{{ $learn->created_at->format('d/m/y H:i') }}</td>
 
-                                            <td>
+                                            <td class="btn-group-action">
                                                 <!-- Edit button -->
                                                 <a href="{{ route('learnings.edit', $learn->id) }}"
                                                     class="btn btn-success btn-xs">
@@ -91,7 +122,8 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center text-muted">No learning data</td>
+                                            <td colspan="6" class="text-center text-muted">Tidak ada data materi belajar
+                                            </td>
                                         </tr>
                                     @endforelse
                                 </tbody>

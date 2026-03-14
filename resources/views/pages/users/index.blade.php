@@ -87,7 +87,7 @@
                                         <th>Gender</th>
                                         <th>TTL</th>
                                         <th>No. Telp</th>
-                                        <th>Tgl Daftar</th>
+                                        <th>Tanggal Daftar</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>

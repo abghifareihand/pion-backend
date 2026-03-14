@@ -36,22 +36,25 @@ class FinancialController extends Controller
             [
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
-                'file' => 'required|file|mimes:pdf|max:10240', // MAX 10MB
-                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120', // MAX 5MB
+                'file' => 'required_without:image|file|mimes:pdf|max:10240',
+                'image' => 'required_without:file|image|mimes:jpg,jpeg,png|max:5120',
             ],
             [
                 'title.required' => 'Judul wajib diisi.',
                 'title.max' => 'Judul maksimal 255 karakter.',
-                'file.required' => 'File PDF wajib diunggah.',
+                'file.required_without' => 'Salah satu (File PDF atau Gambar) wajib diunggah.',
                 'file.mimes' => 'File harus berupa PDF.',
                 'file.max' => 'File maksimal 10MB.',
+                'image.required_without' => 'Salah satu (File PDF atau Gambar) wajib diunggah.',
                 'image.mimes' => 'Image harus JPG, JPEG, atau PNG.',
                 'image.max' => 'Image maksimal 5MB.',
             ]
         );
 
-        // Upload file PDF
-        $filePath = $request->file('file')->store('financial/files', 'public');
+        // Upload file PDF jika ada
+        $filePath = $request->hasFile('file')
+            ? $request->file('file')->store('financial/files', 'public')
+            : null;
 
         // Upload image jika ada
         $imagePath = $request->hasFile('image')
@@ -116,7 +119,9 @@ class FinancialController extends Controller
 
         // Update PDF jika ada
         if ($request->hasFile('file')) {
-            Storage::disk('public')->delete($financial->file_path);
+            if ($financial->file_path) {
+                Storage::disk('public')->delete($financial->file_path);
+            }
             $financial->file_path = $request->file('file')->store('financial/files', 'public');
         }
 
@@ -137,7 +142,9 @@ class FinancialController extends Controller
 
     public function destroy(Financial $financial)
     {
-        Storage::disk('public')->delete($financial->file_path);
+        if ($financial->file_path) {
+            Storage::disk('public')->delete($financial->file_path);
+        }
         if ($financial->image_path) {
             Storage::disk('public')->delete($financial->image_path);
         }

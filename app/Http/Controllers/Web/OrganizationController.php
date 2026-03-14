@@ -36,22 +36,25 @@ class OrganizationController extends Controller
             [
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
-                'file' => 'required|file|mimes:pdf|max:10240',
-                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+                'file' => 'required_without:image|file|mimes:pdf|max:10240',
+                'image' => 'required_without:file|image|mimes:jpg,jpeg,png|max:5120',
             ],
             [
                 'title.required' => 'Judul wajib diisi.',
                 'title.max' => 'Judul maksimal 255 karakter.',
-                'file.required' => 'File PDF wajib diunggah.',
+                'file.required_without' => 'Salah satu (File PDF atau Gambar) wajib diunggah.',
                 'file.mimes' => 'File harus berupa PDF.',
                 'file.max' => 'File maksimal 10MB.',
+                'image.required_without' => 'Salah satu (File PDF atau Gambar) wajib diunggah.',
                 'image.mimes' => 'Image harus JPG, JPEG, atau PNG.',
                 'image.max' => 'Image maksimal 5MB.',
             ]
         );
 
-        // Upload file PDF
-        $filePath = $request->file('file')->store('organization/files', 'public');
+        // Upload file PDF jika ada
+        $filePath = $request->hasFile('file')
+            ? $request->file('file')->store('organization/files', 'public')
+            : null;
 
         // Upload image jika ada
         $imagePath = $request->hasFile('image')
@@ -116,7 +119,9 @@ class OrganizationController extends Controller
 
         // Update PDF jika ada
         if ($request->hasFile('file')) {
-            Storage::disk('public')->delete($organization->file_path);
+            if ($organization->file_path) {
+                Storage::disk('public')->delete($organization->file_path);
+            }
             $organization->file_path = $request->file('file')->store('organization/files', 'public');
         }
 
@@ -137,7 +142,9 @@ class OrganizationController extends Controller
 
     public function destroy(Organization $organization)
     {
-        Storage::disk('public')->delete($organization->file_path);
+        if ($organization->file_path) {
+            Storage::disk('public')->delete($organization->file_path);
+        }
         if ($organization->image_path) {
             Storage::disk('public')->delete($organization->image_path);
         }

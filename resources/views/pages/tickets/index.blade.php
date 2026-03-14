@@ -7,6 +7,22 @@
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+    <style>
+        .table-responsive table {
+            white-space: nowrap;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Ensure action buttons don't stack */
+        .btn-group-action {
+            display: flex;
+            gap: 3px;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -44,7 +60,7 @@
                                         <th>Nama</th>
                                         <th>Tipe</th>
                                         <th>Status</th>
-                                        <th>Created At</th>
+                                        <th>Tanggal Pesan</th>
                                         <th>PDF</th>
                                         <th>Action</th>
                                     </tr>
@@ -115,11 +131,11 @@
                                                 @endif
                                             </td>
 
-                                            <td>
+                                            <td class="btn-group-action">
                                                 <!-- Reply button -->
                                                 <a href="{{ route('tickets.edit', $ticket->id) }}"
                                                     class="btn btn-success btn-xs">
-                                                    Reply
+                                                    Balas
                                                 </a>
 
                                                 <!-- Delete button -->
@@ -127,7 +143,7 @@
                                                     data-bs-target="#deleteModal"
                                                     data-action="{{ route('tickets.destroy', $ticket->id) }}"
                                                     data-name="{{ $ticket->name }}">
-                                                    Delete
+                                                    Hapus
                                                 </a>
                                             </td>
 
@@ -138,7 +154,7 @@
                                         </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="8" class="text-center text-muted p-4">No ticket data found</td>
+                                                <td colspan="7" class="text-center text-muted p-4">Data tidak ditemukan</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -157,20 +173,20 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Confirm Delete</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete this ticket <strong id="deleteItemName"></strong> ?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <form id="deleteForm" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
-                            <button class="btn btn-danger" type="submit">Delete</button>
-                        </form>
-                    </div>
+                    <h5 class="modal-title">Konfirmasi Hapus</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah Anda yakin ingin menghapus pesan ini <strong id="deleteItemName"></strong>?</p>
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteForm" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-light" type="button" data-bs-dismiss="modal">Tutup</button>
+                        <button class="btn btn-danger" type="submit">Hapus</button>
+                    </form>
+                </div>
                 </div>
             </div>
         </div>

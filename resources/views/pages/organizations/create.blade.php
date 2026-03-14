@@ -94,8 +94,7 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label>Pilih File</label>
-                                        <input class="form-control" type="file" name="file" accept=".pdf,.doc,.docx"
-                                            required>
+                                        <input class="form-control" type="file" name="file" accept=".pdf,.doc,.docx">
                                     </div>
                                 </div>
                             </div>
