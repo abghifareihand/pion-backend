@@ -36,8 +36,8 @@ class UnionController extends Controller
             [
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
-                'file' => 'required|file|mimes:pdf|max:10240', // MAX 10MB
-                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120', // MAX 5MB
+                'file' => 'required|file|mimes:pdf|max:10240',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
             ],
             [
                 'title.required' => 'Judul wajib diisi.',

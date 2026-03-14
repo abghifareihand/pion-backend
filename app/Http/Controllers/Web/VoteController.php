@@ -28,7 +28,7 @@ class VoteController extends Controller
     public function create()
     {
         $users = User::where('role', 'user')
-            ->orderBy('name', 'asc') // urutkan A-Z
+            ->orderBy('name', 'asc')
             ->get();
 
         return view('pages.votes.create', compact('users'));
