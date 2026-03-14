@@ -4,6 +4,13 @@
     Dashboard
 @endsection
 
+@push('css')
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+    <style>
+        /* Local overrides if needed */
+    </style>
+@endpush
+
 
 @section('content')
     <div class="container-fluid">
@@ -182,6 +189,7 @@
                                     <tr>
                                         <th>Nama</th>
                                         <th>NIK KTP</th>
+                                        <th>Jenis Kelamin</th>
                                         <th>Departemen</th>
                                         <th>Tanggal Daftar</th>
                                         <th>Status</th>
@@ -193,13 +201,27 @@
                                         <tr>
                                             <td>{{ $member->name }}</td>
                                             <td>{{ $member->nik_ktp }}</td>
+                                            <td>
+                                                @if ($member->gender == 'male')
+                                                    <span class="badge badge-male">Laki-laki</span>
+                                                @elseif($member->gender == 'female')
+                                                    <span class="badge badge-female">Perempuan</span>
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
                                             <td>{{ $member->department }}</td>
                                             <td>{{ $member->created_at->translatedFormat('d F Y') }}</td>
                                             <td>
-                                                <span
-                                                    class="badge {{ $member->status == 'approved' ? 'bg-success' : 'bg-warning' }}">
-                                                    {{ ucfirst($member->status) }}
-                                                </span>
+                                                @if ($member->status == 'pending')
+                                                    <span class="badge badge-pending">Pending</span>
+                                                @elseif($member->status == 'approved')
+                                                    <span class="badge badge-approved">Approved</span>
+                                                @elseif($member->status == 'rejected')
+                                                    <span class="badge badge-rejected">Rejected</span>
+                                                @else
+                                                    <span class="badge bg-secondary">{{ ucfirst($member->status) }}</span>
+                                                @endif
                                             </td>
                                             <td>
                                                 <a href="{{ route('members.show', $member->id) }}"

@@ -3,9 +3,9 @@
 ================================ */
 
 .dt-col-no {
-    width: 32px;
-    min-width: 32px;
-    max-width: 32px;
+    width: 24px;
+    min-width: 24px;
+    max-width: 24px;
     text-align: center;
     white-space: nowrap;
 }
@@ -25,4 +25,71 @@
 
 .btn:active {
     transform: translateY(0);
+}
+
+/* ===============================
+   CUSTOM SOFT UI BADGES
+================================ */
+.badge-male {
+    background-color: #e7f1ff !important;
+    color: #0052cc !important;
+    border: 1px solid #cfe2ff;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.badge-female {
+    background-color: #fff0f3 !important;
+    color: #af003d !important;
+    border: 1px solid #f8d7da;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.badge-pending {
+    background-color: #fff8e1 !important;
+    color: #b05b00 !important;
+    border: 1px solid #ffe082;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.badge-approved {
+    background-color: #e8f5e9 !important;
+    color: #2e7d32 !important;
+    border: 1px solid #c8e6c9;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.badge-done {
+    background-color: #e8f5e9 !important;
+    color: #2e7d32 !important;
+    border: 1px solid #c8e6c9;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.badge-rejected {
+    background-color: #ffebee !important;
+    color: #c62828 !important;
+    border: 1px solid #ffcdd2;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.badge-responded {
+    background-color: #e3f2fd !important;
+    color: #1565c0 !important;
+    border: 1px solid #bbdefb;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.badge-processed {
+    background-color: #e0f7fa !important;
+    color: #00838f !important;
+    border: 1px solid #b2ebf2;
+    border-radius: 4px;
+    font-weight: 600;
 }

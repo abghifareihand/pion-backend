@@ -16,24 +16,6 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
-
-
-        /* Custom Soft UI Badges */
-        .badge-male {
-            background-color: #e7f1ff !important;
-            color: #0052cc !important;
-            border: 1px solid #cfe2ff;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-
-        .badge-female {
-            background-color: #fff0f3 !important;
-            color: #af003d !important;
-            border: 1px solid #f8d7da;
-            border-radius: 4px;
-            font-weight: 600;
-        }
     </style>
 @endpush
 
@@ -97,9 +79,13 @@
 
                                                 <td>
                                                     @if ($member->status == 'pending')
-                                                        <span class="badge bg-warning text-dark">Menunggu Persetujuan</span>
+                                                        <span class="badge badge-pending">Menunggu Persetujuan</span>
+                                                    @elseif($member->status == 'approved')
+                                                        <span class="badge badge-approved">Sudah Disetujui</span>
+                                                    @elseif($member->status == 'rejected')
+                                                        <span class="badge badge-rejected">Ditolak</span>
                                                     @else
-                                                        <span class="badge bg-success text-dark">Sudah Disetujui</span>
+                                                        <span class="badge bg-secondary">{{ ucfirst($member->status) }}</span>
                                                     @endif
                                                 </td>
 

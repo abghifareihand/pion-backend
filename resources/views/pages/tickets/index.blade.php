@@ -119,23 +119,23 @@
                                                 <td>
                                                     @switch($ticket->status)
                                                         @case('pending')
-                                                            <span class="badge rounded-pill bg-warning text-dark">Pending</span>
+                                                            <span class="badge badge-pending">Pending</span>
                                                         @break
 
                                                         @case('responded')
-                                                            <span class="badge rounded-pill bg-primary text-dark">Responded</span>
+                                                            <span class="badge badge-responded">Responded</span>
                                                         @break
 
                                                         @case('processed')
-                                                            <span class="badge rounded-pill bg-info text-dark">Processed</span>
+                                                            <span class="badge badge-processed">Processed</span>
                                                         @break
 
                                                         @case('done')
-                                                            <span class="badge rounded-pill bg-success text-dark">Done</span>
+                                                            <span class="badge badge-done">Done</span>
                                                         @break
 
                                                         @case('rejected')
-                                                            <span class="badge rounded-pill bg-danger text-dark">Rejected</span>
+                                                            <span class="badge badge-rejected">Rejected</span>
                                                         @break
                                                     @endswitch
                                                 </td>
