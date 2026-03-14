@@ -57,80 +57,81 @@
                         @endif
 
                         {{-- Table untuk list organization --}}
-                        <div class="table-responsive">
-                            <table class="display" id="basic-1">
-                                <thead>
-                                    <tr>
-                                        <th class="dt-col-no">No</th>
-                                        <th>Judul</th>
-                                        <th>File</th>
-                                        <th>Foto</th>
-                                        <th>Tanggal Dibuat</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($organizations as $organization)
+                        @if ($organizations->count() > 0)
+                            <div class="table-responsive">
+                                <table class="display" id="basic-1">
+                                    <thead>
                                         <tr>
-                                            <td class="dt-col-no">{{ $loop->iteration }}</td>
+                                            <th class="dt-col-no">No</th>
+                                            <th>Judul</th>
+                                            <th>File</th>
+                                            <th>Foto</th>
+                                            <th>Tanggal Dibuat</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($organizations as $organization)
+                                            <tr>
+                                                <td class="dt-col-no">{{ $loop->iteration }}</td>
 
-                                            <td>{{ $organization->title }}</td>
+                                                <td>{{ $organization->title }}</td>
 
-                                            <td>
-                                                @if ($organization->file_path)
-                                                    <a href="{{ asset('storage/' . $organization->file_path) }}"
-                                                        target="_blank">
+                                                <td>
+                                                    @if ($organization->file_path)
+                                                        <a href="{{ asset('storage/' . $organization->file_path) }}"
+                                                            target="_blank">
+                                                            Lihat
+                                                        </a>
+                                                    @else
+                                                        <span class="text-muted">-</span>
+                                                    @endif
+                                                </td>
+
+                                                <td>
+                                                    @if ($organization->image_path)
+                                                        <a href="{{ asset('storage/' . $organization->image_path) }}"
+                                                            target="_blank">
+                                                            Lihat
+                                                        </a>
+                                                    @else
+                                                        <span class="text-muted">-</span>
+                                                    @endif
+                                                </td>
+
+                                                <td>{{ $organization->created_at->format('d/m/y H:i') }}</td>
+
+                                                <td class="btn-group-action">
+                                                    <!-- Edit button -->
+                                                    <a href="{{ route('organizations.edit', $organization->id) }}"
+                                                        class="btn btn-success btn-xs">
+                                                        Edit
+                                                    </a>
+
+                                                    <!-- Show button -->
+                                                    <a href="{{ route('organizations.show', $organization->id) }}"
+                                                        class="btn btn-secondary btn-xs">
                                                         Lihat
                                                     </a>
-                                                @else
-                                                    <span class="text-muted">-</span>
-                                                @endif
-                                            </td>
 
-                                            <td>
-                                                @if ($organization->image_path)
-                                                    <a href="{{ asset('storage/' . $organization->image_path) }}"
-                                                        target="_blank">
-                                                        Lihat
+                                                    <!-- Delete button -->
+                                                    <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
+                                                        data-bs-target="#deleteModal"
+                                                        data-action="{{ route('organizations.destroy', $organization) }}"
+                                                        data-name="{{ $organization->title }}">
+                                                        Hapus
                                                     </a>
-                                                @else
-                                                    <span class="text-muted">-</span>
-                                                @endif
-                                            </td>
-
-                                            <td>{{ $organization->created_at->format('d/m/y H:i') }}</td>
-
-                                            <td class="btn-group-action">
-                                                <!-- Edit button -->
-                                                <a href="{{ route('organizations.edit', $organization->id) }}"
-                                                    class="btn btn-success btn-xs">
-                                                    Edit
-                                                </a>
-
-                                                <!-- Show button -->
-                                                <a href="{{ route('organizations.show', $organization->id) }}"
-                                                    class="btn btn-secondary btn-xs">
-                                                    Lihat
-                                                </a>
-
-                                                <!-- Delete button -->
-                                                <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal"
-                                                    data-action="{{ route('organizations.destroy', $organization) }}"
-                                                    data-name="{{ $organization->title }}">
-                                                    Hapus
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="text-center text-muted">Tidak ada data struktur
-                                                organisasi</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="text-center p-5">
+                                <span class="text-muted">Tidak ada data struktur organisasi</span>
+                            </div>
+                        @endif
                         {{-- End Table --}}
                     </div>
                 </div>

@@ -57,72 +57,74 @@
                         @endif
 
                         {{-- Table untuk list votes --}}
-                        <div class="table-responsive">
-                            <table class="display" id="basic-1">
-                                <thead>
-                                    <tr>
-                                        <th class="dt-col-no">No</th>
-                                        <th>Judul</th>
-                                        <th>Total Kandidat</th>
-                                        <th>Status</th>
-                                        <th>Tanggal Dibuat</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($votes as $vote)
+                        @if($votes->count() > 0)
+                            <div class="table-responsive">
+                                <table class="display" id="basic-1">
+                                    <thead>
                                         <tr>
-                                            <td class="dt-col-no">{{ $loop->iteration }}</td>
-
-                                            <td>{{ $vote->title }}</td>
-
-                                            <td>
-                                                <span class="badge bg-info">
-                                                    {{ $vote->options_count }} KANDIDAT
-                                                </span>
-                                            </td>
-
-
-                                            <td>
-                                                @if ($vote->is_active)
-                                                    <span class="badge bg-success">Aktif</span>
-                                                @else
-                                                    <span class="badge bg-danger">Tidak Aktif</span>
-                                                @endif
-                                            </td>
-
-                                            <td>{{ $vote->created_at->format('d/m/y H:i') }}</td>
-
-                                            <td class="btn-group-action">
-                                                <!-- Edit button -->
-                                                <a href="{{ route('votes.edit', $vote->id) }}"
-                                                    class="btn btn-success btn-xs">
-                                                    Edit
-                                                </a>
-
-                                                <!-- Show button -->
-                                                <a href="{{ route('votes.show', $vote->id) }}"
-                                                    class="btn btn-secondary btn-xs">
-                                                    Lihat
-                                                </a>
-
-                                                <!-- Delete button -->
-                                                <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal"
-                                                    data-action="{{ route('votes.destroy', $vote->id) }}"
-                                                    data-name="{{ $vote->title }}">
-                                                    Hapus
-                                                </a>
-                                            </td>
+                                            <th class="dt-col-no">No</th>
+                                            <th>Judul</th>
+                                            <th>Total Kandidat</th>
+                                            <th>Status</th>
+                                            <th>Tanggal Dibuat</th>
+                                            <th>Action</th>
                                         </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="text-center text-muted">Tidak ada data pemilu</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($votes as $vote)
+                                            <tr>
+                                                <td class="dt-col-no">{{ $loop->iteration }}</td>
+
+                                                <td>{{ $vote->title }}</td>
+
+                                                <td>
+                                                    <span class="badge bg-info">
+                                                        {{ $vote->options_count }} KANDIDAT
+                                                    </span>
+                                                </td>
+
+
+                                                <td>
+                                                    @if ($vote->is_active)
+                                                        <span class="badge bg-success">Aktif</span>
+                                                    @else
+                                                        <span class="badge bg-danger">Tidak Aktif</span>
+                                                    @endif
+                                                </td>
+
+                                                <td>{{ $vote->created_at->format('d/m/y H:i') }}</td>
+
+                                                <td class="btn-group-action">
+                                                    <!-- Edit button -->
+                                                    <a href="{{ route('votes.edit', $vote->id) }}"
+                                                        class="btn btn-success btn-xs">
+                                                        Edit
+                                                    </a>
+
+                                                    <!-- Show button -->
+                                                    <a href="{{ route('votes.show', $vote->id) }}"
+                                                        class="btn btn-secondary btn-xs">
+                                                        Lihat
+                                                    </a>
+
+                                                    <!-- Delete button -->
+                                                    <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
+                                                        data-bs-target="#deleteModal"
+                                                        data-action="{{ route('votes.destroy', $vote->id) }}"
+                                                        data-name="{{ $vote->title }}">
+                                                        Hapus
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="text-center p-5">
+                                <span class="text-muted">Tidak ada data pemilu</span>
+                            </div>
+                        @endif
                         {{-- End Table --}}
                     </div>
                 </div>

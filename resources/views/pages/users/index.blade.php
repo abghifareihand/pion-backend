@@ -101,79 +101,83 @@
                         @endif
 
                         {{-- Table untuk list information --}}
-                        <div class="table-responsive">
-                            <table class="display" id="basic-1">
-                                <thead>
-                                    <tr>
-                                        <th class="dt-col-no">No</th>
-                                        <th>Nama</th>
-                                        <th>NIK KTP</th>
-                                        <th>NIK Karyawan</th>
-                                        <th>KTA</th>
-                                        <th>Departemen</th>
-                                        <th>Gender</th>
-                                        <th>TTL</th>
-                                        <th>No. Telp</th>
-                                        <th>Tanggal Daftar</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($users as $user)
+                        @if($users->count() > 0)
+                            <div class="table-responsive">
+                                <table class="display" id="basic-1">
+                                    <thead>
                                         <tr>
-                                            <td class="dt-col-no">{{ $loop->iteration }}</td>
-
-                                            <td>{{ $user->name }}</td>
-
-                                            <td>{{ $user->nik_ktp }}</td>
-                                            <td>{{ $user->nik_karyawan }}</td>
-                                            <td>{{ $user->kta_number ?? '-' }}</td>
-                                            <td>{{ $user->department ?? '-' }}</td>
-                                            <td>
-                                                @if ($user->gender == 'male')
-                                                    <span class="badge badge-male">Laki-laki</span>
-                                                @elseif($user->gender == 'female')
-                                                    <span class="badge badge-female">Perempuan</span>
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
-                                            <td>{{ $user->birth_place ?? '-' }}, {{ $user->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('d/m/Y') : '-' }}</td>
-
-                                            <td>{{ $user->phone }}</td>
-
-                                            <td>{{ $user->created_at->format('d/m/y H:i') }}</td>
-
-                                            <td class="btn-group-action">
-                                                <!-- Edit button -->
-                                                <a href="{{ route('users.edit', $user->id) }}"
-                                                    class="btn btn-success btn-xs">
-                                                    Edit
-                                                </a>
-
-                                                <!-- Show button -->
-                                                <a href="{{ route('users.show', $user->id) }}"
-                                                    class="btn btn-secondary btn-xs">
-                                                    Lihat
-                                                </a>
-
-                                                <!-- Delete button -->
-                                                <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal"
-                                                    data-action="{{ route('users.destroy', $user->id) }}"
-                                                    data-name="{{ $user->name }}">
-                                                    Hapus
-                                                </a>
-                                            </td>
+                                            <th class="dt-col-no">No</th>
+                                            <th>Nama</th>
+                                            <th>NIK KTP</th>
+                                            <th>NIK Karyawan</th>
+                                            <th>KTA</th>
+                                            <th>Departemen</th>
+                                            <th>Gender</th>
+                                            <th>TTL</th>
+                                            <th>No. Telp</th>
+                                            <th>Tanggal Daftar</th>
+                                            <th>Action</th>
                                         </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="13" class="text-center text-muted">Tidak ada data anggota</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($users as $user)
+                                            <tr>
+                                                <td class="dt-col-no">{{ $loop->iteration }}</td>
+
+                                                <td>{{ $user->name }}</td>
+
+                                                <td>{{ $user->nik_ktp }}</td>
+                                                <td>{{ $user->nik_karyawan }}</td>
+                                                <td>{{ $user->kta_number ?? '-' }}</td>
+                                                <td>{{ $user->department ?? '-' }}</td>
+                                                <td>
+                                                    @if ($user->gender == 'male')
+                                                        <span class="badge badge-male">Laki-laki</span>
+                                                    @elseif($user->gender == 'female')
+                                                        <span class="badge badge-female">Perempuan</span>
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
+                                                <td>{{ $user->birth_place ?? '-' }},
+                                                    {{ $user->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('d/m/Y') : '-' }}
+                                                </td>
+
+                                                <td>{{ $user->phone }}</td>
+
+                                                <td>{{ $user->created_at->format('d/m/y H:i') }}</td>
+
+                                                <td class="btn-group-action">
+                                                    <!-- Edit button -->
+                                                    <a href="{{ route('users.edit', $user->id) }}"
+                                                        class="btn btn-success btn-xs">
+                                                        Edit
+                                                    </a>
+
+                                                    <!-- Show button -->
+                                                    <a href="{{ route('users.show', $user->id) }}"
+                                                        class="btn btn-secondary btn-xs">
+                                                        Lihat
+                                                    </a>
+
+                                                    <!-- Delete button -->
+                                                    <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
+                                                        data-bs-target="#deleteModal"
+                                                        data-action="{{ route('users.destroy', $user->id) }}"
+                                                        data-name="{{ $user->name }}">
+                                                        Hapus
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="text-center p-5">
+                                <span class="text-muted">Tidak ada data anggota</span>
+                            </div>
+                        @endif
                         {{-- End Table --}}
                     </div>
                 </div>

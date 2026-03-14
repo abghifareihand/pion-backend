@@ -57,78 +57,81 @@
                         @endif
 
                         {{-- Table untuk list learning --}}
-                        <div class="table-responsive">
-                            <table class="display" id="basic-1">
-                                <thead>
-                                    <tr>
-                                        <th class="dt-col-no">No</th>
-                                        <th>Judul</th>
-                                        <th>File</th>
-                                        <th>Foto</th>
-                                        <th>Tanggal Dibuat</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($financials as $finance)
+                        @if($financials->count() > 0)
+                            <div class="table-responsive">
+                                <table class="display" id="basic-1">
+                                    <thead>
                                         <tr>
-                                            <td class="dt-col-no">{{ $loop->iteration }}</td>
+                                            <th class="dt-col-no">No</th>
+                                            <th>Judul</th>
+                                            <th>File</th>
+                                            <th>Foto</th>
+                                            <th>Tanggal Dibuat</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($financials as $finance)
+                                            <tr>
+                                                <td class="dt-col-no">{{ $loop->iteration }}</td>
 
-                                            <td>{{ $finance->title }}</td>
+                                                <td>{{ $finance->title }}</td>
 
-                                            <td>
-                                                @if ($finance->file_path)
-                                                    <a href="{{ asset('storage/' . $finance->file_path) }}" target="_blank">
+                                                <td>
+                                                    @if ($finance->file_path)
+                                                        <a href="{{ asset('storage/' . $finance->file_path) }}"
+                                                            target="_blank">
+                                                            Lihat
+                                                        </a>
+                                                    @else
+                                                        <span class="text-muted">-</span>
+                                                    @endif
+                                                </td>
+
+                                                <td>
+                                                    @if ($finance->image_path)
+                                                        <a href="{{ asset('storage/' . $finance->image_path) }}"
+                                                            target="_blank">
+                                                            Lihat
+                                                        </a>
+                                                    @else
+                                                        <span class="text-muted">-</span>
+                                                    @endif
+                                                </td>
+
+                                                <td>{{ $finance->created_at->format('d/m/y H:i') }}</td>
+
+                                                <td class="btn-group-action">
+                                                    <!-- Edit button -->
+                                                    <a href="{{ route('financials.edit', $finance->id) }}"
+                                                        class="btn btn-success btn-xs">
+                                                        Edit
+                                                    </a>
+
+                                                    <!-- Show button -->
+                                                    <a href="{{ route('financials.show', $finance->id) }}"
+                                                        class="btn btn-secondary btn-xs">
                                                         Lihat
                                                     </a>
-                                                @else
-                                                    <span class="text-muted">-</span>
-                                                @endif
-                                            </td>
 
-                                            <td>
-                                                @if ($finance->image_path)
-                                                    <a href="{{ asset('storage/' . $finance->image_path) }}"
-                                                        target="_blank">
-                                                        Lihat
+                                                    <!-- Delete button -->
+                                                    <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
+                                                        data-bs-target="#deleteModal"
+                                                        data-action="{{ route('financials.destroy', $finance) }}"
+                                                        data-name="{{ $finance->title }}">
+                                                        Hapus
                                                     </a>
-                                                @else
-                                                    <span class="text-muted">-</span>
-                                                @endif
-                                            </td>
-
-                                            <td>{{ $finance->created_at->format('d/m/y H:i') }}</td>
-
-                                            <td class="btn-group-action">
-                                                <!-- Edit button -->
-                                                <a href="{{ route('financials.edit', $finance->id) }}"
-                                                    class="btn btn-success btn-xs">
-                                                    Edit
-                                                </a>
-
-                                                <!-- Show button -->
-                                                <a href="{{ route('financials.show', $finance->id) }}"
-                                                    class="btn btn-secondary btn-xs">
-                                                    Lihat
-                                                </a>
-
-                                                <!-- Delete button -->
-                                                <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal"
-                                                    data-action="{{ route('financials.destroy', $finance) }}"
-                                                    data-name="{{ $finance->title }}">
-                                                    Hapus
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="text-center text-muted">Tidak ada data keuangan</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="text-center p-5">
+                                <span class="text-muted">Tidak ada data keuangan</span>
+                            </div>
+                        @endif
                         {{-- End Table --}}
                     </div>
                 </div>

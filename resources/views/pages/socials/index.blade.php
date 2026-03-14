@@ -57,78 +57,81 @@
                         @endif
 
                         {{-- Table untuk list social --}}
-                        <div class="table-responsive">
-                            <table class="display" id="basic-1">
-                                <thead>
-                                    <tr>
-                                        <th class="dt-col-no">No</th>
-                                        <th>Judul</th>
-                                        <th>File</th>
-                                        <th>Foto</th>
-                                        <th>Tanggal Dibuat</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($socials as $social)
+                        @if($socials->count() > 0)
+                            <div class="table-responsive">
+                                <table class="display" id="basic-1">
+                                    <thead>
                                         <tr>
-                                            <td class="dt-col-no">{{ $loop->iteration }}</td>
+                                            <th class="dt-col-no">No</th>
+                                            <th>Judul</th>
+                                            <th>File</th>
+                                            <th>Foto</th>
+                                            <th>Tanggal Dibuat</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($socials as $social)
+                                            <tr>
+                                                <td class="dt-col-no">{{ $loop->iteration }}</td>
 
-                                            <td>{{ $social->title }}</td>
+                                                <td>{{ $social->title }}</td>
 
-                                            <td>
-                                                @if ($social->file_path)
-                                                    <a href="{{ asset('storage/' . $social->file_path) }}" target="_blank">
+                                                <td>
+                                                    @if ($social->file_path)
+                                                        <a href="{{ asset('storage/' . $social->file_path) }}"
+                                                            target="_blank">
+                                                            Lihat
+                                                        </a>
+                                                    @else
+                                                        <span class="text-muted">-</span>
+                                                    @endif
+                                                </td>
+
+                                                <td>
+                                                    @if ($social->image_path)
+                                                        <a href="{{ asset('storage/' . $social->image_path) }}"
+                                                            target="_blank">
+                                                            Lihat
+                                                        </a>
+                                                    @else
+                                                        <span class="text-muted">-</span>
+                                                    @endif
+                                                </td>
+
+                                                <td>{{ $social->created_at->format('d/m/y H:i') }}</td>
+
+                                                <td class="btn-group-action">
+                                                    <!-- Edit button -->
+                                                    <a href="{{ route('socials.edit', $social->id) }}"
+                                                        class="btn btn-success btn-xs">
+                                                        Edit
+                                                    </a>
+
+                                                    <!-- Show button -->
+                                                    <a href="{{ route('socials.show', $social->id) }}"
+                                                        class="btn btn-secondary btn-xs">
                                                         Lihat
                                                     </a>
-                                                @else
-                                                    <span class="text-muted">-</span>
-                                                @endif
-                                            </td>
 
-                                            <td>
-                                                @if ($social->image_path)
-                                                    <a href="{{ asset('storage/' . $social->image_path) }}" target="_blank">
-                                                        Lihat
+                                                    <!-- Delete button -->
+                                                    <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
+                                                        data-bs-target="#deleteModal"
+                                                        data-action="{{ route('socials.destroy', $social) }}"
+                                                        data-name="{{ $social->title }}">
+                                                        Hapus
                                                     </a>
-                                                @else
-                                                    <span class="text-muted">-</span>
-                                                @endif
-                                            </td>
-
-                                            <td>{{ $social->created_at->format('d/m/y H:i') }}</td>
-
-                                            <td class="btn-group-action">
-                                                <!-- Edit button -->
-                                                <a href="{{ route('socials.edit', $social->id) }}"
-                                                    class="btn btn-success btn-xs">
-                                                    Edit
-                                                </a>
-
-                                                <!-- Show button -->
-                                                <a href="{{ route('socials.show', $social->id) }}"
-                                                    class="btn btn-secondary btn-xs">
-                                                    Lihat
-                                                </a>
-
-                                                <!-- Delete button -->
-                                                <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal"
-                                                    data-action="{{ route('socials.destroy', $social) }}"
-                                                    data-name="{{ $social->title }}">
-                                                    Hapus
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="text-center text-muted">Tidak ada data program sosial
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="text-center p-5">
+                                <span class="text-muted">Tidak ada data program sosial</span>
+                            </div>
+                        @endif
                         {{-- End Table --}}
                     </div>
                 </div>

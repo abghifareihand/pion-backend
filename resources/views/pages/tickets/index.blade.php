@@ -52,114 +52,111 @@
                         @endif
 
                         {{-- Table untuk list tickets --}}
-                        <div class="table-responsive">
-                            <table class="display" id="basic-1">
-                                <thead>
-                                    <tr>
-                                        <th class="dt-col-no">No</th>
-                                        <th>Nama</th>
-                                        <th>Tipe</th>
-                                        <th>Status</th>
-                                        <th>Tanggal Pesan</th>
-                                        <th>PDF</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($tickets as $ticket)
+                        @if($tickets->count() > 0)
+                            <div class="table-responsive">
+                                <table class="display" id="basic-1">
+                                    <thead>
                                         <tr>
-                                            <td class="dt-col-no">{{ $loop->iteration }}</td>
-                                            <td>{{ $ticket->user->name }}</td>
-
-                                            {{-- Badge untuk TYPE --}}
-                                            <td>
-                                                @if ($ticket->type == 'report')
-                                                    <span class="badge bg-danger">Report</span>
-                                                @elseif($ticket->type == 'question')
-                                                    <span class="badge bg-info">Question</span>
-                                                @else
-                                                    <span class="badge bg-secondary">Suggestion</span>
-                                                @endif
-                                            </td>
-
-
-                                            {{-- Badge untuk STATUS --}}
-                                            <td>
-                                                @switch($ticket->status)
-                                                    @case('pending')
-                                                        <span class="badge rounded-pill bg-warning text-dark">Pending</span>
-                                                    @break
-
-                                                    @case('responded')
-                                                        <span class="badge rounded-pill bg-primary text-dark">Responded</span>
-                                                    @break
-
-                                                    @case('processed')
-                                                        <span class="badge rounded-pill bg-info text-dark">Processed</span>
-                                                    @break
-
-                                                    @case('done')
-                                                        <span class="badge rounded-pill bg-success text-dark">Done</span>
-                                                    @break
-
-                                                    @case('rejected')
-                                                        <span class="badge rounded-pill bg-danger text-dark">Rejected</span>
-                                                    @break
-                                                @endswitch
-                                            </td>
-
-                                            <td>{{ $ticket->created_at->format('d/m/y H:i') }}</td>
-
-
-
-                                            <td>
-                                                <a href="{{ route('tickets.pdf', $ticket->id) }}"
-                                                    class="btn btn-pill btn-success btn-xs">
-                                                    Dengan File
-                                                </a>
-
-                                                <a href="{{ route('tickets.pdf', $ticket->id) }}?hide_attachment=1"
-                                                    class="btn btn-warning btn-xs text-dark">
-                                                    Tanpa File
-                                                </a>
-
-                                                @if ($ticket->attachment)
-                                                    <a href="{{ url('storage/' . $ticket->attachment) }}" target="_blank"
-                                                        class="btn btn-light btn-xs text-dark">
-                                                        Lihat File
-                                                    </a>
-                                                @endif
-                                            </td>
-
-                                            <td class="btn-group-action">
-                                                <!-- Reply button -->
-                                                <a href="{{ route('tickets.edit', $ticket->id) }}"
-                                                    class="btn btn-success btn-xs">
-                                                    Balas
-                                                </a>
-
-                                                <!-- Delete button -->
-                                                <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal"
-                                                    data-action="{{ route('tickets.destroy', $ticket->id) }}"
-                                                    data-name="{{ $ticket->name }}">
-                                                    Hapus
-                                                </a>
-                                            </td>
-
-
-
-
-
+                                            <th class="dt-col-no">No</th>
+                                            <th>Nama</th>
+                                            <th>Tipe</th>
+                                            <th>Status</th>
+                                            <th>Tanggal Pesan</th>
+                                            <th>PDF</th>
+                                            <th>Action</th>
                                         </tr>
-                                        @empty
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($tickets as $ticket)
                                             <tr>
-                                                <td colspan="7" class="text-center text-muted p-4">Tidak ada data pesan</td>
+                                                <td class="dt-col-no">{{ $loop->iteration }}</td>
+                                                <td>{{ $ticket->user->name }}</td>
+
+                                                {{-- Badge untuk TYPE --}}
+                                                <td>
+                                                    @if ($ticket->type == 'report')
+                                                        <span class="badge bg-danger">Report</span>
+                                                    @elseif($ticket->type == 'question')
+                                                        <span class="badge bg-info">Question</span>
+                                                    @else
+                                                        <span class="badge bg-secondary">Suggestion</span>
+                                                    @endif
+                                                </td>
+
+
+                                                {{-- Badge untuk STATUS --}}
+                                                <td>
+                                                    @switch($ticket->status)
+                                                        @case('pending')
+                                                            <span class="badge rounded-pill bg-warning text-dark">Pending</span>
+                                                        @break
+
+                                                        @case('responded')
+                                                            <span class="badge rounded-pill bg-primary text-dark">Responded</span>
+                                                        @break
+
+                                                        @case('processed')
+                                                            <span class="badge rounded-pill bg-info text-dark">Processed</span>
+                                                        @break
+
+                                                        @case('done')
+                                                            <span class="badge rounded-pill bg-success text-dark">Done</span>
+                                                        @break
+
+                                                        @case('rejected')
+                                                            <span class="badge rounded-pill bg-danger text-dark">Rejected</span>
+                                                        @break
+                                                    @endswitch
+                                                </td>
+
+                                                <td>{{ $ticket->created_at->format('d/m/y H:i') }}</td>
+
+
+
+                                                <td>
+                                                    <a href="{{ route('tickets.pdf', $ticket->id) }}"
+                                                        class="btn btn-pill btn-success btn-xs">
+                                                        Dengan File
+                                                    </a>
+
+                                                    <a href="{{ route('tickets.pdf', $ticket->id) }}?hide_attachment=1"
+                                                        class="btn btn-warning btn-xs text-dark">
+                                                        Tanpa File
+                                                    </a>
+
+                                                    @if ($ticket->attachment)
+                                                        <a href="{{ url('storage/' . $ticket->attachment) }}"
+                                                            target="_blank" class="btn btn-light btn-xs text-dark">
+                                                            Lihat File
+                                                        </a>
+                                                    @endif
+                                                </td>
+
+                                                <td class="btn-group-action">
+                                                    <!-- Reply button -->
+                                                    <a href="{{ route('tickets.edit', $ticket->id) }}"
+                                                        class="btn btn-success btn-xs">
+                                                        Balas
+                                                    </a>
+
+                                                    <!-- Delete button -->
+                                                    <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
+                                                        data-bs-target="#deleteModal"
+                                                        data-action="{{ route('tickets.destroy', $ticket->id) }}"
+                                                        data-name="{{ $ticket->name }}">
+                                                        Hapus
+                                                    </a>
+                                                </td>
                                             </tr>
-                                        @endforelse
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
+                        @else
+                            <div class="text-center p-5">
+                                <span class="text-muted">Tidak ada data pesan</span>
+                            </div>
+                        @endif
                             {{-- End Table --}}
                         </div>
                     </div>

@@ -52,65 +52,67 @@
                         @endif
 
                         {{-- Table untuk list Member Registration --}}
-                        <div class="table-responsive">
-                            <table class="display" id="basic-1">
-                                <thead>
-                                    <tr>
-                                        <th class="dt-col-no">No</th>
-                                        <th>Nama</th>
-                                        <th>Status</th>
-                                        <th>Pendaftar</th>
-                                        <th>Tanggal Daftar</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($members as $member)
+                        @if($members->count() > 0)
+                            <div class="table-responsive">
+                                <table class="display" id="basic-1">
+                                    <thead>
                                         <tr>
-                                            <td class="dt-col-no">{{ $loop->iteration }}</td>
-
-                                            <td>{{ $member->name }}</td>
-
-                                            <td>
-                                                @if ($member->status == 'pending')
-                                                    <span class="badge bg-warning text-dark">Menunggu Persetujuan</span>
-                                                @else
-                                                    <span class="badge bg-success text-dark">Sudah Disetujui</span>
-                                                @endif
-                                            </td>
-
-                                            <td>{{ $member->referrer->name }}</td>
-
-                                            <td>{{ $member->created_at->format('d/m/y H:i') }}</td>
-
-                                            <td class="btn-group-action">
-                                                <!-- Edit button -->
-                                                <a href="{{ route('members.edit', $member->id) }}"
-                                                    class="btn btn-success btn-xs">
-                                                    Edit
-                                                </a>
-
-                                                <!-- Show button -->
-                                                <a href="{{ route('members.show', $member->id) }}"
-                                                    class="btn btn-secondary btn-xs">
-                                                    Lihat
-                                                </a>
-
-                                                <!-- Preview pdf button -->
-                                                <a href="{{ route('members.pdf', $member->id) }}" target="_blank"
-                                                    class="btn btn-primary btn-xs">
-                                                    Cetak PDF
-                                                </a>
-                                            </td>
+                                            <th class="dt-col-no">No</th>
+                                            <th>Nama</th>
+                                            <th>Status</th>
+                                            <th>Pendaftar</th>
+                                            <th>Tanggal Daftar</th>
+                                            <th>Action</th>
                                         </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="7" class="text-center text-muted p-4">Tidak ada data registrasi member</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($members as $member)
+                                            <tr>
+                                                <td class="dt-col-no">{{ $loop->iteration }}</td>
+
+                                                <td>{{ $member->name }}</td>
+
+                                                <td>
+                                                    @if ($member->status == 'pending')
+                                                        <span class="badge bg-warning text-dark">Menunggu Persetujuan</span>
+                                                    @else
+                                                        <span class="badge bg-success text-dark">Sudah Disetujui</span>
+                                                    @endif
+                                                </td>
+
+                                                <td>{{ $member->referrer->name }}</td>
+
+                                                <td>{{ $member->created_at->format('d/m/y H:i') }}</td>
+
+                                                <td class="btn-group-action">
+                                                    <!-- Edit button -->
+                                                    <a href="{{ route('members.edit', $member->id) }}"
+                                                        class="btn btn-success btn-xs">
+                                                        Edit
+                                                    </a>
+
+                                                    <!-- Show button -->
+                                                    <a href="{{ route('members.show', $member->id) }}"
+                                                        class="btn btn-secondary btn-xs">
+                                                        Lihat
+                                                    </a>
+
+                                                    <!-- Preview pdf button -->
+                                                    <a href="{{ route('members.pdf', $member->id) }}" target="_blank"
+                                                        class="btn btn-primary btn-xs">
+                                                        Cetak PDF
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="text-center p-5">
+                                <span class="text-muted">Tidak ada data registrasi member</span>
+                            </div>
+                        @endif
                         {{-- End Table --}}
                     </div>
                 </div>
