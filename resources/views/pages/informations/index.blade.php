@@ -57,7 +57,7 @@
                         @endif
 
                         {{-- Table untuk list information --}}
-                        @if($informations->count() > 0)
+                        @if ($informations->count() > 0)
                             <div class="table-responsive">
                                 <table class="display" id="basic-1">
                                     <thead>

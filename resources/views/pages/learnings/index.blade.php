@@ -57,7 +57,7 @@
                         @endif
 
                         {{-- Table untuk list learning --}}
-                        @if($learnings->count() > 0)
+                        @if ($learnings->count() > 0)
                             <div class="table-responsive">
                                 <table class="display" id="basic-1">
                                     <thead>

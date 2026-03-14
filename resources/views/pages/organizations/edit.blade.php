@@ -87,9 +87,11 @@
                                             <div class="mb-3">
                                                 <label class="fw-bold">Foto Sekarang</label>
                                                 <p class="mb-0">
-                                                    <img src="{{ asset('storage/' . $organization->image_path) }}"
-                                                        alt="Current Image" style="max-width: 200px; height: auto;"
-                                                        class="img-thumbnail">
+                                                    <a href="{{ asset('storage/' . $organization->image_path) }}" target="_blank">
+                                                        <img src="{{ asset('storage/' . $organization->image_path) }}"
+                                                            alt="Current Image" style="max-width: 200px; height: auto;"
+                                                            class="img-thumbnail">
+                                                    </a>
                                                 </p>
                                             </div>
                                         @endif
@@ -108,13 +110,13 @@
                                     <div class="mb-3 p-3 border rounded">
                                         @if ($organization->file_path)
                                             <div class="mb-3">
-                                                <label class="fw-bold">File Sekarang</label>
-                                                <p class="mb-0">
-                                                    <a href="{{ asset('storage/' . $organization->file_path) }}"
-                                                        target="_blank" class="btn btn-outline-primary btn-sm">
-                                                        <i class="fa fa-eye me-1"></i> Lihat
+                                                <label class="fw-bold d-block mb-2">File Sekarang</label>
+                                                <div class="p-2 border rounded d-inline-block text-center" style="min-width: 200px;">
+                                                    <a href="{{ asset('storage/' . $organization->file_path) }}" target="_blank" class="text-decoration-none text-dark">
+                                                        <i class="fa fa-file-pdf-o fa-3x text-danger"></i>
+                                                        <div class="text-muted small mt-1">Klik untuk lihat</div>
                                                     </a>
-                                                </p>
+                                                </div>
                                             </div>
                                         @endif
                                         <div>

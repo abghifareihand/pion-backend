@@ -52,7 +52,7 @@
                         @endif
 
                         {{-- Table untuk list tickets --}}
-                        @if($tickets->count() > 0)
+                        @if ($tickets->count() > 0)
                             <div class="table-responsive">
                                 <table class="display" id="basic-1">
                                     <thead>
@@ -157,19 +157,19 @@
                                 <span class="text-muted">Tidak ada data pesan</span>
                             </div>
                         @endif
-                            {{-- End Table --}}
-                        </div>
+                        {{-- End Table --}}
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        {{-- Modal Delete (global) --}}
-        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
+    {{-- Modal Delete (global) --}}
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title">Konfirmasi Hapus</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -184,31 +184,31 @@
                         <button class="btn btn-danger" type="submit">Hapus</button>
                     </form>
                 </div>
-                </div>
             </div>
         </div>
-        {{-- End Modal Delete --}}
+    </div>
+    {{-- End Modal Delete --}}
 
 
 
-        @push('scripts')
-            <!-- Script delete -->
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const deleteModal = document.getElementById('deleteModal');
-                    const deleteForm = document.getElementById('deleteForm');
-                    const deleteItemName = document.getElementById('deleteItemName');
+    @push('scripts')
+        <!-- Script delete -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const deleteModal = document.getElementById('deleteModal');
+                const deleteForm = document.getElementById('deleteForm');
+                const deleteItemName = document.getElementById('deleteItemName');
 
-                    document.querySelectorAll('.btn-danger[data-bs-target="#deleteModal"]').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            deleteForm.action = this.dataset.action;
-                            deleteItemName.textContent = this.dataset.name;
-                        });
+                document.querySelectorAll('.btn-danger[data-bs-target="#deleteModal"]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        deleteForm.action = this.dataset.action;
+                        deleteItemName.textContent = this.dataset.name;
                     });
                 });
-            </script>
+            });
+        </script>
 
-            <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
-            <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>
-        @endpush
-    @endsection
+        <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>
+    @endpush
+@endsection
