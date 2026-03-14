@@ -29,7 +29,7 @@
 
                         <!-- Baris 1 -->
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="mb-3">
                                     <label>Nama</label>
                                     <div class="form-control-plaintext py-0">
@@ -37,11 +37,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="mb-3">
-                                    <label>NIK</label>
+                                    <label>NIK KTP</label>
                                     <div class="form-control-plaintext py-0">
-                                        {{ $user->nik }}
+                                        {{ $user->nik_ktp }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="mb-3">
+                                    <label>NIK Karyawan</label>
+                                    <div class="form-control-plaintext py-0">
+                                        {{ $user->nik_karyawan }}
                                     </div>
                                 </div>
                             </div>
@@ -49,7 +57,7 @@
 
                         <!-- Baris 2 -->
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="mb-3">
                                     <label>KTA</label>
                                     <div class="form-control-plaintext py-0">
@@ -57,7 +65,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="mb-3">
                                     <label>Departemen</label>
                                     <div class="form-control-plaintext py-0">
@@ -69,7 +77,7 @@
 
                         <!-- Baris 2 -->
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="mb-3">
                                     <label>No. Telepon / WA</label>
                                     <div class="form-control-plaintext py-0">
@@ -77,7 +85,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="mb-3">
                                     <label>Email</label>
                                     <div class="form-control-plaintext py-0">
@@ -89,7 +97,7 @@
 
                         <!-- Baris 3 -->
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="mb-3">
                                     <label>Tempat Lahir</label>
                                     <div class="form-control-plaintext py-0">
@@ -97,7 +105,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="mb-3">
                                     <label>Tanggal Lahir</label>
                                     <div class="form-control-plaintext py-0">
@@ -109,7 +117,7 @@
 
                         <!-- Baris 4 -->
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="mb-3">
                                     <label>Jenis Kelamin</label>
                                     <div class="form-control-plaintext py-0">
@@ -117,7 +125,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="mb-3">
                                     <label>Agama</label>
                                     <div class="form-control-plaintext py-0">
@@ -129,7 +137,7 @@
 
                         <!-- Baris 4 -->
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="mb-3">
                                     <label>Pendidikan</label>
                                     <div class="form-control-plaintext py-0">

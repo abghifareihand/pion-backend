@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
         // 1. Seed Super Admin
         User::create([
             'name' => 'Super Admin',
-            'nik' => '12345678',
+            'nik_ktp' => '12345678',
+            'nik_karyawan' => '12345678',
             'username' => 'admin',
             'email' => 'admin@gmail.com',
             'phone' => '08123456789',

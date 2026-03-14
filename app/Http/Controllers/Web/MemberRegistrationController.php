@@ -33,11 +33,12 @@ class MemberRegistrationController extends Controller
     public function update(Request $request, MemberRegistration $member)
     {
         $request->validate([
-            'name'        => 'required|string|max:255',
-            'nik'         => 'required|string|max:20|unique:member_registrations,nik,' . $member->id,
-            'department'  => 'required|string',
+            'name'         => 'required|string|max:255',
+            'nik_ktp'      => 'required|string|max:20|unique:member_registrations,nik_ktp,' . $member->id,
+            'nik_karyawan' => 'required|string|max:20|unique:member_registrations,nik_karyawan,' . $member->id,
+            'department'   => 'required|string',
             'birth_place' => 'required|string|max:100',
-            'birth_date'  => 'required|date',
+            'birth_date'  => 'required|date_format:d/m/Y',
             'gender'      => 'required|in:male,female',
             'address'     => 'required|string',
             'phone'       => 'required|string|max:20',
@@ -45,8 +46,10 @@ class MemberRegistrationController extends Controller
             'education'   => 'nullable|string',
         ], [
             'name.required'        => 'Nama lengkap wajib diisi.',
-            'nik.required'         => 'NIK wajib diisi.',
-            'nik.unique'           => 'NIK ini sudah terdaftar di sistem.',
+            'nik_ktp.required'     => 'NIK KTP wajib diisi.',
+            'nik_ktp.unique'       => 'NIK KTP ini sudah terdaftar di sistem.',
+            'nik_karyawan.required' => 'NIK Karyawan wajib diisi.',
+            'nik_karyawan.unique'   => 'NIK Karyawan ini sudah terdaftar di sistem.',
             'department.required'  => 'Bagian / Departemen wajib diisi.',
             'birth_place.required' => 'Tempat lahir wajib diisi.',
             'birth_date.required'  => 'Tanggal lahir wajib diisi.',
@@ -57,12 +60,15 @@ class MemberRegistrationController extends Controller
         ]);
 
         // Update data menggunakan fill untuk keamanan
+        $birthDate = $request->birth_date ? \Carbon\Carbon::createFromFormat('d/m/Y', $request->birth_date)->format('Y-m-d') : null;
+
         $member->fill([
-            'name'        => $request->name,
-            'nik'         => $request->nik,
-            'department'  => $request->department,
+            'name'         => $request->name,
+            'nik_ktp'      => $request->nik_ktp,
+            'nik_karyawan' => $request->nik_karyawan,
+            'department'   => $request->department,
             'birth_place' => $request->birth_place,
-            'birth_date'  => $request->birth_date,
+            'birth_date'  => $birthDate,
             'gender'      => $request->gender,
             'address'     => $request->address,
             'phone'       => $request->phone,
@@ -81,7 +87,8 @@ class MemberRegistrationController extends Controller
         // 1. Buat User Baru (Official Account)
         User::create([
             'name'          => $member->name,
-            'nik'           => $member->nik,
+            'nik_ktp'       => $member->nik_ktp,
+            'nik_karyawan'  => $member->nik_karyawan,
             'phone'         => $member->phone,
             'department'    => $member->department,
             'birth_place'   => $member->birth_place,
@@ -92,7 +99,7 @@ class MemberRegistrationController extends Controller
             'education'     => $member->education,
 
             // AUTH DATA DEFAULT
-            'username'      => $member->nik, // Biar gampang login pake NIK
+            'username'      => $member->nik_ktp, // Biar gampang login pake NIK KTP
             'password'      => Hash::make('password1234'), // Password default request kamu
             'pin'           => Hash::make('000000'),
             'role'          => 'user',
@@ -118,6 +125,6 @@ class MemberRegistrationController extends Controller
         $pdf->setPaper('a4', 'portrait');
 
         // 4. Stream ke browser
-        return $pdf->stream('Laporan-Pendaftaran-' . $member->nik . '.pdf');
+        return $pdf->stream('Laporan-Pendaftaran-' . $member->nik_ktp . '.pdf');
     }
 }

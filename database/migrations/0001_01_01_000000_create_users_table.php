@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             // Auth & Basic
             $table->string('name');
-            $table->string('nik')->unique();
+            $table->string('nik_ktp')->unique();
+            $table->string('nik_karyawan')->unique();
             $table->string('username')->unique()->nullable();
             $table->string('kta_number')->unique()->nullable();
             $table->string('barcode_number')->unique()->nullable();

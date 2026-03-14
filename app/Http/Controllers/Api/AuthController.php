@@ -139,6 +139,8 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name'        => 'sometimes|string|max:255',
+            'nik_ktp'     => 'sometimes|string|max:20|unique:users,nik_ktp,' . $user->id,
+            'nik_karyawan' => 'sometimes|string|max:20|unique:users,nik_karyawan,' . $user->id,
             'email'       => 'sometimes|nullable|email|unique:users,email,' . $user->id,
             'department'  => 'sometimes|nullable|string|max:255',
             'phone'       => 'sometimes|nullable|string|max:20',
@@ -164,6 +166,8 @@ class AuthController extends Controller
 
         $data = $request->only([
             'name',
+            'nik_ktp',
+            'nik_karyawan',
             'email',
             'department',
             'phone',

@@ -181,7 +181,7 @@
                                 <thead>
                                     <tr>
                                         <th>Nama</th>
-                                        <th>NIK</th>
+                                        <th>NIK KTP</th>
                                         <th>Departemen</th>
                                         <th>Tanggal Daftar</th>
                                         <th>Status</th>
@@ -192,7 +192,7 @@
                                     @foreach ($recentMembers as $member)
                                         <tr>
                                             <td>{{ $member->name }}</td>
-                                            <td>{{ $member->nik }}</td>
+                                            <td>{{ $member->nik_ktp }}</td>
                                             <td>{{ $member->department }}</td>
                                             <td>{{ $member->created_at->translatedFormat('d F Y') }}</td>
                                             <td>

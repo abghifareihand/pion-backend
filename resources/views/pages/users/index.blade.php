@@ -7,6 +7,39 @@
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+    <style>
+        .table-responsive table {
+            white-space: nowrap;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Ensure action buttons don't stack */
+        .btn-group-action {
+            display: flex;
+            gap: 3px;
+        }
+
+        /* Custom Soft UI Badges */
+        .badge-male {
+            background-color: #e7f1ff !important;
+            color: #0052cc !important;
+            border: 1px solid #cfe2ff;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .badge-female {
+            background-color: #fff0f3 !important;
+            color: #af003d !important;
+            border: 1px solid #f8d7da;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -47,9 +80,14 @@
                                     <tr>
                                         <th class="dt-col-no">No</th>
                                         <th>Nama</th>
-                                        <th>NIK</th>
+                                        <th>NIK KTP</th>
+                                        <th>NIK Karyawan</th>
+                                        <th>KTA</th>
+                                        <th>Departemen</th>
+                                        <th>Gender</th>
+                                        <th>TTL</th>
                                         <th>No. Telp</th>
-                                        <th>Created At</th>
+                                        <th>Tgl Daftar</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -60,13 +98,26 @@
 
                                             <td>{{ $user->name }}</td>
 
-                                            <td>{{ $user->nik }}</td>
+                                            <td>{{ $user->nik_ktp }}</td>
+                                            <td>{{ $user->nik_karyawan }}</td>
+                                            <td>{{ $user->kta_number ?? '-' }}</td>
+                                            <td>{{ $user->department ?? '-' }}</td>
+                                            <td>
+                                                @if ($user->gender == 'male')
+                                                    <span class="badge badge-male">Laki-laki</span>
+                                                @elseif($user->gender == 'female')
+                                                    <span class="badge badge-female">Perempuan</span>
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td>{{ $user->birth_place ?? '-' }}, {{ $user->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('d/m/Y') : '-' }}</td>
 
                                             <td>{{ $user->phone }}</td>
 
                                             <td>{{ $user->created_at->format('d/m/y H:i') }}</td>
 
-                                            <td>
+                                            <td class="btn-group-action">
                                                 <!-- Edit button -->
                                                 <a href="{{ route('users.edit', $user->id) }}"
                                                     class="btn btn-success btn-xs">
@@ -90,7 +141,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="7" class="text-center text-muted">No user data</td>
+                                            <td colspan="13" class="text-center text-muted">No user data</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
