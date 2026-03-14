@@ -93,3 +93,107 @@
     border-radius: 4px;
     font-weight: 600;
 }
+
+/* ===============================
+   CUSTOM SOFT UI ALERTS
+================================ */
+.alert-soft-success {
+    background-color: #e8f5e9 !important;
+    color: #2e7d32 !important;
+    border: 1px solid #c8e6c9 !important;
+    border-radius: 8px;
+}
+
+.alert-soft-danger {
+    background-color: #ffebee !important;
+    color: #c62828 !important;
+    border: 1px solid #ffcdd2 !important;
+    border-radius: 8px;
+}
+
+.alert-soft-success .btn-close,
+.alert-soft-danger .btn-close {
+    filter: grayscale(1) invert(1) brightness(0.5);
+    opacity: 0.8;
+}
+
+/* ===============================
+   PREMIUM BUTTONS
+================================ */
+.btn-premium {
+    border: 1px solid #212529;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #212529 !important;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btn-premium:focus,
+.btn-premium:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.btn-premium-lg {
+    padding: 10px 18px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border-radius: 4px !important;
+}
+
+.btn-login {
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    border-radius: 4px !important;
+    margin-top: 10px !important;
+}
+
+.btn-premium:disabled,
+.btn-premium.disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+    box-shadow: none;
+    pointer-events: none;
+}
+
+.btn-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    filter: brightness(1.1);
+    color: #212529 !important;
+}
+
+.btn-premium-white,
+.btn-premium-white:hover {
+    color: #ffffff !important;
+}
+
+.btn-premium-primary {
+    background: linear-gradient(135deg, #AA2224 0%, #d32f2f 100%);
+}
+
+.btn-premium-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.btn-premium-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #f8606d 100%);
+}
+
+.btn-premium-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+}
+
+.btn-premium-info {
+    background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+}
+
+.btn-premium-light {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}

@@ -17,42 +17,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Premium Buttons */
-        .btn-premium {
-            border: 1px solid #212529;
-            border-radius: 4px;
-            padding: 4px 10px;
-            font-size: 11px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            color: #212529 !important;
-            display: inline-block;
-            text-decoration: none;
-        }
-
-        .btn-premium:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            filter: brightness(1.1);
-            color: #212529 !important;
-        }
-
-        .btn-premium-success {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-        }
-
-        .btn-premium-danger {
-            background: linear-gradient(135deg, #dc3545 0%, #f8606d 100%);
-        }
-
-        .btn-premium-warning {
-            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
-        }
-
-        .btn-premium-light {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        }
     </style>
 @endpush
 
@@ -75,7 +39,7 @@
 
                         {{-- Alert sukses --}}
                         @if (session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
                                 {{ session('success') }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
@@ -106,11 +70,11 @@
                                                 {{-- Badge untuk TYPE --}}
                                                 <td>
                                                     @if ($ticket->type == 'report')
-                                                        <span class="badge bg-danger">Report</span>
+                                                        <span class="badge badge-rejected">Report</span>
                                                     @elseif($ticket->type == 'question')
-                                                        <span class="badge bg-info">Question</span>
+                                                        <span class="badge badge-pending">Question</span>
                                                     @else
-                                                        <span class="badge bg-secondary">Suggestion</span>
+                                                        <span class="badge badge-responded">Suggestion</span>
                                                     @endif
                                                 </td>
 

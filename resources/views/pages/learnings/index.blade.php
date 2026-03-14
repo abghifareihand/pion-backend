@@ -44,7 +44,7 @@
 
                         {{-- Alert sukses --}}
                         @if (session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
                                 {{ session('success') }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
@@ -59,8 +59,8 @@
                                         <tr>
                                             <th class="dt-col-no">No</th>
                                             <th>Judul</th>
-                                            <th>File</th>
                                             <th>Foto</th>
+                                            <th>File</th>
                                             <th>Tanggal Dibuat</th>
                                             <th>Action</th>
                                         </tr>
@@ -73,24 +73,28 @@
                                                 <td>{{ $learn->title }}</td>
 
                                                 <td>
-                                                    @if ($learn->file_path)
-                                                        <a href="{{ asset('storage/' . $learn->file_path) }}"
-                                                            target="_blank">
-                                                            Lihat
+                                                    @if ($learn->image_path)
+                                                        <a href="{{ asset('storage/' . $learn->image_path) }}"
+                                                            target="_blank" class="btn-premium btn-premium-info">
+                                                            <i class="fa fa-eye"></i> Lihat Foto
                                                         </a>
                                                     @else
-                                                        <span class="text-muted">-</span>
+                                                        <a href="javascript:void(0)" class="btn-premium btn-premium-light disabled">
+                                                            <i class="fa fa-times"></i> Tidak Ada Foto
+                                                        </a>
                                                     @endif
                                                 </td>
 
                                                 <td>
-                                                    @if ($learn->image_path)
-                                                        <a href="{{ asset('storage/' . $learn->image_path) }}"
-                                                            target="_blank">
-                                                            Lihat
+                                                    @if ($learn->file_path)
+                                                        <a href="{{ asset('storage/' . $learn->file_path) }}"
+                                                            target="_blank" class="btn-premium btn-premium-success">
+                                                            <i class="fa fa-eye"></i> Lihat File
                                                         </a>
                                                     @else
-                                                        <span class="text-muted">-</span>
+                                                        <a href="javascript:void(0)" class="btn-premium btn-premium-light disabled">
+                                                            <i class="fa fa-times"></i> Tidak Ada File
+                                                        </a>
                                                     @endif
                                                 </td>
 

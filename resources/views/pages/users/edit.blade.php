@@ -5,6 +5,7 @@
 @endsection
 
 @push('css')
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/date-picker.css') }}">
 @endpush
 
@@ -34,7 +35,7 @@
 
                         {{-- Alert sukses --}}
                         @if (session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
                                 {{ session('success') }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
@@ -43,7 +44,7 @@
 
                         {{-- Alert Error --}}
                         @if ($errors->any())
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
                                 <ul class="mb-0">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
@@ -97,9 +98,9 @@
                             <div class="mb-3">
                                 <label>Nomor Barcode</label>
                                 <input class="form-control" type="text" name="barcode_number"
-                                    value="{{ old('barcode_number', $user->barcode_number) }}" maxlength="20"
-                                    pattern="\d*" inputmode="numeric"
-                                    oninput="this.value = this.value.replace(/[^0-9]/g, '');" required />
+                                    value="{{ old('barcode_number', $user->barcode_number) }}" maxlength="20" pattern="\d*"
+                                    inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                    required />
                             </div>
 
 
@@ -130,8 +131,7 @@
                                 <label>Jenis Kelamin</label>
                                 <select class="form-select" name="gender" required>
                                     <option value="">-- Pilih Jenis Kelamin --</option>
-                                    <option value="male"
-                                        {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>
+                                    <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>
                                         Laki-Laki</option>
                                     <option value="female"
                                         {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>
@@ -188,18 +188,10 @@
                             <!-- Input Pendidikan -->
                             <div class="mb-3">
                                 <label>Pendidikan</label>
-                                 <select class="form-select" name="education" required>
+                                <select class="form-select" name="education" required>
                                     <option value="">-- Pilih Pendidikan --</option>
                                     @php
-                                        $educations = [
-                                            'SD',
-                                            'SMP',
-                                            'SMA/SMK',
-                                            'D3',
-                                            'S1',
-                                            'S2',
-                                            'S3',
-                                        ];
+                                        $educations = ['SD', 'SMP', 'SMA/SMK', 'D3', 'S1', 'S2', 'S3'];
                                     @endphp
                                     @foreach ($educations as $item)
                                         <option value="{{ $item }}"
@@ -219,9 +211,8 @@
                             <!-- Input PIN -->
                             <div class="mb-3">
                                 <label>PIN</label>
-                                <input class="form-control" type="text" name="pin"
-                                    value="{{ old('pin') }}" maxlength="6" pattern="\d*"
-                                    inputmode="numeric"
+                                <input class="form-control" type="text" name="pin" value="{{ old('pin') }}"
+                                    maxlength="6" pattern="\d*" inputmode="numeric"
                                     oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
                                 <small class="text-muted">
                                     Kosongkan jika tidak ingin mengubah PIN
@@ -241,10 +232,14 @@
 
 
                             <!-- Button Update -->
-                            <div class="text-end">
-                                <button class="btn btn-success" type="submit">
-                                    <i class="fa fa-save me-1"></i> Update
-                                </button>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="text-end">
+                                        <button class="btn btn-success" type="submit">
+                                            <i class="fa fa-save me-1"></i> Update
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                         {{-- End Form --}}

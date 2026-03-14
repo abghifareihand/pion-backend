@@ -5,7 +5,9 @@
 @endsection
 
 @push('css')
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 @endpush
+
 
 @section('content')
     <div class="container-fluid">
@@ -32,7 +34,7 @@
 
                         {{-- Alert sukses --}}
                         @if (session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
                                 {{ session('success') }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
@@ -41,7 +43,7 @@
 
                         {{-- Alert Error --}}
                         @if ($errors->any())
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
                                 <ul class="mb-0">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
@@ -87,8 +89,7 @@
                                 @endif
                                 <div>
                                     <label>Pilih Foto Baru (opsional)</label>
-                                    <input class="form-control" type="file" name="image"
-                                        accept=".jpg,.jpeg,.png">
+                                    <input class="form-control" type="file" name="image" accept=".jpg,.jpeg,.png">
                                 </div>
                             </div>
 
@@ -97,8 +98,10 @@
                                 @if ($financial->file_path)
                                     <div class="mb-3">
                                         <label class="fw-bold d-block mb-2">File Sekarang</label>
-                                        <div class="p-2 border rounded d-inline-block text-center" style="min-width: 200px;">
-                                            <a href="{{ asset('storage/' . $financial->file_path) }}" target="_blank" class="text-decoration-none text-dark">
+                                        <div class="p-2 border rounded d-inline-block text-center"
+                                            style="min-width: 200px;">
+                                            <a href="{{ asset('storage/' . $financial->file_path) }}" target="_blank"
+                                                class="text-decoration-none text-dark">
                                                 <i class="fa fa-file-pdf-o fa-3x text-danger"></i>
                                                 <div class="text-muted small mt-1">Klik untuk lihat</div>
                                             </a>
@@ -107,8 +110,7 @@
                                 @endif
                                 <div>
                                     <label>Pilih File Baru (opsional)</label>
-                                    <input class="form-control" type="file" name="file"
-                                        accept=".pdf,.doc,.docx">
+                                    <input class="form-control" type="file" name="file" accept=".pdf,.doc,.docx">
                                 </div>
                             </div>
 

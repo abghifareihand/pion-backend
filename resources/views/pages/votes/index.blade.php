@@ -5,8 +5,8 @@
 @endsection
 
 @push('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
     <style>
         .table-responsive table {
             white-space: nowrap;
@@ -44,7 +44,7 @@
 
                         {{-- Alert sukses --}}
                         @if (session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
                                 {{ session('success') }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
@@ -73,7 +73,7 @@
                                                 <td>{{ $vote->title }}</td>
 
                                                 <td>
-                                                    <span class="badge bg-info">
+                                                    <span class="badge badge-responded">
                                                         {{ $vote->options_count }} KANDIDAT
                                                     </span>
                                                 </td>
@@ -81,9 +81,9 @@
 
                                                 <td>
                                                     @if ($vote->is_active)
-                                                        <span class="badge bg-success">Aktif</span>
+                                                        <span class="badge badge-approved">Aktif</span>
                                                     @else
-                                                        <span class="badge bg-danger">Tidak Aktif</span>
+                                                        <span class="badge badge-rejected">Tidak Aktif</span>
                                                     @endif
                                                 </td>
 

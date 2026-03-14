@@ -1,8 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-    Edit Profile
+    Profil Saya
 @endsection
+
+@push('css')
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+@endpush
 
 @push('css')
 @endpush
@@ -29,7 +33,7 @@
 
                         {{-- Alert sukses --}}
                         @if (session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
                                 {{ session('success') }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
@@ -38,7 +42,7 @@
 
                         {{-- Alert Error --}}
                         @if ($errors->any())
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
                                 <ul class="mb-0">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>

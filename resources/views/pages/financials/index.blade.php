@@ -5,8 +5,8 @@
 @endsection
 
 @push('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
     <style>
         .table-responsive table {
             white-space: nowrap;
@@ -42,10 +42,23 @@
                 <div class="card">
                     <div class="card-body">
 
-                        {{-- Alert sukses --}}
+                       {{-- Alert sukses --}}
                         @if (session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
                                 {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        {{-- Alert Error --}}
+                        @if ($errors->any())
+                            <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
                             </div>
@@ -59,8 +72,8 @@
                                         <tr>
                                             <th class="dt-col-no">No</th>
                                             <th>Judul</th>
-                                            <th>File</th>
                                             <th>Foto</th>
+                                            <th>File</th>
                                             <th>Tanggal Dibuat</th>
                                             <th>Action</th>
                                         </tr>
@@ -73,24 +86,28 @@
                                                 <td>{{ $finance->title }}</td>
 
                                                 <td>
-                                                    @if ($finance->file_path)
-                                                        <a href="{{ asset('storage/' . $finance->file_path) }}"
-                                                            target="_blank">
-                                                            Lihat
+                                                    @if ($finance->image_path)
+                                                        <a href="{{ asset('storage/' . $finance->image_path) }}"
+                                                            target="_blank" class="btn-premium btn-premium-info">
+                                                            <i class="fa fa-eye"></i> Lihat Foto
                                                         </a>
                                                     @else
-                                                        <span class="text-muted">-</span>
+                                                        <a href="javascript:void(0)" class="btn-premium btn-premium-light disabled">
+                                                            <i class="fa fa-times"></i> Tidak Ada Foto
+                                                        </a>
                                                     @endif
                                                 </td>
 
                                                 <td>
-                                                    @if ($finance->image_path)
-                                                        <a href="{{ asset('storage/' . $finance->image_path) }}"
-                                                            target="_blank">
-                                                            Lihat
+                                                    @if ($finance->file_path)
+                                                        <a href="{{ asset('storage/' . $finance->file_path) }}"
+                                                            target="_blank" class="btn-premium btn-premium-success">
+                                                            <i class="fa fa-eye"></i> Lihat File
                                                         </a>
                                                     @else
-                                                        <span class="text-muted">-</span>
+                                                        <a href="javascript:void(0)" class="btn-premium btn-premium-light disabled">
+                                                            <i class="fa fa-times"></i> Tidak Ada File
+                                                        </a>
                                                     @endif
                                                 </td>
 

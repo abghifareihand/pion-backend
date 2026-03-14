@@ -4,6 +4,10 @@
     Reply Pesan
 @endsection
 
+@push('css')
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+@endpush
+
 @section('content')
     <div class="container-fluid">
         <div class="row">
@@ -103,7 +107,7 @@
                 <div class="card">
                     <div class="card-body">
                         @if ($errors->any())
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
                                 <ul class="mb-0">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
