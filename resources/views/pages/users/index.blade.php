@@ -101,7 +101,7 @@
                         @endif
 
                         {{-- Table untuk list information --}}
-                        @if($users->count() > 0)
+                        @if ($users->count() > 0)
                             <div class="table-responsive">
                                 <table class="display" id="basic-1">
                                     <thead>
@@ -112,7 +112,7 @@
                                             <th>NIK Karyawan</th>
                                             <th>KTA</th>
                                             <th>Departemen</th>
-                                            <th>Gender</th>
+                                            <th>Jenis Kelamin</th>
                                             <th>TTL</th>
                                             <th>No. Telp</th>
                                             <th>Tanggal Daftar</th>

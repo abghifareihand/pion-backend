@@ -26,135 +26,95 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <!-- Header -->
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="mb-3">
-                                    <label>Status</label>
-                                    <div class="form-control-plaintext py-0">
-                                        @if ($member->status == 'pending')
-                                            <span class="badge bg-warning text-dark">Menunggu Persetujuan</span>
-                                        @else
-                                            <span class="badge bg-success text-dark">Sudah Disetujui</span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="mb-3">
-                                    <label>Pendaftar</label>
-                                    <div class="form-control-plaintext py-0">
-                                        <span class="badge bg-primary"> {{ $member->referrer->name }}</span>
-                                    </div>
-                                </div>
+                        <!-- Status & Referrer -->
+                        <div class="mb-3">
+                            <label>Status</label>
+                            <div class="form-control-plaintext py-0">
+                                @if ($member->status == 'pending')
+                                    <span class="badge bg-warning text-dark">Menunggu Persetujuan</span>
+                                @else
+                                    <span class="badge bg-success text-dark">Sudah Disetujui</span>
+                                @endif
                             </div>
                         </div>
 
-                        <!-- Baris 1 -->
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="mb-3">
-                                    <label>Nama</label>
-                                    <div class="form-control-plaintext py-0">
-                                        {{ $member->name }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="mb-3">
-                                    <label>NIK KTP</label>
-                                    <div class="form-control-plaintext py-0">
-                                        {{ $member->nik_ktp }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="mb-3">
-                                    <label>NIK Karyawan</label>
-                                    <div class="form-control-plaintext py-0">
-                                        {{ $member->nik_karyawan }}
-                                    </div>
-                                </div>
+                        <div class="mb-3">
+                            <label>Pendaftar</label>
+                            <div class="form-control-plaintext py-0">
+                                <span class="badge bg-primary"> {{ $member->referrer->name }}</span>
                             </div>
                         </div>
 
-                        <!-- Baris 2 -->
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="mb-3">
-                                    <label>Departemen</label>
-                                    <div class="form-control-plaintext py-0">
-                                        {{ $member->department }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="mb-3">
-                                    <label>No. Telepon / WA</label>
-                                    <div class="form-control-plaintext py-0">
-                                        {{ $member->phone ?? '-' }}
-                                    </div>
-                                </div>
+                        <hr>
+
+                        <!-- Personal Information -->
+                        <div class="mb-3">
+                            <label>Nama Lengkap</label>
+                            <div class="form-control-plaintext py-0">
+                                {{ $member->name }}
                             </div>
                         </div>
 
-                        <!-- Baris 3 -->
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="mb-3">
-                                    <label>Tempat Lahir</label>
-                                    <div class="form-control-plaintext py-0">
-                                        {{ $member->birth_place }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="mb-3">
-                                    <label>Tanggal Lahir</label>
-                                    <div class="form-control-plaintext py-0">
-                                        {{ $member->birth_date ? \Carbon\Carbon::parse($member->birth_date)->translatedFormat('j F Y') : '-' }}
-                                    </div>
-                                </div>
+                        <div class="mb-3">
+                            <label>NIK KTP</label>
+                            <div class="form-control-plaintext py-0">
+                                {{ $member->nik_ktp }}
                             </div>
                         </div>
 
-                        <!-- Baris 4 -->
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="mb-3">
-                                    <label>Jenis Kelamin</label>
-                                    <div class="form-control-plaintext py-0">
-                                        {{ $member->gender == 'male' ? 'Laki-laki' : ($member->gender == 'female' ? 'Perempuan' : '-') }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="mb-3">
-                                    <label>Agama</label>
-                                    <div class="form-control-plaintext py-0">
-                                        {{ $member->religion }}
-                                    </div>
-                                </div>
+                        <div class="mb-3">
+                            <label>NIK Karyawan</label>
+                            <div class="form-control-plaintext py-0">
+                                {{ $member->nik_karyawan }}
                             </div>
                         </div>
 
-                        <!-- Baris 4 -->
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="mb-3">
-                                    <label>Pendidikan</label>
-                                    <div class="form-control-plaintext py-0">
-                                        {{ $member->education }}
-                                    </div>
-                                </div>
+                        <div class="mb-3">
+                            <label>Departemen</label>
+                            <div class="form-control-plaintext py-0">
+                                {{ $member->department }}
                             </div>
-                            <div class="col-sm-6">
-                                <div class="mb-3">
-                                    <label>Alamat</label>
-                                    <div class="form-control-plaintext py-0">
-                                        {{ $member->address }}
-                                    </div>
-                                </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>No. Telepon / WA</label>
+                            <div class="form-control-plaintext py-0">
+                                {{ $member->phone ?? '-' }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Tempat, Tanggal Lahir</label>
+                            <div class="form-control-plaintext py-0">
+                                {{ $member->birth_place }}, {{ $member->birth_date ? \Carbon\Carbon::parse($member->birth_date)->translatedFormat('j F Y') : '-' }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Jenis Kelamin</label>
+                            <div class="form-control-plaintext py-0">
+                                {{ $member->gender == 'male' ? 'Laki-laki' : ($member->gender == 'female' ? 'Perempuan' : '-') }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Agama</label>
+                            <div class="form-control-plaintext py-0">
+                                {{ $member->religion }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Pendidikan</label>
+                            <div class="form-control-plaintext py-0">
+                                {{ $member->education }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Alamat</label>
+                            <div class="form-control-plaintext py-0">
+                                {{ $member->address }}
                             </div>
                         </div>
 

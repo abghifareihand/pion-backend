@@ -165,7 +165,7 @@
             <tr>
                 <td>2. NIK Karyawan</td>
                 <td>:</td>
-                <td>{{ $member->nik }}</td>
+                <td>{{ $member->nik_karyawan }}</td>
             </tr>
             <tr>
                 <td>3. Departemen</td>
@@ -250,7 +250,7 @@
             <tr>
                 <td>2. NIK KTP</td>
                 <td>:</td>
-                <td>{{ $member->nik }}</td>
+                <td>{{ $member->nik_ktp }}</td>
             </tr>
             <tr>
                 <td>3. Departemen</td>

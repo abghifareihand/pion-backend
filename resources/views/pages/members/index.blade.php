@@ -22,6 +22,23 @@
             display: flex;
             gap: 3px;
         }
+
+        /* Custom Soft UI Badges */
+        .badge-male {
+            background-color: #e7f1ff !important;
+            color: #0052cc !important;
+            border: 1px solid #cfe2ff;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .badge-female {
+            background-color: #fff0f3 !important;
+            color: #af003d !important;
+            border: 1px solid #f8d7da;
+            border-radius: 4px;
+            font-weight: 600;
+        }
     </style>
 @endpush
 
@@ -52,13 +69,14 @@
                         @endif
 
                         {{-- Table untuk list Member Registration --}}
-                        @if($members->count() > 0)
+                        @if ($members->count() > 0)
                             <div class="table-responsive">
                                 <table class="display" id="basic-1">
                                     <thead>
                                         <tr>
                                             <th class="dt-col-no">No</th>
                                             <th>Nama</th>
+                                            <th>Jenis Kelamin</th>
                                             <th>Status</th>
                                             <th>Pendaftar</th>
                                             <th>Tanggal Daftar</th>
@@ -71,6 +89,16 @@
                                                 <td class="dt-col-no">{{ $loop->iteration }}</td>
 
                                                 <td>{{ $member->name }}</td>
+
+                                                <td>
+                                                    @if ($member->gender == 'male')
+                                                        <span class="badge badge-male">Laki-laki</span>
+                                                    @elseif($member->gender == 'female')
+                                                        <span class="badge badge-female">Perempuan</span>
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
 
                                                 <td>
                                                     @if ($member->status == 'pending')
