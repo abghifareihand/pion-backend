@@ -78,14 +78,22 @@
                                 </div>
                             </div>
 
-                            <!-- Candidates (read-only) -->
+                            <!-- Candidates -->
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label>Kandidat</label>
-                                        <div class="form-control-plaintext py-0">
+                                        <label>Kandidat & Visi</label>
+                                        <div class="row">
                                             @foreach ($vote->options as $option)
-                                                {{ $loop->iteration }}. {{ $option->label }}<br>
+                                                <div class="col-md-6 mb-3">
+                                                    <div class="p-2 border rounded">
+                                                        <span class="fw-bold d-block mb-1">{{ $loop->iteration }}. {{ $option->label }}</span>
+                                                        <div class="vision-field pt-1 border-top">
+                                                            <label class="small text-muted mb-1">Visi Misi</label>
+                                                            <textarea class="form-control form-control-sm" name="visions[{{ $option->id }}]" rows="2" placeholder="Masukkan visi misi...">{{ old('visions.' . $option->id, $option->vision) }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             @endforeach
                                         </div>
                                     </div>

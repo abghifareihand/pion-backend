@@ -35,11 +35,22 @@
                         </div>
 
                         <div class="mb-3">
-                            <label>Total Kandidat</label>
+                            <label>Daftar Kandidat</label>
                             <div class="form-control-plaintext py-0">
-                                @foreach ($vote->options as $option)
-                                    {{ $loop->iteration }}. {{ $option->label }}<br>
-                                @endforeach
+                                <div class="row">
+                                    @foreach ($vote->options as $option)
+                                        <div class="col-md-6 mb-2">
+                                            <div class="p-2 border rounded">
+                                                <span class="fw-bold">{{ $loop->iteration }}. {{ $option->label }}</span>
+                                                @if($option->vision)
+                                                    <div class="small text-muted mt-1 px-2 border-start border-3 border-primary">
+                                                        <strong>Visi:</strong> {{ $option->vision }}
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
 

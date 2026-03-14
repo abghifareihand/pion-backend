@@ -83,16 +83,23 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label>Pilih Kandidat</label>
+                                        <label>Pilih Kandidat (Maksimal 8)</label>
                                         <div class="row">
                                             @foreach ($users as $user)
-                                                <div class="col-md-6">
-                                                    <label class="d-block" for="user_{{ $user->id }}">
-                                                        <input class="checkbox_animated" id="user_{{ $user->id }}"
-                                                            type="checkbox" name="options[]" value="{{ $user->id }}"
-                                                            {{ in_array($user->id, old('options', [])) ? 'checked' : '' }}>
-                                                        {{ $user->name }}
-                                                    </label>
+                                                <div class="col-md-6 mb-3">
+                                                    <div class="candidate-container p-2 border rounded">
+                                                        <label class="d-flex align-items-center mb-1 cursor-pointer" for="user_{{ $user->id }}">
+                                                            <input class="checkbox_animated candidate-checkbox" id="user_{{ $user->id }}"
+                                                                type="checkbox" name="options[]" value="{{ $user->id }}"
+                                                                {{ in_array($user->id, old('options', [])) ? 'checked' : '' }}>
+                                                            <span class="ms-2">{{ $user->name }}</span>
+                                                        </label>
+                                                        
+                                                        <div class="vision-field mt-2 {{ in_array($user->id, old('options', [])) ? '' : 'd-none' }}" id="vision_container_{{ $user->id }}">
+                                                            <label class="small text-muted mb-1">Visi Misi Kandidat</label>
+                                                            <textarea class="form-control form-control-sm" name="visions[{{ $user->id }}]" rows="2" placeholder="Masukkan visi misi untuk {{ $user->name }}...">{{ old('visions.' . $user->id) }}</textarea>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             @endforeach
                                         </div>
@@ -121,5 +128,38 @@
     </div>
 
     @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.candidate-checkbox');
+            const maxCandidates = 8;
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const userId = this.value;
+                    const visionContainer = document.getElementById(`vision_container_${userId}`);
+                    
+                    // Toggle vision field visibility
+                    if (this.checked) {
+                        visionContainer.classList.remove('d-none');
+                    } else {
+                        visionContainer.classList.add('d-none');
+                    }
+
+                    // Count checked
+                    const checkedCount = document.querySelectorAll('.candidate-checkbox:checked').length;
+
+                    if (checkedCount > maxCandidates) {
+                        this.checked = false;
+                        visionContainer.classList.add('d-none');
+                        alert('Maksimal kandidat yang dapat dipilih adalah 8 orang.');
+                    }
+                });
+            });
+        });
+    </script>
+    <style>
+        .cursor-pointer { cursor: pointer; }
+        .candidate-container:hover { background-color: #f8f9fa; }
+    </style>
     @endpush
 @endsection

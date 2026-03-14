@@ -13,6 +13,7 @@ class VoteOption extends Model
         'vote_id',
         'user_id',
         'label',
+        'vision',
     ];
 
     // Relasi balik ke Vote
