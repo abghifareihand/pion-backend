@@ -23,7 +23,6 @@
             gap: 3px;
         }
     </style>
-@endpush+
 @endpush
 
 @section('content')
@@ -118,7 +117,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="text-center text-muted">Data tidak ditemukan</td>
+                                            <td colspan="6" class="text-center text-muted">Tidak ada data pemilu</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

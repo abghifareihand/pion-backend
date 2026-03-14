@@ -105,7 +105,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="7" class="text-center text-muted p-4">Data tidak ditemukan</td>
+                                            <td colspan="7" class="text-center text-muted p-4">Tidak ada data registrasi member</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

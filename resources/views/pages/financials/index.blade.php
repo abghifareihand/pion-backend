@@ -109,7 +109,7 @@
                                                 <!-- Show button -->
                                                 <a href="{{ route('financials.show', $finance->id) }}"
                                                     class="btn btn-secondary btn-xs">
-                                                    Show
+                                                    Lihat
                                                 </a>
 
                                                 <!-- Delete button -->
@@ -117,7 +117,7 @@
                                                     data-bs-target="#deleteModal"
                                                     data-action="{{ route('financials.destroy', $finance) }}"
                                                     data-name="{{ $finance->title }}">
-                                                    Delete
+                                                    Hapus
                                                 </a>
                                             </td>
                                         </tr>
@@ -142,18 +142,18 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Confirm Delete</h5>
+                    <h5 class="modal-title">Konfirmasi Hapus</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this financial <strong id="deleteItemName"></strong> ?</p>
+                    <p>Apakah Anda yakin ingin menghapus data laporan keuangan <strong id="deleteItemName"></strong>?</p>
                 </div>
                 <div class="modal-footer">
                     <form id="deleteForm" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
-                        <button class="btn btn-danger" type="submit">Delete</button>
+                        <button class="btn btn-light" type="button" data-bs-dismiss="modal">Tutup</button>
+                        <button class="btn btn-danger" type="submit">Hapus</button>
                     </form>
                 </div>
             </div>

@@ -106,7 +106,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center text-muted">Data tidak ditemukan</td>
+                                            <td colspan="5" class="text-center text-muted">Tidak ada data broadcast</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
