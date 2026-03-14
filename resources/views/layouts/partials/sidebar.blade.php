@@ -13,7 +13,7 @@
         </div>
 
         <a href="{{ route('profile.index') }}">
-            <h6 class="mt-3 f-14 f-w-600">{{ Auth::user()->name }}</h6>
+            <h6 class="mt-2 f-14 f-w-700">{{ Auth::user()->name }}</h6>
         </a>
     </div>
 

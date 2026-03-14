@@ -214,11 +214,11 @@
                                             <td>{{ $member->created_at->translatedFormat('d F Y') }}</td>
                                             <td>
                                                 @if ($member->status == 'pending')
-                                                    <span class="badge badge-pending">Pending</span>
+                                                    <span class="badge badge-pending">Menunggu Persetujuan</span>
                                                 @elseif($member->status == 'approved')
-                                                    <span class="badge badge-approved">Approved</span>
+                                                    <span class="badge badge-approved">Sudah Disetujui</span>
                                                 @elseif($member->status == 'rejected')
-                                                    <span class="badge badge-rejected">Rejected</span>
+                                                    <span class="badge badge-rejected">Ditolak</span>
                                                 @else
                                                     <span class="badge bg-secondary">{{ ucfirst($member->status) }}</span>
                                                 @endif

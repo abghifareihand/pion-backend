@@ -32,9 +32,13 @@
                             <label>Status</label>
                             <div class="form-control-plaintext py-0">
                                 @if ($member->status == 'pending')
-                                    <span class="badge bg-warning text-dark">Menunggu Persetujuan</span>
+                                    <span class="badge badge-pending">Menunggu Persetujuan</span>
+                                @elseif($member->status == 'approved')
+                                    <span class="badge badge-approved">Sudah Disetujui</span>
+                                @elseif($member->status == 'rejected')
+                                    <span class="badge badge-rejected">Ditolak</span>
                                 @else
-                                    <span class="badge bg-success text-dark">Sudah Disetujui</span>
+                                    <span class="badge bg-secondary">{{ ucfirst($member->status) }}</span>
                                 @endif
                             </div>
                         </div>
@@ -87,7 +91,8 @@
                         <div class="mb-3">
                             <label>Tempat, Tanggal Lahir</label>
                             <div class="form-control-plaintext py-0">
-                                {{ $member->birth_place }}, {{ $member->birth_date ? \Carbon\Carbon::parse($member->birth_date)->translatedFormat('j F Y') : '-' }}
+                                {{ $member->birth_place }},
+                                {{ $member->birth_date ? \Carbon\Carbon::parse($member->birth_date)->translatedFormat('j F Y') : '-' }}
                             </div>
                         </div>
 
@@ -121,8 +126,8 @@
 
                         <div class="card-footer">
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="{{ route('members.pdf', $member->id) }}"
-                                    class="btn btn-outline-danger" target="_blank">
+                                <a href="{{ route('members.pdf', $member->id) }}" class="btn btn-outline-danger"
+                                    target="_blank">
                                     <i class="fa fa-file-pdf me-1"></i> Preview PDF
                                 </a>
 
