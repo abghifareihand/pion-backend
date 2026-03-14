@@ -28,17 +28,14 @@
 
                             <div class="mb-3">
                                 <label class="form-label">Password</label>
-                                <input class="form-control" type="password" name="password" placeholder="Password"
-                                    required />
-                            </div>
-
-                            {{-- <div class="form-group">
-                                <div class="checkbox">
-                                    <input id="checkbox1" type="checkbox" name="remember" />
-                                    <label for="checkbox1">Remember me</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="password" id="password" name="password"
+                                        placeholder="Password" required />
+                                    <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+                                        <i class="fa fa-eye"></i>
+                                    </span>
                                 </div>
-                                <a class="link" href="">Forgot password?</a>
-                            </div> --}}
+                            </div>
 
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary w-100">
@@ -56,5 +53,21 @@
     @push('scripts')
         <script src="{{ asset('assets/js/height-equal.js') }}"></script>
         <script src="{{ asset('assets/js/tooltip-init.js') }}"></script>
+        <script>
+            $(document).ready(function() {
+                $('#togglePassword').on('click', function() {
+                    const passwordField = $('#password');
+                    const icon = $(this).find('i');
+
+                    if (passwordField.attr('type') === 'password') {
+                        passwordField.attr('type', 'text');
+                        icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                    } else {
+                        passwordField.attr('type', 'password');
+                        icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                    }
+                });
+            });
+        </script>
     @endpush
 @endsection
