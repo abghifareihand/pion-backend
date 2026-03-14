@@ -189,6 +189,33 @@
 .btn-premium-warning {
     background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
 }
+/* ===============================
+   PREMIUM BACKGROUND GRADIENTS
+================================ */
+.bg-premium-primary {
+    background: linear-gradient(135deg, #AA2224 0%, #d32f2f 100%) !important;
+    color: #ffffff !important;
+}
+
+.bg-premium-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    color: #ffffff !important;
+}
+
+.bg-premium-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #f8606d 100%) !important;
+    color: #ffffff !important;
+}
+
+.bg-premium-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%) !important;
+    color: #ffffff !important;
+}
+
+.bg-premium-info {
+    background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%) !important;
+    color: #ffffff !important;
+}
 
 .btn-premium-info {
     background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);

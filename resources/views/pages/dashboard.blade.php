@@ -29,7 +29,7 @@
             {{-- Card 1 --}}
             <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
-                    <div class="bg-primary b-r-4 card-body">
+                    <div class="bg-premium-primary b-r-4 card-body">
                         <div class="media static-top-widget">
                             <div class="align-self-center text-center"><i data-feather="users"></i></div>
                             <div class="media-body">
@@ -45,7 +45,7 @@
             {{-- Card 2 --}}
             <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
-                    <div class="bg-primary b-r-4 card-body">
+                    <div class="bg-premium-primary b-r-4 card-body">
                         <div class="media static-top-widget">
                             <div class="align-self-center text-center"><i data-feather="edit"></i></div>
                             <div class="media-body">
@@ -61,7 +61,7 @@
             {{-- Card 3 --}}
             <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
-                    <div class="bg-primary b-r-4 card-body">
+                    <div class="bg-premium-primary b-r-4 card-body">
                         <div class="media static-top-widget">
                             <div class="align-self-center text-center"><i data-feather="layers"></i></div>
                             <div class="media-body">
@@ -79,7 +79,7 @@
             {{-- Card 4 --}}
             <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
-                    <div class="bg-primary b-r-4 card-body">
+                    <div class="bg-premium-primary b-r-4 card-body">
                         <div class="media static-top-widget">
                             <div class="align-self-center text-center"><i data-feather="dollar-sign"></i></div>
                             <div class="media-body">
@@ -95,7 +95,7 @@
             {{-- Card 5 --}}
             <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
-                    <div class="bg-primary b-r-4 card-body">
+                    <div class="bg-premium-primary b-r-4 card-body">
                         <div class="media static-top-widget">
                             <div class="align-self-center text-center"><i data-feather="globe"></i></div>
                             <div class="media-body">
@@ -111,7 +111,7 @@
             {{-- Card 6 --}}
             <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
-                    <div class="bg-primary b-r-4 card-body">
+                    <div class="bg-premium-primary b-r-4 card-body">
                         <div class="media static-top-widget">
                             <div class="align-self-center text-center"><i data-feather="share-2"></i></div>
                             <div class="media-body">
@@ -129,7 +129,7 @@
             {{-- Card 7 --}}
             <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
-                    <div class="bg-primary b-r-4 card-body">
+                    <div class="bg-premium-primary b-r-4 card-body">
                         <div class="media static-top-widget">
                             <div class="align-self-center text-center"><i data-feather="send"></i></div>
                             <div class="media-body">
@@ -145,7 +145,7 @@
             {{-- Card 8 --}}
             <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
-                    <div class="bg-primary b-r-4 card-body">
+                    <div class="bg-premium-primary b-r-4 card-body">
                         <div class="media static-top-widget">
                             <div class="align-self-center text-center"><i data-feather="check-square"></i></div>
                             <div class="media-body">
@@ -161,7 +161,7 @@
             {{-- Card 9 --}}
             <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
-                    <div class="bg-primary b-r-4 card-body">
+                    <div class="bg-premium-primary b-r-4 card-body">
                         <div class="media static-top-widget">
                             <div class="align-self-center text-center"><i data-feather="message-circle"></i></div>
                             <div class="media-body">
