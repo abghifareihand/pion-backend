@@ -8,7 +8,7 @@
             </div>
 
             <div class="modal-body">
-                <p>Apakah Anda yakin ingin logout dari dashboard?</p>
+                <p>Apakah Anda yakin ingin logout dari website?</p>
             </div>
 
             <div class="modal-footer">
