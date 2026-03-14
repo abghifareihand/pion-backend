@@ -17,10 +17,41 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Ensure action buttons don't stack */
-        .btn-group-action {
-            display: flex;
-            gap: 3px;
+        /* Premium Buttons */
+        .btn-premium {
+            border: 1px solid #212529;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #212529 !important;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            filter: brightness(1.1);
+            color: #212529 !important;
+        }
+
+        .btn-premium-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .btn-premium-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #f8606d 100%);
+        }
+
+        .btn-premium-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        }
+
+        .btn-premium-light {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         }
     </style>
 @endpush
@@ -115,24 +146,24 @@
 
                                                 <td>
                                                     <a href="{{ route('tickets.pdf', $ticket->id) }}"
-                                                        class="btn btn-pill btn-success btn-xs">
-                                                        Dengan File
+                                                        class="btn-premium btn-premium-success">
+                                                        <i class="fa fa-file-pdf-o"></i> Dengan File
                                                     </a>
 
                                                     <a href="{{ route('tickets.pdf', $ticket->id) }}?hide_attachment=1"
-                                                        class="btn btn-warning btn-xs text-dark">
-                                                        Tanpa File
+                                                        class="btn-premium btn-premium-warning">
+                                                        <i class="fa fa-file-pdf-o"></i> Tanpa File
                                                     </a>
 
                                                     @if ($ticket->attachment)
                                                         <a href="{{ url('storage/' . $ticket->attachment) }}"
-                                                            target="_blank" class="btn btn-light btn-xs text-dark">
-                                                            Lihat File
+                                                            target="_blank" class="btn-premium btn-premium-light">
+                                                            <i class="fa fa-eye"></i> Lihat File
                                                         </a>
                                                     @endif
                                                 </td>
 
-                                                <td class="btn-group-action">
+                                                <td style="display: flex; gap: 5px;">
                                                     <!-- Reply button -->
                                                     <a href="{{ route('tickets.edit', $ticket->id) }}"
                                                         class="btn btn-success btn-xs">
@@ -140,8 +171,8 @@
                                                     </a>
 
                                                     <!-- Delete button -->
-                                                    <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteModal"
+                                                    <a href="#" class="btn btn-danger btn-xs"
+                                                        data-bs-toggle="modal" data-bs-target="#deleteModal"
                                                         data-action="{{ route('tickets.destroy', $ticket->id) }}"
                                                         data-name="{{ $ticket->name }}">
                                                         Hapus

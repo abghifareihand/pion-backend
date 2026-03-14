@@ -17,11 +17,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Ensure action buttons don't stack */
-        .btn-group-action {
-            display: flex;
-            gap: 3px;
-        }
     </style>
 @endpush
 
@@ -101,7 +96,7 @@
 
                                                 <td>{{ $organization->created_at->format('d/m/y H:i') }}</td>
 
-                                                <td class="btn-group-action">
+                                                <td>
                                                     <!-- Edit button -->
                                                     <a href="{{ route('organizations.edit', $organization->id) }}"
                                                         class="btn btn-success btn-xs">

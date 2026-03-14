@@ -17,11 +17,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Ensure action buttons don't stack */
-        .btn-group-action {
-            display: flex;
-            gap: 3px;
-        }
     </style>
 @endpush
 
@@ -85,7 +80,7 @@
 
                                                 <td>{{ $broadcast->created_at->format('d/m/y H:i') }}</td>
 
-                                                <td class="btn-group-action">
+                                                <td>
                                                     <!-- Edit button -->
                                                     <a href="" class="btn btn-success btn-sm">
                                                         Edit

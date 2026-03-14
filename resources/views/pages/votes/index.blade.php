@@ -17,11 +17,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Ensure action buttons don't stack */
-        .btn-group-action {
-            display: flex;
-            gap: 3px;
-        }
     </style>
 @endpush
 
@@ -94,7 +89,7 @@
 
                                                 <td>{{ $vote->created_at->format('d/m/y H:i') }}</td>
 
-                                                <td class="btn-group-action">
+                                                <td>
                                                     <!-- Edit button -->
                                                     <a href="{{ route('votes.edit', $vote->id) }}"
                                                         class="btn btn-success btn-xs">

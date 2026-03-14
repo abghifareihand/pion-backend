@@ -17,11 +17,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Ensure action buttons don't stack */
-        .btn-group-action {
-            display: flex;
-            gap: 3px;
-        }
 
         /* Custom Soft UI Badges */
         .badge-male {
@@ -147,7 +142,7 @@
 
                                                 <td>{{ $user->created_at->format('d/m/y H:i') }}</td>
 
-                                                <td class="btn-group-action">
+                                                <td>
                                                     <!-- Edit button -->
                                                     <a href="{{ route('users.edit', $user->id) }}"
                                                         class="btn btn-success btn-xs">

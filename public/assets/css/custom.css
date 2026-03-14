@@ -9,3 +9,20 @@
     text-align: center;
     white-space: nowrap;
 }
+
+/* ===============================
+   GLOBAL BUTTON INTERACTION
+================================ */
+.btn {
+    transition: all 0.3s ease !important;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
