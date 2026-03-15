@@ -58,7 +58,7 @@
                     <div class="card-header">
                         <h6 class="mb-0 fw-bold">Riwayat Percakapan</h6>
                     </div>
-                    <div class="card-body" style="height: 450px; overflow-y: auto; background-color: #f0f2f5;">
+                    <div class="card-body" id="chat-container" style="height: 450px; overflow-y: auto; background-color: #f0f2f5;">
 
                         <div class="d-flex justify-content-start mb-4">
                             <div class="bg-white p-3 rounded shadow-sm border" style="max-width: 75%;">
@@ -81,8 +81,12 @@
                             </div>
                         </div>
 
+                        @php $lastReplyId = 0; @endphp
                         @foreach ($ticket->replies as $reply)
-                            @php $isMe = $reply->user_id == Auth::id(); @endphp
+                            @php 
+                                $isMe = $reply->user_id == Auth::id(); 
+                                $lastReplyId = $reply->id;
+                            @endphp
                             <div class="d-flex {{ $isMe ? 'justify-content-end' : 'justify-content-start' }} mb-4">
                                 <div class="{{ $isMe ? 'bg-primary text-white' : 'bg-white border' }} p-3 rounded shadow-sm"
                                     style="max-width: 75%;">
@@ -118,12 +122,12 @@
                             </div>
                         @endif
 
-                        <form method="POST" action="{{ route('tickets.reply', $ticket->id) }}" class="form theme-form">
+                        <form method="POST" id="reply-form" action="{{ route('tickets.reply', $ticket->id) }}" class="form theme-form">
                             @csrf
                             <!-- Input Reply -->
                             <div class="mb-3">
                                 <label class="fw-bold">Reply Pesan Kamu</label>
-                                <textarea class="form-control" name="message" rows="4" placeholder="Tulis pesan balasan atau solusi..." required>{{ old('message') }}</textarea>
+                                <textarea class="form-control" name="message" id="reply-message" rows="4" placeholder="Tulis pesan balasan atau solusi..." required>{{ old('message') }}</textarea>
                             </div>
 
                             <!-- Status and Button -->
@@ -155,3 +159,54 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let lastReplyId = {{ $lastReplyId }};
+        const ticketId = {{ $ticket->id }};
+        const chatContainer = document.getElementById('chat-container');
+
+        // Fungsi scroll ke bawah
+        function scrollToBottom() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Scroll saat halaman dimuat
+        scrollToBottom();
+
+        // Polling pesan baru setiap 3 detik
+        setInterval(function() {
+            fetch(`/tickets/${ticketId}/replies?last_id=${lastReplyId}`)
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success' && result.data.length > 0) {
+                        result.data.forEach(reply => {
+                            // Render template chat bubble
+                            const alignmentClass = reply.is_me ? 'justify-content-end' : 'justify-content-start';
+                            const bubbleClass = reply.is_me ? 'bg-primary text-white' : 'bg-white border';
+                            const nameColorClass = reply.is_me ? 'text-white-50' : 'text-primary';
+                            const timeColorClass = reply.is_me ? 'text-white-50' : 'text-muted';
+
+                            const html = `
+                                <div class="d-flex ${alignmentClass} mb-4">
+                                    <div class="${bubbleClass} p-3 rounded shadow-sm" style="max-width: 75%;">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <small class="fw-bold ${nameColorClass}">${reply.sender}</small>
+                                            <small class="ms-3 ${timeColorClass}" style="font-size: 10px;">${reply.date}</small>
+                                        </div>
+                                        <p class="mb-0">${reply.message}</p>
+                                    </div>
+                                </div>
+                            `;
+                            chatContainer.insertAdjacentHTML('beforeend', html);
+                            lastReplyId = reply.id; // Update last_id
+                        });
+                        scrollToBottom();
+                    }
+                })
+                .catch(error => console.error('Error polling replies:', error));
+        }, 5000);
+    });
+</script>
+@endpush

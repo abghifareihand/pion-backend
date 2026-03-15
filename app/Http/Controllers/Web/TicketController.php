@@ -38,6 +38,34 @@ class TicketController extends Controller
         return view('pages.tickets.edit', compact('ticket'));
     }
 
+    public function getReplies(Request $request, Ticket $ticket)
+    {
+        // Mendapatkan JSON reply yang ID-nya lebih besar dari ID terakhir di Client
+        $lastId = $request->query('last_id', 0);
+
+        $newReplies = $ticket->replies()
+            ->with('user')
+            ->where('id', '>', $lastId)
+            ->orderBy('id', 'asc')
+            ->get();
+
+        $formattedReplies = $newReplies->map(function ($reply) {
+            $isMe = $reply->user_id == Auth::id();
+            return [
+                'id' => $reply->id,
+                'message' => $reply->message,
+                'sender' => $isMe ? 'You (Admin)' : ($reply->user->name ?? 'User'),
+                'date' => $reply->created_at->format('d M, H:i'),
+                'is_me' => $isMe,
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $formattedReplies
+        ]);
+    }
+
     // MODIFIED: Fungsi untuk memproses balasan (Chat) dari Admin
     public function reply(Request $request, Ticket $ticket)
     {
