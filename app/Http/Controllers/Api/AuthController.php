@@ -32,7 +32,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // ✅ Proteksi Role Admin
+        // ✅ Proteksi Role Admin (Admin hanya boleh lewat Web)
         if ($user->role === 'admin') {
             return response()->json([
                 'status' => false,
@@ -40,41 +40,29 @@ class AuthController extends Controller
             ], 403);
         }
 
-        // --- 🛡️ LOGIKA CEK DEVICE (MENGGUNAKAN RELASI) ---
+        $deviceBinding = UserDevice::where('device_id', $request->device_id)->first();
 
-        // 1. Cek apakah device_id ini sudah dipakai oleh user lain di database
-        $deviceOwner = UserDevice::where('device_id', $request->device_id)->first();
-        if ($deviceOwner && $deviceOwner->user_id !== $user->id) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Perangkat ini sudah terdaftar pada akun lain. Satu perangkat hanya dapat digunakan oleh satu akun.',
-            ], 403);
+        if ($deviceBinding) {
+            if ($deviceBinding->user_id != $user->id) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Perangkat ini sudah terdaftar pada akun lain. Satu perangkat hanya dapat digunakan oleh satu akun.',
+                ], 403);
+            }
+
         }
-
-        // 2. Mengakses relasi $user->device (hasOne)
-        $currentDevice = $user->device;
-
-        if ($currentDevice) {
-            // Jika user sudah terdaftar di hp lain (device_id miliknya beda dengan yg dikirim)
-            if ($currentDevice->device_id !== $request->device_id) {
+        else {
+            if ($user->device) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Akun Anda sudah terhubung di perangkat lain. Silakan hubungi admin untuk reset.'
                 ], 403);
             }
-        // Jika ID sama, kita biarkan lolos (dia login ulang di HP yang sama)
-        }
-        else {
-            // Jika user ini belum punya record device (pertama kali login)
             $user->device()->create([
                 'device_id' => $request->device_id,
                 'device_name' => $request->device_name ?? 'Unknown Device',
             ]);
         }
-
-        // --- 🛡️ AKHIR LOGIKA CEK DEVICE ---
-
-        // ✅ Generate Token Sanctum
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -120,8 +108,8 @@ class AuthController extends Controller
             'education' => $user->education,
             'role' => $user->role,
             'image_url' => $user->image_path
-                ? asset('storage/' . $user->image_path)
-                : null,
+            ? asset('storage/' . $user->image_path)
+            : null,
         ];
 
         return response()->json([

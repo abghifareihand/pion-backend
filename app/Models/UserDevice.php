@@ -12,6 +12,10 @@ class UserDevice extends Model
         'device_name',
     ];
 
+    protected $casts = [
+        'user_id' => 'integer',
+    ];
+
     /**
      * Relasi balik ke User
      */
