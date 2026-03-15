@@ -49,9 +49,9 @@ class DatabaseSeeder extends Seeder
                 [
                     'name' => $u['name'],
                     'nik_ktp' => '3201' . str_pad($index + 1, 12, '0', STR_PAD_LEFT),
-                    'nik_karyawan' => 'K' . str_pad($index + 1, 7, '0', STR_PAD_LEFT),
-                    'kta_number' => 'KTA-' . str_pad($index + 1, 8, '0', STR_PAD_LEFT),
-                    'barcode_number' => 'BAR-' . str_pad($index + 1, 8, '0', STR_PAD_LEFT),
+                    'nik_karyawan' => str_pad($index + 1, 7, '0', STR_PAD_LEFT),
+                    'kta_number' => str_pad($index + 1, 8, '0', STR_PAD_LEFT),
+                    'barcode_number' => str_pad($index + 1, 8, '0', STR_PAD_LEFT),
                     'email' => $u['username'] . '@example.com',
                     'phone' => '0812' . str_pad($index + 1, 8, '0', STR_PAD_LEFT),
                     'department' => 'Staff Operasional',

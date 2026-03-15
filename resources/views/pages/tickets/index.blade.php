@@ -70,11 +70,11 @@
                                                 {{-- Badge untuk TYPE --}}
                                                 <td>
                                                     @if ($ticket->type == 'report')
-                                                        <span class="badge badge-rejected">Report</span>
+                                                        <span class="badge badge-report">Report</span>
                                                     @elseif($ticket->type == 'question')
-                                                        <span class="badge badge-pending">Question</span>
+                                                        <span class="badge badge-question">Question</span>
                                                     @else
-                                                        <span class="badge badge-responded">Suggestion</span>
+                                                        <span class="badge badge-suggestion">Suggestion</span>
                                                     @endif
                                                 </td>
 

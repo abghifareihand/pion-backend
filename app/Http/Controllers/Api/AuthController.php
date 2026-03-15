@@ -91,15 +91,33 @@ class AuthController extends Controller
     public function profile(Request $request)
     {
         $user = $request->user();
-        $user->image_url = $user->image_path
-            ? asset('storage/' . $user->image_path)
-            : null;
-        unset($user->image_path);
+
+        $data = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'nik_ktp' => $user->nik_ktp,
+            'nik_karyawan' => $user->nik_karyawan,
+            'kta_number' => $user->kta_number,
+            'barcode_number' => $user->barcode_number,
+            'email' => $user->email,
+            'department' => $user->department,
+            'phone' => $user->phone,
+            'birth_place' => $user->birth_place,
+            'birth_date' => $user->birth_date,
+            'address' => $user->address,
+            'gender' => $user->gender,
+            'religion' => $user->religion,
+            'education' => $user->education,
+            'role' => $user->role,
+            'image_url' => $user->image_path
+                ? asset('storage/' . $user->image_path)
+                : null,
+        ];
 
         return response()->json([
             'status' => true,
             'message' => 'Data profil berhasil diambil',
-            'data' => $user
+            'data' => $data
         ]);
     }
 

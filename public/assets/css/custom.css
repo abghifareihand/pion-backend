@@ -93,6 +93,31 @@
     border-radius: 4px;
     font-weight: 600;
 }
+
+.badge-report {
+    background-color: #ffebee !important;
+    color: #ff5252 !important;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-suggestion {
+    background-color: #e8f5e9 !important;
+    color: #4caf50 !important;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-question {
+    background-color: #e3f2fd !important;
+    color: #448aff !important;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
 /* ===============================
    CUSTOM SOFT UI ALERTS
 ================================ */
@@ -188,6 +213,7 @@
 .btn-premium-warning {
     background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
 }
+
 /* ===============================
    PREMIUM BACKGROUND GRADIENTS
 ================================ */
