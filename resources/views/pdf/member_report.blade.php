@@ -220,7 +220,7 @@
 
         <div class="signature-wrapper">
             <div class="signature-box">
-                Grobogan, .............................20....<br><br><br><br>
+                Grobogan, .............................20....<br><br><br><br><br>
                 ( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )
             </div>
             <div style="clear: both;"></div>
@@ -282,7 +282,7 @@
         <div class="content-text" margin-bottom: 5px;">
             Dengan ini saya memberikan kuasa khusus kepada Pengurus SERIKAT PEKERJA PUNGKOOK INDONESIA GROBOGAN untuk
             memotong upah kami masing-masing sebesar 1 % dari UMK yang berlaku pada tahun berjalan sebagai Uang pangkal
-            (pasal 12 ART) sebanyak 1 x diawal, dan iuran bulanan (pasal 13 ART) sebesar Rp 5.000,00 (Lima Ribu Rupiah)
+            (pasal 12 ART) sebanyak 1 x diawal, dan iuran bulanan (pasal 13 ART) sebesar {{ $iuranNominal }} ({{ $iuranTerbilang }})
             dibulan berikutnya sampai berakhirnya Status keanggotaan melalui bagian keuangan perusahaan PT. Pungkook
             Indonesia Grobogan yang ditransfer ke rekening organisasi.
         </div>
@@ -295,7 +295,7 @@
         <div class="signature-wrapper">
             <div class="signature-box">
                 Grobogan, .............................20....<br>
-                yang membuat pernyataan,<br><br><br><br>
+                yang membuat pernyataan,<br><br><br><br><br>
                 ( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )
             </div>
             <div style="clear: both;"></div>

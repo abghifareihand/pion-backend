@@ -1,6 +1,6 @@
 <header class="main-nav">
     <div class="sidebar-user text-center">
-        <a class="setting-primary" href="javascript:void(0)"><i data-feather="settings"></i></a>
+        <a class="setting-primary" href="{{ route('settings.edit') }}"><i data-feather="settings"></i></a>
         @if (Auth::user()->image_path)
             <img class="img-90 rounded-circle" src="{{ asset('storage/' . Auth::user()->image_path) }}" alt="User Image"
                 style="object-fit: cover; height: 90px; width: 90px;" />
@@ -168,7 +168,6 @@
                             <i data-feather="target"></i><span>Visi Misi</span>
                         </a>
                     </li>
-
 
                     <li>
                         <a class="nav-link menu-title link-nav {{ routeActive('profile.index') }}"

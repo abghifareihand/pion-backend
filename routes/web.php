@@ -14,6 +14,7 @@ use App\Http\Controllers\Web\SocialController;
 use App\Http\Controllers\Web\TicketController;
 use App\Http\Controllers\Web\UnionController;
 use App\Http\Controllers\Web\UserController;
+use App\Http\Controllers\Web\SettingController;
 use App\Http\Controllers\Web\VisionController;
 use App\Http\Controllers\Web\VoteController;
 use Illuminate\Support\Facades\Route;
@@ -171,5 +172,13 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('devices')->name('devices.')->group(function () {
         Route::get('/', [DeviceController::class, 'index'])->name('index');
         Route::delete('/{device}', [DeviceController::class, 'destroy'])->name('destroy');
+    });
+
+    // Settings Routes
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('/edit', [SettingController::class, 'edit'])->name('edit');
+        Route::put('/update', [SettingController::class, 'update'])->name('update');
+        Route::post('/store', [SettingController::class, 'store'])->name('store');
+        Route::delete('/{setting}', [SettingController::class, 'destroy'])->name('destroy');
     });
 });

@@ -51,7 +51,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
                             </div>
-@endif
+                        @endif
 
                         {{-- Form untuk edit learning --}}
                         <form method="POST" action="{{ route('organizations.update', $organization->id) }}"
@@ -88,8 +88,7 @@
                                 @endif
                                 <div>
                                     <label>Pilih Foto Baru (opsional)</label>
-                                    <input class="form-control" type="file" name="image"
-                                        accept=".jpg,.jpeg,.png">
+                                    <input class="form-control" type="file" name="image" accept=".jpg,.jpeg,.png">
                                 </div>
                             </div>
 
@@ -98,8 +97,10 @@
                                 @if ($organization->file_path)
                                     <div class="mb-3">
                                         <label class="fw-bold d-block mb-2">File Sekarang</label>
-                                        <div class="p-2 border rounded d-inline-block text-center" style="min-width: 200px;">
-                                            <a href="{{ asset('storage/' . $organization->file_path) }}" target="_blank" class="text-decoration-none text-dark">
+                                        <div class="p-2 border rounded d-inline-block text-center"
+                                            style="min-width: 200px;">
+                                            <a href="{{ asset('storage/' . $organization->file_path) }}" target="_blank"
+                                                class="text-decoration-none text-dark">
                                                 <i class="fa fa-file-pdf-o fa-3x text-danger"></i>
                                                 <div class="text-muted small mt-1">Klik untuk lihat</div>
                                             </a>
@@ -108,8 +109,7 @@
                                 @endif
                                 <div>
                                     <label>Pilih File Baru (opsional)</label>
-                                    <input class="form-control" type="file" name="file"
-                                        accept=".pdf,.doc,.docx">
+                                    <input class="form-control" type="file" name="file" accept=".pdf,.doc,.docx">
                                 </div>
                             </div>
 

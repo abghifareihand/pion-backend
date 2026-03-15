@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\MemberRegistration;
 use App\Models\User;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -115,16 +116,27 @@ class MemberRegistrationController extends Controller
 
     public function previewPdf(MemberRegistration $member)
     {
-        // 1. Load relasi jika ada (misal ingin tahu siapa yang mendaftarkan)
+        // 1. Load relasi jika ada
         $member->load('referrer');
 
-        // 2. Generate PDF dari view (kita akan buat view ini di langkah 2)
-        $pdf = Pdf::loadView('pdf.member_report', compact('member'));
+        // 2. Ambil semua setting yang dibutuhkan dalam 1 query
+        $keys = [
+            Setting::IURAN_BULANAN_NOMINAL,
+            Setting::IURAN_BULANAN_TERBILANG,
+            // tambahkan key baru di sini saja jika dibutuhkan
+        ];
+        $settings = Setting::whereIn('key', $keys)->pluck('value', 'key');
 
-        // 3. Atur ukuran kertas (A4 Portrait)
+        $iuranNominal   = $settings[Setting::IURAN_BULANAN_NOMINAL]   ?? 'Rp 5.000,00';
+        $iuranTerbilang = $settings[Setting::IURAN_BULANAN_TERBILANG] ?? 'Lima Ribu Rupiah';
+
+        // 3. Generate PDF dari view
+        $pdf = Pdf::loadView('pdf.member_report', compact('member', 'iuranNominal', 'iuranTerbilang'));
+
+        // 4. Atur ukuran kertas (A4 Portrait)
         $pdf->setPaper('a4', 'portrait');
 
-        // 4. Stream ke browser
+        // 5. Stream ke browser
         return $pdf->stream('Laporan-Pendaftaran-' . $member->nik_ktp . '.pdf');
     }
 }

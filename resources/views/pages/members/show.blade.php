@@ -155,21 +155,21 @@
                         <hr class="my-4">
 
                         <div class="d-flex justify-content-end gap-2 mt-2">
-                            <a href="{{ route('members.pdf', $member->id) }}" class="btn btn-outline-danger btn-lg px-4"
+                            <a href="{{ route('members.pdf', $member->id) }}" class="btn btn-primary px-4"
                                 target="_blank">
-                                <i class="fa fa-file-pdf me-2"></i> Preview PDF
+                                <i class="fa fa-file-text me-2"></i> Preview PDF
                             </a>
 
                             @if ($member->status == 'pending')
                                 <form action="{{ route('members.approve', $member->id) }}" method="POST" id="approveForm">
                                     @csrf
-                                    <button type="button" class="btn btn-success btn-lg px-4" onclick="confirmApprove()">
-                                        <i class="fa fa-check-circle me-2"></i> Setujui & Buat Akun
+                                    <button type="button" class="btn btn-success px-4" onclick="confirmApprove()">
+                                        <i class="fa fa-check me-2"></i> Setujui & Buat Akun
                                     </button>
                                 </form>
                             @else
-                                <button class="btn btn-success btn-lg px-4" disabled>
-                                    <i class="fa fa-check-double me-2"></i> Member Sudah Aktif
+                                <button class="btn btn-info px-4" disabled>
+                                    <i class="fa fa-check me-2"></i> Member Sudah Aktif
                                 </button>
                             @endif
                         </div>

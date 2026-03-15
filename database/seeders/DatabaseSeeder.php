@@ -67,5 +67,9 @@ class DatabaseSeeder extends Seeder
                 ]
             );
         }
+
+        // 3. Seed Settings (Pengaturan Default)
+        $this->call(SettingSeeder::class);
     }
 }
+        
