@@ -104,7 +104,9 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // ----- Feed Route -----
-    Route::get('/feed', [FeedController::class, 'index']);
+    Route::prefix('feeds')->group(function () {
+        Route::get('/', [FeedController::class, 'index']);
+    });
 
     // ----- Vision Route -----
     Route::get('/vision', [VisionController::class, 'show']);
