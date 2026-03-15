@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserDevice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -41,11 +42,20 @@ class AuthController extends Controller
 
         // --- 🛡️ LOGIKA CEK DEVICE (MENGGUNAKAN RELASI) ---
 
-        // Mengakses relasi $user->device (hasOne)
+        // 1. Cek apakah device_id ini sudah dipakai oleh user lain di database
+        $deviceOwner = UserDevice::where('device_id', $request->device_id)->first();
+        if ($deviceOwner && $deviceOwner->user_id !== $user->id) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Perangkat ini sudah terdaftar pada akun lain. Satu perangkat hanya dapat digunakan oleh satu akun.',
+            ], 403);
+        }
+
+        // 2. Mengakses relasi $user->device (hasOne)
         $currentDevice = $user->device;
 
         if ($currentDevice) {
-            // Jika sudah ada device terdaftar, tapi ID-nya beda dengan yang login sekarang
+            // Jika user sudah terdaftar di hp lain (device_id miliknya beda dengan yg dikirim)
             if ($currentDevice->device_id !== $request->device_id) {
                 return response()->json([
                     'status' => false,
