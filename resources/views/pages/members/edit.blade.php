@@ -73,7 +73,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label>Bagian</label>
+                                <label>Departemen</label>
                                 <input class="form-control" type="text" name="department"
                                     value="{{ old('department', $member->department) }}" required />
                             </div>

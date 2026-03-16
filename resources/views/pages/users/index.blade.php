@@ -121,7 +121,7 @@
                                             <th>NIK KTP</th>
                                             <th>NIK Karyawan</th>
                                             <th>KTA</th>
-                                            <th>Bagian</th>
+                                            <th>Departemen</th>
                                             <th>Jenis Kelamin</th>
                                             <th>Tempat Lahir</th>
                                             <th>Tanggal Lahir</th>

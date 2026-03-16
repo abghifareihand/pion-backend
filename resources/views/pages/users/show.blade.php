@@ -58,7 +58,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label>Bagian</label>
+                            <label>Departemen</label>
                             <div class="form-control-plaintext py-0">
                                 {{ $user->department }}
                             </div>
