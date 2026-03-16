@@ -43,11 +43,10 @@
                                         <div class="col-md-6 mb-2">
                                             <div class="p-2 border rounded">
                                                 <span class="fw-bold">{{ $loop->iteration }}. {{ $option->label }}</span>
-                                                @if($option->vision)
-                                                    <div class="small text-muted mt-1 px-2 border-start border-3 border-primary">
-                                                        <strong>Visi:</strong> {{ $option->vision }}
-                                                    </div>
-                                                @endif
+                                                <div
+                                                    class="small text-muted mt-1 px-2 border-start border-3 border-primary">
+                                                    <strong>Visi:</strong> {{ $option->vision ?? '-' }}
+                                                </div>
                                             </div>
                                         </div>
                                     @endforeach
@@ -60,9 +59,9 @@
                             <label>Status</label>
                             <div class="form-control-plaintext py-0">
                                 @if ($vote->is_active)
-                                    <span class="badge bg-success">Active</span>
+                                    <span class="badge badge-approved">Aktif</span>
                                 @else
-                                    <span class="badge bg-danger">Not Active</span>
+                                    <span class="badge badge-rejected">Tidak Aktif</span>
                                 @endif
                             </div>
                         </div>
@@ -88,18 +87,35 @@
                                             ? round(($option->results_count / $totalVotesCount) * 100, 1)
                                             : 0;
                                 @endphp
-                                <div class="mb-4">
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <span class="fw-bold">{{ $loop->iteration }}. {{ $option->label }}</span>
-                                        <span class="fw-bold">
-                                            {{ $option->results_count }} Suara ({{ $optionPercentage }}%)
-                                        </span>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar bg-primary" role="progressbar"
-                                            style="width: {{ $optionPercentage }}%"
-                                            aria-valuenow="{{ $optionPercentage }}" aria-valuemin="0"
-                                            aria-valuemax="100">
+                                <div class="card shadow-sm rounded-3 mb-3">
+                                    <div class="card-body p-3">
+                                        <div class="d-flex align-items-center">
+                                            @if ($option->user && $option->user->image_path)
+                                                <img src="{{ asset('storage/' . $option->user->image_path) }}"
+                                                    alt="{{ $option->label }}" class="rounded-circle me-3 shadow-sm"
+                                                    style="width: 65px; height: 65px; object-fit: cover; border: 2px solid #ccc;">
+                                            @else
+                                                <div class="rounded-circle me-3 shadow-sm d-flex align-items-center justify-content-center bg-light text-secondary"
+                                                    style="width: 65px; height: 65px; border: 2px solid #ccc;">
+                                                    <i class="fa fa-user fa-lg"></i>
+                                                </div>
+                                            @endif
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span class="fw-bold">{{ $loop->iteration }}.
+                                                        {{ $option->label }}</span>
+                                                    <span class="fw-bold">
+                                                        {{ $option->results_count }} Suara ({{ $optionPercentage }}%)
+                                                    </span>
+                                                </div>
+                                                <div class="progress" style="height: 10px;">
+                                                    <div class="progress-bar bg-primary" role="progressbar"
+                                                        style="width: {{ $optionPercentage }}%"
+                                                        aria-valuenow="{{ $optionPercentage }}" aria-valuemin="0"
+                                                        aria-valuemax="100">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -111,7 +127,10 @@
                                 <div class="col-md-12">
                                     <div class="d-flex justify-content-between align-items-center px-2">
                                         <span class="fw-bold text-uppercase">TOTAL SUARA MASUK</span>
-                                        <span class="fw-bold">{{ $participationRate }}%</span>
+                                        <span class="fw-bold">
+                                            {{ $totalVotesCount }} / {{ $totalEligibleUsers }} Suara
+                                            ({{ $participationRate }}%)
+                                        </span>
                                     </div>
                                     <div class="progress mt-1 mx-2">
                                         <div class="progress-bar bg-primary" role="progressbar"

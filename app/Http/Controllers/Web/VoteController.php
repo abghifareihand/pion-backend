@@ -94,9 +94,9 @@ class VoteController extends Controller
 
     public function show(Vote $vote)
     {
-        // Hitung suara per opsi secara otomatis
+        // Hitung suara per opsi secara otomatis dan load relasi user (kandidat)
         $vote->load(['options' => function ($query) {
-            $query->withCount('results')->orderBy('results_count', 'desc');
+            $query->with(['user'])->withCount('results')->orderBy('results_count', 'desc');
         }]);
 
         $totalVotes = $vote->results()->count();
