@@ -74,7 +74,7 @@
                                         <small class="text-muted d-block mb-1">Lampiran:</small>
                                         <a href="{{ asset('storage/' . $ticket->attachment) }}" target="_blank"
                                             class="btn-premium btn-premium-success">
-                                            <i class="fa fa-eye"></i> Lihat Lampiran
+                                            <i class="fa fa-paperclip"></i> Lihat Lampiran
                                         </a>
                                     </div>
                                 @endif

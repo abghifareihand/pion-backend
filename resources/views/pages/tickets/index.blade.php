@@ -111,18 +111,18 @@
                                                 <td>
                                                     <a href="{{ route('tickets.pdf', $ticket->id) }}"
                                                         class="btn-premium btn-premium-success" target="_blank">
-                                                        <i class="fa fa-file-pdf-o"></i> Dengan File
+                                                        <i class="fa fa-paperclip"></i> Dengan Lampiran
                                                     </a>
 
                                                     <a href="{{ route('tickets.pdf', $ticket->id) }}?hide_attachment=1"
                                                         class="btn-premium btn-premium-warning" target="_blank">
-                                                        <i class="fa fa-file-pdf-o"></i> Tanpa File
+                                                        <i class="fa fa-file-text-o"></i> Tanpa Lampiran
                                                     </a>
 
                                                     @if ($ticket->attachment)
                                                         <a href="{{ url('storage/' . $ticket->attachment) }}"
                                                             target="_blank" class="btn-premium btn-premium-light">
-                                                            <i class="fa fa-eye"></i> Lihat File
+                                                            <i class="fa fa-eye"></i> Lihat Lampiran
                                                         </a>
                                                     @endif
                                                 </td>
