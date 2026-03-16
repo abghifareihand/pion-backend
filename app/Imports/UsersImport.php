@@ -19,7 +19,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation
     public function prepareForValidation($data, $index)
     {
         // Jika Nama atau NIK kosong, atau ini baris contoh 'John Doe', kita kembalikan array kosong
-        if (empty($data['nama']) || $data['nama'] == 'John Doe' || $data['nama'] == 'Nama') {
+        if (empty($data['nama']) || $data['nama'] == 'John Doe' || $data['nama'] == 'NAMA') {
             return [];
         }
 
@@ -57,26 +57,26 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation
         }
 
         // --- Proses Nomor Telepon ---
-        $phone = $row['no_telp_wa'] ?? $row['no_telepon'] ?? null;
+        $phone = $row['no_telepon'] ?? $row['no_telp_wa'] ?? null;
 
         return new User([
             'name' => $row['nama'],
-            'nik_ktp' => (string)$row['nik_ktp'],
-            'nik_karyawan' => (string)($row['nik_karyawan'] ?? ''),
-            'username' => (string)$row['nik_ktp'],
-            'kta_number' => (string)($row['nomor_kta'] ?? ''),
-            'barcode_number' => (string)($row['nomor_barcode'] ?? ''),
+            'nik_ktp' => (string)$row['ktp'],
+            'nik_karyawan' => (string)($row['nik'] ?? ''),
+            'username' => (string)$row['ktp'],
+            'kta_number' => (string)($row['kta'] ?? ''),
+            'barcode_number' => (string)($row['barcode'] ?? ''),
             'email' => $row['email'] ?? null,
-            'department' => $row['departemen'] ?? null,
+            'department' => $row['bagian'] ?? null,
             'phone' => (string)$phone,
-            'birth_place' => $row['tempat_lahir'] ?? null,
+            'birth_place' => $row['tempat_lahir'] ?? null, // Tempat lahir was removed from template as per header list
             'birth_date' => $birthDate,
             'gender' => $gender,
             'religion' => $row['agama'] ?? null,
             'education' => $row['pendidikan'] ?? null,
             'address' => $row['alamat'] ?? null,
             'role' => 'user',
-            'pin' => Hash::make((string)($row['pin_6_digit'] ?? '123456')),
+            'pin' => Hash::make((string)($row['pin'] ?? '123456')),
             'password' => Hash::make((string)($row['password'] ?? 'password')),
         ]);
     }
@@ -89,17 +89,17 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation
          */
         return [
             'nama' => 'sometimes|required|string|max:255',
-            'nik_ktp' => 'sometimes|required',
-            'pin_6_digit' => 'sometimes|required',
+            'ktp' => 'sometimes|required',
+            'pin' => 'sometimes|required',
         ];
     }
 
     public function customValidationMessages()
     {
         return [
-            'nama.required' => 'Baris :index: Nama wajib diisi.',
-            'nik_ktp.required' => 'Baris :index: NIK KTP wajib diisi.',
-            'pin_6_digit.required' => 'Baris :index: PIN 6 digit wajib diisi.',
+            'nama.required' => 'Baris :index: NAMA wajib diisi.',
+            'ktp.required' => 'Baris :index: KTP wajib diisi.',
+            'pin.required' => 'Baris :index: PIN wajib diisi.',
         ];
     }
 }

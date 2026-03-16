@@ -20,6 +20,8 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class UsersExport extends DefaultValueBinder implements FromCollection, WithHeadings, WithMapping, WithEvents, WithColumnWidths, WithCustomStartCell, WithCustomValueBinder
 {
+    private $rowNumber = 0;
+
     /**
      * Force long numeric strings to be treated as Strings in Excel
      */
@@ -34,8 +36,8 @@ class UsersExport extends DefaultValueBinder implements FromCollection, WithHead
     }
 
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         return User::where('role', '!=', 'admin')->latest()->get();
@@ -43,95 +45,98 @@ class UsersExport extends DefaultValueBinder implements FromCollection, WithHead
 
     public function startCell(): string
     {
-        return 'A3';
+        return 'A1';
     }
 
     public function headings(): array
     {
         return [
-            'Nama',
-            'NIK KTP',
-            'NIK Karyawan',
-            'Nomor KTA',
-            'Nomor Barcode',
-            'Email',
-            'Departemen',
-            'No. Telp (WA)',
-            'Tempat Lahir',
-            'Tanggal Lahir',
-            'Jenis Kelamin',
-            'Agama',
-            'Pendidikan',
-            'Alamat',
-            'Tanggal Daftar'
+            'NO',
+            'NIK',
+            'KTA',
+            'NAMA',
+            'JOINT DATE',
+            'KTP',
+            'ALAMAT',
+            'TEMPAT LAHIR',
+            'TANGGAL LAHIR',
+            'JENIS KELAMIN',
+            'BAGIAN',
+            'AGAMA',
+            'EMAIL',
+            'PENDIDIKAN',
+            'NO TELEPON',
+            'BARCODE',
+            'PIN',
+            'PASSWORD'
         ];
     }
 
     public function columnWidths(): array
     {
         return [
-            'A' => 25, // Nama
-            'B' => 20, // NIK KTP
-            'C' => 20, // NIK Karyawan
-            'D' => 20, // Nomor KTA
-            'E' => 20, // Nomor Barcode
-            'F' => 25, // Email
-            'G' => 20, // Departemen
-            'H' => 20, // No. Telp (WA)
-            'I' => 20, // Tempat Lahir
-            'J' => 15, // Tanggal Lahir
-            'K' => 15, // Jenis Kelamin
-            'L' => 15, // Agama
-            'M' => 15, // Pendidikan
-            'N' => 30, // Alamat
-            'O' => 20, // Tanggal Daftar
+            'A' => 5, // NO
+            'B' => 20, // NIK
+            'C' => 20, // KTA
+            'D' => 35, // NAMA
+            'E' => 20, // JOINT DATE
+            'F' => 20, // KTP
+            'G' => 80, // ALAMAT
+            'H' => 20, // TEMPAT LAHIR
+            'I' => 20, // TANGGAL LAHIR
+            'J' => 20, // JENIS KELAMIN
+            'K' => 25, // BAGIAN
+            'L' => 15, // AGAMA
+            'M' => 30, // EMAIL
+            'N' => 15, // PENDIDIKAN
+            'O' => 20, // NO TELEPON
+            'P' => 20, // BARCODE
+            'Q' => 10, // PIN
+            'R' => 15, // PASSWORD
         ];
     }
 
     public function map($user): array
     {
+        $this->rowNumber++;
+        \Carbon\Carbon::setLocale('id');
         return [
-            $user->name,
-            (string)$user->nik_ktp,
+            $this->rowNumber,
             (string)$user->nik_karyawan,
             (string)$user->kta_number,
-            (string)$user->barcode_number,
-            $user->email,
-            $user->department,
-            (string)$user->phone,
-            $user->birth_place,
-            $user->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('d/m/Y') : '-',
-            $user->gender == 'male' ? 'Laki-Laki' : 'Perempuan',
-            $user->religion,
-            $user->education,
+            $user->name,
+            $user->created_at ? $user->created_at->translatedFormat('d F Y') : '-',
+            (string)$user->nik_ktp,
             $user->address,
-            $user->created_at->format('d/m/Y H:i')
+            $user->birth_place,
+            $user->birth_date ?\Carbon\Carbon::parse($user->birth_date)->format('d-m-Y') : '-',
+            $user->gender == 'male' ? 'Laki-Laki' : 'Perempuan',
+            $user->department,
+            $user->religion,
+            $user->email,
+            $user->education,
+            (string)$user->phone,
+            (string)$user->barcode_number,
+            '', // PIN
+            '' // Password
         ];
     }
 
     public function registerEvents(): array
     {
         return [
-            AfterSheet::class => function(AfterSheet $event) {
-                $sheet = $event->sheet->getDelegate();
-                
-                // Set Info di baris 1 dan 2
-                $sheet->setCellValue('A1', 'DATA ANGGOTA - PION APP');
-                $sheet->setCellValue('A2', 'Diekspor pada: ' . now()->format('d/m/Y H:i:s'));
-                
-                $sheet->mergeCells('A1:O1');
-                $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
-                
-                // Style Table Header (Baris 3 karena startCell A3)
-                $headerRange = 'A3:O3';
-                $sheet->getStyle($headerRange)->applyFromArray([
+            AfterSheet::class => function (AfterSheet $event) {
+            $sheet = $event->sheet->getDelegate();
+            $highestRow = $sheet->getHighestRow();
+            $highestColumn = $sheet->getHighestColumn();
+            $range = 'A1:' . $highestColumn . $highestRow;
+
+            // Style Table Header (Baris 1)
+            $headerRange = 'A1:R1';
+            $sheet->getStyle($headerRange)->applyFromArray([
                     'font' => [
                         'bold' => true,
-                        'color' => ['rgb' => 'FFFFFF'],
-                    ],
-                    'fill' => [
-                        'fillType' => Fill::FILL_SOLID,
-                        'startColor' => ['rgb' => 'AA2224'], // Brand Red
+                        'color' => ['rgb' => '000000'],
                     ],
                     'alignment' => [
                         'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -139,17 +144,33 @@ class UsersExport extends DefaultValueBinder implements FromCollection, WithHead
                     ],
                 ]);
 
-                // Set Header Height
-                $sheet->getRowDimension(3)->setRowHeight(30);
-                
-                // Format Kolom NIK, KTA, Barcode, Phone sebagai TEXT agar 0 tidak hilang & no scientific notation
-                // B: NIK KTP, C: NIK Karyawan, D: KTA, E: Barcode, H: No. Telp (WA)
-                $sheet->getStyle('B4:E5000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
-                $sheet->getStyle('H4:H5000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+            // Apply Borders to All Data
+            $sheet->getStyle($range)->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['rgb' => '000000'],
+                        ],
+                    ],
+                ]);
 
-                // Align Tanggal Lahir (Kolom J) to Left
-                $sheet->getStyle('J4:J5000')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
-            },
+            // Reset Row Height to normal
+            $sheet->getRowDimension(1)->setRowHeight(-1);
+
+            // Align semua data ke kiri
+            if ($highestRow > 1) {
+                $sheet->getStyle('A2:R' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+                // Kolom NO (A) rata tengah
+                $sheet->getStyle('A2:A' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+                // Format kolom numerik sebagai TEXT
+                // B: NIK, C: KTA, F: KTP, O: NO TELEPON, P: BARCODE
+                $sheet->getStyle('B2:C' . $highestRow)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+                $sheet->getStyle('F2:F' . $highestRow)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+                $sheet->getStyle('O2:P' . $highestRow)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+            }
+        },
         ];
     }
 }

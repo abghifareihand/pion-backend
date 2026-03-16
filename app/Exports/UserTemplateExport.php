@@ -40,22 +40,22 @@ class UserTemplateExport extends DefaultValueBinder implements FromCollection, W
     {
         return collect([
             [
-                'John Doe',
-                '1234567890123456', // NIK KTP
-                '2024001',           // NIK Karyawan
-                '12345001',          // Nomor KTA
-                '123456789',         // Nomor Barcode
-                'john@example.com',
-                'IT Department',
-                '081234567890',      // No. Telp (WA)
-                'Jakarta',
-                '01/01/1990',        // Tanggal Lahir
-                'Laki-Laki',         // Jenis Kelamin
-                'Islam',             // Agama
-                'S1',                // Pendidikan
-                'Jl. Mawar No. 123, Jakarta',
-                '123456',            // PIN (6 Digit)
-                'password123'        // Password
+                '2024001',                       // NIK
+                '12345001',                      // KTA
+                'John Doe',                      // NAMA
+                '1234567890123456',              // KTP
+                'Jl. Mawar No. 123, Jakarta',   // ALAMAT
+                'Jakarta',                       // TEMPAT LAHIR
+                '01-01-1990',                    // TANGGAL LAHIR
+                'Laki-Laki',                     // JENIS KELAMIN
+                'IT Department',                 // BAGIAN
+                'Islam',                         // AGAMA
+                'john@example.com',              // EMAIL
+                'S1',                            // PENDIDIKAN
+                '081234567890',                  // NO TELEPON
+                '123456789',                     // BARCODE
+                '123456',                        // PIN (6 Digit)
+                'password123'                    // PASSWORD
             ]
         ]);
     }
@@ -63,44 +63,44 @@ class UserTemplateExport extends DefaultValueBinder implements FromCollection, W
     public function headings(): array
     {
         return [
-            'Nama',
-            'NIK KTP',
-            'NIK Karyawan',
-            'Nomor KTA',
-            'Nomor Barcode',
-            'Email',
-            'Departemen',
-            'No. Telp (WA)',
-            'Tempat Lahir',
-            'Tanggal Lahir',
-            'Jenis Kelamin',
-            'Agama',
-            'Pendidikan',
-            'Alamat',
-            'PIN (6 Digit)',
-            'Password'
+            'NIK',
+            'KTA',
+            'NAMA',
+            'KTP',
+            'ALAMAT',
+            'TEMPAT LAHIR',
+            'TANGGAL LAHIR',
+            'JENIS KELAMIN',
+            'BAGIAN',
+            'AGAMA',
+            'EMAIL',
+            'PENDIDIKAN',
+            'NO TELEPON',
+            'BARCODE',
+            'PIN',
+            'PASSWORD'
         ];
     }
 
     public function columnWidths(): array
     {
         return [
-            'A' => 25, // Nama
-            'B' => 20, // NIK KTP
-            'C' => 20, // NIK Karyawan
-            'D' => 20, // Nomor KTA
-            'E' => 20, // Nomor Barcode
-            'F' => 25, // Email
-            'G' => 20, // Departemen
-            'H' => 20, // No. Telp (WA)
-            'I' => 20, // Tempat Lahir
-            'J' => 20, // Tanggal Lahir
-            'K' => 20, // Jenis Kelamin
-            'L' => 15, // Agama
-            'M' => 15, // Pendidikan
-            'N' => 30, // Alamat
-            'O' => 15, // PIN (6 Digit)
-            'P' => 15, // Password
+            'A' => 20, // NIK
+            'B' => 20, // KTA
+            'C' => 35, // NAMA
+            'D' => 20, // KTP
+            'E' => 80, // ALAMAT
+            'F' => 20, // TEMPAT LAHIR
+            'G' => 20, // TANGGAL LAHIR
+            'H' => 20, // JENIS KELAMIN
+            'I' => 25, // BAGIAN
+            'J' => 15, // AGAMA
+            'K' => 30, // EMAIL
+            'L' => 15, // PENDIDIKAN
+            'M' => 20, // NO TELEPON
+            'N' => 20, // BARCODE
+            'O' => 10, // PIN
+            'P' => 15, // PASSWORD
         ];
     }
 
@@ -109,17 +109,13 @@ class UserTemplateExport extends DefaultValueBinder implements FromCollection, W
         return [
             AfterSheet::class => function(AfterSheet $event) {
                 $sheet = $event->sheet->getDelegate();
-                
+
                 // Style Header (Baris 1)
                 $headerRange = 'A1:P1';
                 $sheet->getStyle($headerRange)->applyFromArray([
                     'font' => [
                         'bold' => true,
-                        'color' => ['rgb' => 'FFFFFF'],
-                    ],
-                    'fill' => [
-                        'fillType' => Fill::FILL_SOLID,
-                        'startColor' => ['rgb' => 'AA2224'], // Brand Red
+                        'color' => ['rgb' => '000000'],
                     ],
                     'alignment' => [
                         'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -127,49 +123,48 @@ class UserTemplateExport extends DefaultValueBinder implements FromCollection, W
                     ],
                 ]);
 
-                // Set Header Height
-                $sheet->getRowDimension(1)->setRowHeight(30);
+                // Set Header Height Normal
+                $sheet->getRowDimension(1)->setRowHeight(-1);
 
-                // Format Kolom NIK, KTA, Barcode, Phone sebagai TEXT agar 0 tidak hilang
-                // B: NIK KTP, C: NIK Karyawan, D: KTA, E: Barcode, H: No. Telp (WA), O: PIN
-                $sheet->getStyle('B2:E1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
-                $sheet->getStyle('H2:H1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
-                $sheet->getStyle('O2:O1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+                // Format kolom numerik sebagai TEXT agar angka panjang tidak berubah
+                // A: NIK, B: KTA, D: KTP, M: NO TELEPON, N: BARCODE, O: PIN
+                $sheet->getStyle('A2:B1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+                $sheet->getStyle('D2:D1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+                $sheet->getStyle('M2:O1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
 
-                // Align Tanggal Lahir (Kolom J) to Left
-                $sheet->getStyle('J2:J1000')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+                // Format TANGGAL LAHIR (G) sebagai TEXT agar tidak diubah Excel
+                $sheet->getStyle('G2:G1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+
+                // Rata kiri untuk semua data
+                $sheet->getStyle('A2:P1000')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+                // Validasi NIK (Kolom A - Wajib Angka)
+                $nikValidation = $this->createNumericOnlyValidation('A', 'NIK harus berupa angka');
+                $sheet->setDataValidation('A2:A1000', $nikValidation);
+
+                // Validasi KTA (Kolom B - Wajib Angka)
+                $ktaValidation = $this->createNumericOnlyValidation('B', 'KTA harus berupa angka');
+                $sheet->setDataValidation('B2:B1000', $ktaValidation);
+
+                // Validasi KTP (Kolom D - Wajib Angka)
+                $ktpValidation = $this->createNumericOnlyValidation('D', 'KTP harus berupa angka');
+                $sheet->setDataValidation('D2:D1000', $ktpValidation);
 
                 // Validasi PIN (Kolom O - Harus 6 Karakter & Angka)
                 $pinValidation = $this->createCustomLengthValidation('O', 6, 'PIN harus 6 digit angka', true);
                 $sheet->setDataValidation('O2:O1000', $pinValidation);
 
-                // Validasi NIK KTP (Kolom B - Wajib Angka)
-                $nikKtpValidation = $this->createNumericOnlyValidation('B', 'NIK KTP harus berupa angka');
-                $sheet->setDataValidation('B2:B1000', $nikKtpValidation);
-
-                // Validasi NIK Karyawan (Kolom C - Wajib Angka)
-                $nikKarValidation = $this->createNumericOnlyValidation('C', 'NIK Karyawan harus berupa angka');
-                $sheet->setDataValidation('C2:C1000', $nikKarValidation);
-
-                // Validasi Nomor KTA (Kolom D - Wajib Angka)
-                $ktaValidation = $this->createNumericOnlyValidation('D', 'Nomor KTA harus berupa angka');
-                $sheet->setDataValidation('D2:D1000', $ktaValidation);
-
-                // Validasi Nomor Barcode (Kolom E - Wajib Angka)
-                $barcodeValidation = $this->createNumericOnlyValidation('E', 'Nomor Barcode harus berupa angka');
-                $sheet->setDataValidation('E2:E1000', $barcodeValidation);
-
-                // Gender Dropdown (Kolom K)
+                // Gender Dropdown (Kolom H - JENIS KELAMIN)
                 $genders = '"Laki-Laki,Perempuan"';
-                $sheet->setDataValidation('K2:K1000', $this->createValidation($genders));
+                $sheet->setDataValidation('H2:H1000', $this->createValidation($genders));
 
-                // Religion Dropdown (Kolom L)
+                // Religion Dropdown (Kolom J - AGAMA)
                 $religions = '"Islam,Kristen,Katolik,Hindu,Buddha,Khonghucu,Lainnya"';
-                $sheet->setDataValidation('L2:L1000', $this->createValidation($religions));
+                $sheet->setDataValidation('J2:J1000', $this->createValidation($religions));
 
-                // Education Dropdown (Kolom M)
+                // Education Dropdown (Kolom L - PENDIDIKAN)
                 $educations = '"SD,SMP,SMA/SMK,D3,S1,S2,S3"';
-                $sheet->setDataValidation('M2:M1000', $this->createValidation($educations));
+                $sheet->setDataValidation('L2:L1000', $this->createValidation($educations));
             },
         ];
     }
