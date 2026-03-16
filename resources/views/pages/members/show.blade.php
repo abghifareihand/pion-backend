@@ -141,8 +141,8 @@
                                         </p>
                                     </div>
                                     <div class="col-md-6 mb-4">
-                                        <p class="detail-label">Agama / Pendidikan</p>
-                                        <p class="detail-value">{{ $member->religion }} / {{ $member->education }}</p>
+                                        <p class="detail-label">Agama | Pendidikan</p>
+                                        <p class="detail-value">{{ $member->religion }} | {{ $member->education }}</p>
                                     </div>
                                     <div class="col-md-12 mb-4">
                                         <p class="detail-label">Alamat Lengkap</p>
