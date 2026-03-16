@@ -185,7 +185,7 @@
             function confirmApprove() {
                 Swal.fire({
                     title: 'Konfirmasi Persetujuan',
-                    text: "Member akan dibuatkan akun otomatis dengan password : password1234",
+                    html: "Member akan dibuatkan akun otomatis dengan <br> Password: <strong class='text-danger'>password123</strong> dan PIN: <strong class='text-danger'>123456</strong>",
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#28a745',

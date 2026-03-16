@@ -37,6 +37,8 @@ class User extends Authenticatable
         'image_path',
         'password',
         'pin',
+        'password_hint',
+        'pin_hint',
         'role',
         'fcm_token'
     ];
@@ -50,6 +52,8 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'pin',
+        'password_hint',
+        'pin_hint',
     ];
 
     /**
@@ -79,6 +83,8 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'birth_date' => 'date',
+            'password_hint' => 'encrypted',
+            'pin_hint' => 'encrypted',
         ];
     }
 }

@@ -101,8 +101,10 @@ class MemberRegistrationController extends Controller
 
             // AUTH DATA DEFAULT
             'username'      => $member->nik_ktp, // Biar gampang login pake NIK KTP
-            'password'      => Hash::make('password1234'), // Password default request kamu
-            'pin'           => Hash::make('000000'),
+            'password'      => Hash::make('password123'), // Password default request kamu
+            'pin'           => Hash::make('123456'),
+            'password_hint' => 'password123',
+            'pin_hint'      => '123456',
             'role'          => 'user',
         ]);
 

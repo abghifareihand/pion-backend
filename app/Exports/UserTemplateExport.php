@@ -100,7 +100,7 @@ class UserTemplateExport extends DefaultValueBinder implements FromCollection, W
             'M' => 20, // NO TELEPON
             'N' => 20, // BARCODE
             'O' => 10, // PIN
-            'P' => 15, // PASSWORD
+            'P' => 25, // PASSWORD
         ];
     }
 

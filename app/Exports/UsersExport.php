@@ -92,7 +92,7 @@ class UsersExport extends DefaultValueBinder implements FromCollection, WithHead
             'O' => 20, // NO TELEPON
             'P' => 20, // BARCODE
             'Q' => 10, // PIN
-            'R' => 15, // PASSWORD
+            'R' => 25, // PASSWORD
         ];
     }
 
@@ -117,8 +117,8 @@ class UsersExport extends DefaultValueBinder implements FromCollection, WithHead
             $user->education,
             (string)$user->phone,
             (string)$user->barcode_number,
-            '', // PIN
-            '' // Password
+            (string)($user->pin_hint ?? '-'),
+            (string)($user->password_hint ?? '-')
         ];
     }
 

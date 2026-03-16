@@ -155,7 +155,6 @@
                                                 </td>
 
                                                 <td>{{ $user->phone }}</td>
-
                                                 <td>{{ $user->created_at->format('d/m/y H:i') }}</td>
 
                                                 <td>

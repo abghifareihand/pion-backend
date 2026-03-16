@@ -78,6 +78,8 @@ class UserController extends Controller
             'role'         => 'user',
             'pin'          => Hash::make($request->pin),
             'password'     => Hash::make($request->password),
+            'pin_hint'     => $request->pin,
+            'password_hint' => $request->password,
         ]);
 
         return redirect()->route('users.index')->with('success', 'User berhasil dibuat.');
@@ -149,11 +151,13 @@ class UserController extends Controller
         // Update PIN jika diisi
         if ($request->filled('pin')) {
             $user->pin = Hash::make($request->pin);
+            $user->pin_hint = $request->pin;
         }
 
         // Update Password jika diisi
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
+            $user->password_hint = $request->password;
         }
 
         $user->save();

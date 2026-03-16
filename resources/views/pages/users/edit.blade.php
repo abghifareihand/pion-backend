@@ -208,24 +208,22 @@
                                 <textarea class="form-control" name="address" rows="3" required>{{ old('address', $user->address) }}</textarea>
                             </div>
 
-                            <!-- Input PIN -->
                             <div class="mb-3">
                                 <label>PIN</label>
-                                <input class="form-control" type="text" name="pin" value="{{ old('pin') }}"
+                                <input class="form-control" type="text" name="pin" value="{{ old('pin', $user->pin_hint) }}"
                                     maxlength="6" pattern="\d*" inputmode="numeric"
                                     oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
                                 <small class="text-muted">
-                                    Kosongkan jika tidak ingin mengubah PIN
+                                    PIN saat ini: <strong class="text-danger">{{ $user->pin_hint ?? '-' }}</strong>
                                 </small>
                             </div>
 
-                            <!-- Input Password -->
                             <div class="mb-3">
                                 <label>Password</label>
                                 <input class="form-control" type="text" name="password"
-                                    value="{{ old('password') }}" />
+                                    value="{{ old('password', $user->password_hint) }}" />
                                 <small class="text-muted">
-                                    Kosongkan jika tidak ingin mengubah password
+                                    Password saat ini: <strong class="text-danger">{{ $user->password_hint ?? '-' }}</strong>
                                 </small>
                             </div>
 

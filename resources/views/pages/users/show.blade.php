@@ -81,7 +81,8 @@
                         <div class="mb-3">
                             <label>Tempat, Tanggal Lahir</label>
                             <div class="form-control-plaintext py-0">
-                                {{ $user->birth_place ?? '-' }}, {{ $user->birth_date ? \Carbon\Carbon::parse($user->birth_date)->translatedFormat('j F Y') : '-' }}
+                                {{ $user->birth_place ?? '-' }},
+                                {{ $user->birth_date ? \Carbon\Carbon::parse($user->birth_date)->translatedFormat('j F Y') : '-' }}
                             </div>
                         </div>
 
@@ -121,6 +122,25 @@
                                 @else
                                     -
                                 @endif
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="mb-2">
+                            <label class="fw-bold text-uppercase mb-3">Informasi Keamanan</label>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label class="d-block">PIN</label>
+                                    <span class="badge badge-rejected" style="font-size: 14px;">
+                                        {{ $user->pin_hint ?? '-' }}
+                                    </span>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="d-block">Password</label>
+                                    <span class="badge badge-rejected" style="font-size: 14px;">
+                                        {{ $user->password_hint ?? '-' }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>

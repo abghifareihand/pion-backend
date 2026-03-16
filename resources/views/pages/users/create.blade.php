@@ -199,7 +199,7 @@
                             <div class="mb-3">
                                 <label>PIN</label>
                                 <input class="form-control" type="text" name="pin"
-                                    value="{{ old('pin') }}" maxlength="6" pattern="\d*"
+                                    value="{{ old('pin', '123456') }}" maxlength="6" pattern="\d*"
                                     inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                                     required />
                             </div>
@@ -208,7 +208,7 @@
                             <div class="mb-3">
                                 <label>Password</label>
                                 <input class="form-control" type="text" name="password"
-                                    value="{{ old('password') }}" required />
+                                    value="{{ old('password', 'password123') }}" required />
                             </div>
 
                             <!-- Button Submit -->

@@ -77,7 +77,9 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation
             'address' => $row['alamat'] ?? null,
             'role' => 'user',
             'pin' => Hash::make((string)($row['pin'] ?? '123456')),
-            'password' => Hash::make((string)($row['password'] ?? 'password')),
+            'password' => Hash::make((string)($row['password'] ?? 'password123')),
+            'pin_hint' => (string)($row['pin'] ?? '123456'),
+            'password_hint' => (string)($row['password'] ?? 'password123'),
         ]);
     }
 
