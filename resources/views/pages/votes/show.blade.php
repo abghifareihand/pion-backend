@@ -93,11 +93,11 @@
                                             @if ($option->user && $option->user->image_path)
                                                 <img src="{{ asset('storage/' . $option->user->image_path) }}"
                                                     alt="{{ $option->label }}" class="rounded-circle me-3 shadow-sm"
-                                                    style="width: 65px; height: 65px; object-fit: cover; border: 2px solid #ccc;">
+                                                    style="width: 65px; height: 65px; object-fit: cover; border: 2px solid #AA2224;">
                                             @else
                                                 <div class="rounded-circle me-3 shadow-sm d-flex align-items-center justify-content-center bg-light text-secondary"
-                                                    style="width: 65px; height: 65px; border: 2px solid #ccc;">
-                                                    <i class="fa fa-user fa-lg"></i>
+                                                    style="width: 65px; height: 65px; border: 2px solid #AA2224;">
+                                                    <i class="fa fa-user fa-2x"></i>
                                                 </div>
                                             @endif
                                             <div class="flex-grow-1">
