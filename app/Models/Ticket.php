@@ -20,6 +20,7 @@ class Ticket extends Model
     ];
 
     protected $casts = [
+        'user_id' => 'integer',
         'responded_at' => 'datetime',
     ];
 

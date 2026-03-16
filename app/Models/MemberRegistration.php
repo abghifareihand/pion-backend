@@ -24,6 +24,7 @@ class MemberRegistration extends Model
     ];
 
     protected $casts = [
+        'referrer_id' => 'integer',
         'birth_date' => 'date',
     ];
 

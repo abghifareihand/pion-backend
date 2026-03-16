@@ -15,6 +15,11 @@ class TicketReply extends Model
         'message',
     ];
 
+    protected $casts = [
+        'ticket_id' => 'integer',
+        'user_id' => 'integer',
+    ];
+
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);

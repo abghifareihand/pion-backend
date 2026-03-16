@@ -34,7 +34,7 @@ class VoteController extends Controller
                 'id' => $vote->id,
                 'title' => $vote->title,
                 'is_active' => (bool)$vote->is_active,
-                'options_count' => $vote->options_count,
+                'options_count' => (int)$vote->options_count,
                 'created_at' => $vote->created_at->format('Y-m-d H:i:s'),
             ];
         });
@@ -94,8 +94,8 @@ class VoteController extends Controller
                 'image' => $candidate && $candidate->image_path
                     ? asset('storage/' . $candidate->image_path)
                     : null,
-                'votes_count' => $optionCount,
-                'percentage' => $vote->results_count > 0
+                'votes_count' => (int)$optionCount,
+                'percentage' => (int)$vote->results_count > 0
                     ? round(($optionCount / $vote->results_count) * 100, 1)
                     : 0,
                 'profile' => $candidate ? [
@@ -122,7 +122,7 @@ class VoteController extends Controller
                 'id' => $vote->id,
                 'title' => $vote->title,
                 'description' => $vote->description,
-                'results_count' => $vote->results_count,
+                'results_count' => (int)$vote->results_count,
                 'is_voted' => $vote->is_voted,
                 'participation_percentage' => $vote->participation_percentage,
                 'options' => $options

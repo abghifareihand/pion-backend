@@ -16,6 +16,11 @@ class VoteOption extends Model
         'vision',
     ];
 
+    protected $casts = [
+        'vote_id' => 'integer',
+        'user_id' => 'integer',
+    ];
+
     // Relasi balik ke Vote
     public function vote()
     {
