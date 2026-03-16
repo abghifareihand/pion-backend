@@ -105,11 +105,12 @@
                                                     <span class="fw-bold">{{ $loop->iteration }}.
                                                         {{ $option->label }}</span>
                                                     <span class="fw-bold">
-                                                        {{ $option->results_count }} Suara ({{ $optionPercentage }}%)
+                                                        <span id="results-count-{{ $option->id }}">{{ $option->results_count }}</span> Suara 
+                                                        (<span id="percentage-{{ $option->id }}">{{ $optionPercentage }}</span>%)
                                                     </span>
                                                 </div>
                                                 <div class="progress" style="height: 10px;">
-                                                    <div class="progress-bar bg-primary" role="progressbar"
+                                                    <div id="progress-bar-{{ $option->id }}" class="progress-bar bg-primary" role="progressbar"
                                                         style="width: {{ $optionPercentage }}%"
                                                         aria-valuenow="{{ $optionPercentage }}" aria-valuemin="0"
                                                         aria-valuemax="100">
@@ -128,12 +129,12 @@
                                     <div class="d-flex justify-content-between align-items-center px-2">
                                         <span class="fw-bold text-uppercase">TOTAL SUARA MASUK</span>
                                         <span class="fw-bold">
-                                            {{ $totalVotesCount }} / {{ $totalEligibleUsers }} Suara
-                                            ({{ $participationRate }}%)
+                                            <span id="total-votes-count">{{ $totalVotesCount }}</span> / <span id="total-eligible-users">{{ $totalEligibleUsers }}</span> Suara
+                                            (<span id="total-participation-rate">{{ $participationRate }}</span>%)
                                         </span>
                                     </div>
                                     <div class="progress mt-1 mx-2">
-                                        <div class="progress-bar bg-primary" role="progressbar"
+                                        <div id="total-progress-bar" class="progress-bar bg-primary" role="progressbar"
                                             style="width: {{ $participationRate }}%"></div>
                                     </div>
                                 </div>
@@ -146,5 +147,47 @@
     </div>
 
     @push('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const voteId = {{ $vote->id }};
+
+            // Polling hasil voting setiap 5 detik
+            setInterval(function() {
+                fetch(`/votes/${voteId}/results`)
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.status === 'success') {
+                            const data = result.data;
+                            
+                            // Update individual options
+                            data.options.forEach(option => {
+                                const countElem = document.getElementById(`results-count-${option.id}`);
+                                const percentElem = document.getElementById(`percentage-${option.id}`);
+                                const progressElem = document.getElementById(`progress-bar-${option.id}`);
+
+                                if (countElem) countElem.innerText = option.results_count;
+                                if (percentElem) percentElem.innerText = option.percentage;
+                                if (progressElem) {
+                                    progressElem.style.width = option.percentage + '%';
+                                    progressElem.setAttribute('aria-valuenow', option.percentage);
+                                }
+                            });
+
+                            // Update total summary
+                            const totalVotesElem = document.getElementById('total-votes-count');
+                            const totalEligibleElem = document.getElementById('total-eligible-users');
+                            const participationRateElem = document.getElementById('total-participation-rate');
+                            const totalProgressElem = document.getElementById('total-progress-bar');
+
+                            if (totalVotesElem) totalVotesElem.innerText = data.total_votes_count;
+                            if (totalEligibleElem) totalEligibleElem.innerText = data.total_eligible_users;
+                            if (participationRateElem) participationRateElem.innerText = data.participation_rate;
+                            if (totalProgressElem) totalProgressElem.style.width = data.participation_rate + '%';
+                        }
+                    })
+                    .catch(error => console.error('Error polling vote results:', error));
+            }, 5000);
+        });
+    </script>
     @endpush
 @endsection

@@ -128,6 +128,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/create', [VoteController::class, 'create'])->name('create');
         Route::post('/store', [VoteController::class, 'store'])->name('store');
         Route::get('/{vote}', [VoteController::class, 'show'])->name('show');
+        Route::get('/{vote}/results', [VoteController::class, 'getResults'])->name('results');
         Route::get('/{vote}/edit', [VoteController::class, 'edit'])->name('edit');
         Route::put('/{vote}', [VoteController::class, 'update'])->name('update');
         Route::delete('/{vote}', [VoteController::class, 'destroy'])->name('destroy');

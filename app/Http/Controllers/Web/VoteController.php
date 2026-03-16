@@ -99,9 +99,41 @@ class VoteController extends Controller
             $query->with(['user'])->withCount('results')->orderBy('results_count', 'desc');
         }]);
 
-        $totalVotes = $vote->results()->count();
-
         return view('pages.votes.show', compact('vote'));
+    }
+
+    public function getResults(Vote $vote)
+    {
+        $vote->load(['options' => function ($query) {
+            $query->withCount('results')->orderBy('results_count', 'desc');
+        }]);
+
+        $totalVotesCount = $vote->options->sum('results_count');
+        $totalEligibleUsers = User::where('role', 'user')->count();
+        $participationRate = $totalEligibleUsers > 0
+            ? round(($totalVotesCount / $totalEligibleUsers) * 100, 1)
+            : 0;
+
+        $options = $vote->options->map(function ($option) use ($totalVotesCount) {
+            $optionPercentage = $totalVotesCount > 0
+                ? round(($option->results_count / $totalVotesCount) * 100, 1)
+                : 0;
+            return [
+                'id' => $option->id,
+                'results_count' => $option->results_count,
+                'percentage' => $optionPercentage,
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'options' => $options,
+                'total_votes_count' => $totalVotesCount,
+                'total_eligible_users' => $totalEligibleUsers,
+                'participation_rate' => $participationRate,
+            ]
+        ]);
     }
 
     public function edit(Vote $vote)
