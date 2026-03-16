@@ -110,12 +110,12 @@
 
                                                 <td>
                                                     <a href="{{ route('tickets.pdf', $ticket->id) }}"
-                                                        class="btn-premium btn-premium-success">
+                                                        class="btn-premium btn-premium-success" target="_blank">
                                                         <i class="fa fa-file-pdf-o"></i> Dengan File
                                                     </a>
 
                                                     <a href="{{ route('tickets.pdf', $ticket->id) }}?hide_attachment=1"
-                                                        class="btn-premium btn-premium-warning">
+                                                        class="btn-premium btn-premium-warning" target="_blank">
                                                         <i class="fa fa-file-pdf-o"></i> Tanpa File
                                                     </a>
 
@@ -127,7 +127,7 @@
                                                     @endif
                                                 </td>
 
-                                                <td style="display: flex; gap: 5px;">
+                                                <td>
                                                     <!-- Reply button -->
                                                     <a href="{{ route('tickets.edit', $ticket->id) }}"
                                                         class="btn btn-success btn-xs">
