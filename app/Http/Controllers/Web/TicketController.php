@@ -154,16 +154,17 @@ class TicketController extends Controller
     public function previewPdf(Ticket $ticket)
     {
         // 1. Load data relasi yang dibutuhkan
-        // user = pemilik tiket, replies.user = pengirim chat
         $ticket->load(['user', 'replies.user']);
 
-        // 2. Generate PDF dari view yang dibuat tadi
-        $pdf = Pdf::loadView('pdf.ticket_report', compact('ticket'));
+        // 2. Ambil setting email organisasi
+        $emailOrganisasi = \App\Models\Setting::get(\App\Models\Setting::EMAIL_ORGANISASI, 'sppion18@gmail.com');
 
-        // 3. Atur ukuran kertas dan orientasi
+        // 3. Generate PDF dari view
+        $pdf = Pdf::loadView('pdf.ticket_report', compact('ticket', 'emailOrganisasi'));
+
+        // 4. Atur ukuran kertas
         $pdf->setPaper('a4', 'portrait');
 
-        // 4. Return stream (bukan download) agar bisa dilihat di browser/previewer
         return $pdf->stream('Laporan-Tiket-' . $ticket->ticket_number . '.pdf');
     }
 }

@@ -143,7 +143,7 @@
                         <p>
                             JL. Raya Purwodadi-Blora Km.18 RT.001 RW.002, Desa Tanjungrejo Kecamatan Wirosari, Kabupaten<br>
                             Grobogan, Jawa Tengah-Indonesia 58192<br>
-                            <strong>Email : sppion18@gmail.com</strong>
+                            <strong>Email : {{ $emailOrganisasi }}</strong>
                         </p>
                     </td>
                 </tr>

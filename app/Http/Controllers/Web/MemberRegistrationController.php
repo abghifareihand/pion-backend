@@ -131,9 +131,10 @@ class MemberRegistrationController extends Controller
 
         $iuranNominal   = $settings[Setting::IURAN_BULANAN_NOMINAL]   ?? 'Rp 5.000,00';
         $iuranTerbilang = $settings[Setting::IURAN_BULANAN_TERBILANG] ?? 'Lima Ribu Rupiah';
+        $emailOrganisasi = Setting::get(Setting::EMAIL_ORGANISASI, 'sppion18@gmail.com');
 
         // 3. Generate PDF dari view
-        $pdf = Pdf::loadView('pdf.member_report', compact('member', 'iuranNominal', 'iuranTerbilang'));
+        $pdf = Pdf::loadView('pdf.member_report', compact('member', 'iuranNominal', 'iuranTerbilang', 'emailOrganisasi'));
 
         // 4. Atur ukuran kertas (A4 Portrait)
         $pdf->setPaper('a4', 'portrait');

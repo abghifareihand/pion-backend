@@ -26,25 +26,4 @@ class SettingController extends Controller
 
         return redirect()->route('settings.edit')->with('success', 'Pengaturan berhasil diperbarui!');
     }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'key'   => 'required|string|unique:settings,key',
-            'label' => 'required|string',
-            'value' => 'nullable|string',
-        ], [
-            'key.unique' => 'Key tersebut sudah ada.',
-        ]);
-
-        Setting::create($request->only('key', 'label', 'value'));
-
-        return redirect()->route('settings.edit')->with('success', 'Setting baru berhasil ditambahkan!');
-    }
-
-    public function destroy(Setting $setting)
-    {
-        $setting->delete();
-        return redirect()->route('settings.edit')->with('success', "Setting {$setting->label} berhasil dihapus.");
-    }
 }

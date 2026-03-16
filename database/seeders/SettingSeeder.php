@@ -12,13 +12,18 @@ class SettingSeeder extends Seeder
         $settings = [
             [
                 'key'   => 'iuran_bulanan_nominal',
-                'label' => 'Nominal Iuran Bulanan (Angka)',
+                'label' => 'Nominal Iuran Bulanan',
                 'value' => 'Rp 5.000,00',
             ],
             [
                 'key'   => 'iuran_bulanan_terbilang',
-                'label' => 'Iuran Bulanan Terbilang',
+                'label' => 'Terbilang Iuran Bulanan',
                 'value' => 'Lima Ribu Rupiah',
+            ],
+            [
+                'key'   => 'email_organisasi',
+                'label' => 'Email SP PION',
+                'value' => 'sppion18@gmail.com',
             ],
         ];
 
