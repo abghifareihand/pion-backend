@@ -79,6 +79,24 @@
                             </div>
                         @endif
 
+                        {{-- Alert Error (General) --}}
+                        @if (session('error'))
+                            <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        {{-- Alert Error HTML (For Excel Validation) --}}
+                        @if (session('error_html'))
+                            <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
+                                {!! session('error_html') !!}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endif
+
                         {{-- Alert Error --}}
                         @if ($errors->any())
                             <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
