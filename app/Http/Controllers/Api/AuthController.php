@@ -205,7 +205,8 @@ class AuthController extends Controller
         }
 
         $user->update([
-            'password' => Hash::make($request->new_password)
+            'password' => Hash::make($request->new_password),
+            'password_hint' => $request->new_password
         ]);
 
         return response()->json([
@@ -231,7 +232,8 @@ class AuthController extends Controller
         }
 
         $user->update([
-            'pin' => Hash::make($request->new_pin)
+            'pin' => Hash::make($request->new_pin),
+            'pin_hint' => $request->new_pin
         ]);
 
         return response()->json([
