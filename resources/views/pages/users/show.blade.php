@@ -58,14 +58,14 @@
                         </div>
 
                         <div class="mb-3">
-                            <label>Departemen</label>
+                            <label>Bagian</label>
                             <div class="form-control-plaintext py-0">
                                 {{ $user->department }}
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label>No. Telepon / WA</label>
+                            <label>No Telepon / WA</label>
                             <div class="form-control-plaintext py-0">
                                 {{ $user->phone ?? '-' }}
                             </div>

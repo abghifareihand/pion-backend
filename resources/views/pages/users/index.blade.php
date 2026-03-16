@@ -121,10 +121,11 @@
                                             <th>NIK KTP</th>
                                             <th>NIK Karyawan</th>
                                             <th>KTA</th>
-                                            <th>Departemen</th>
+                                            <th>Bagian</th>
                                             <th>Jenis Kelamin</th>
-                                            <th>TTL</th>
-                                            <th>No. Telp</th>
+                                            <th>Tempat Lahir</th>
+                                            <th>Tanggal Lahir</th>
+                                            <th>No Telepon</th>
                                             <th>Tanggal Daftar</th>
                                             <th>Action</th>
                                         </tr>
@@ -149,8 +150,8 @@
                                                         -
                                                     @endif
                                                 </td>
-                                                <td>{{ $user->birth_place ?? '-' }},
-                                                    {{ $user->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('d/m/Y') : '-' }}
+                                                <td>{{ $user->birth_place ?? '-' }}</td>
+                                                <td>{{ $user->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('d-m-Y') : '-' }}
                                                 </td>
 
                                                 <td>{{ $user->phone }}</td>

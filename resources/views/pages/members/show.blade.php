@@ -114,11 +114,11 @@
                                         <p class="detail-value">{{ $member->nik_ktp }}</p>
                                     </div>
                                     <div class="col-md-6 mb-4">
-                                        <p class="detail-label">No. Telepon / WA</p>
+                                        <p class="detail-label">No Telepon / WA</p>
                                         <p class="detail-value">{{ $member->phone ?? '-' }}</p>
                                     </div>
                                     <div class="col-md-6 mb-4">
-                                        <p class="detail-label">Departemen</p>
+                                        <p class="detail-label">Bagian</p>
                                         <p class="detail-value">{{ $member->department }}</p>
                                     </div>
                                     <div class="col-md-6 mb-4">

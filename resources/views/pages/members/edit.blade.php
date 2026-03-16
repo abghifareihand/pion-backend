@@ -73,13 +73,13 @@
                             </div>
 
                             <div class="mb-3">
-                                <label>Departemen</label>
+                                <label>Bagian</label>
                                 <input class="form-control" type="text" name="department"
                                     value="{{ old('department', $member->department) }}" required />
                             </div>
 
                             <div class="mb-3">
-                                <label>No. Telepon / WA</label>
+                                <label>No Telepon / WA</label>
                                 <input class="form-control" type="text" name="phone"
                                     value="{{ old('phone', $member->phone) }}" required />
                             </div>
