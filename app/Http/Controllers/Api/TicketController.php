@@ -181,6 +181,7 @@ class TicketController extends Controller
             'description' => $request->description,
             'attachment' => $attachmentPath,
             'status' => 'pending',
+            'is_read' => false,
         ]);
 
         return response()->json([

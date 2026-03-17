@@ -24,15 +24,23 @@ class TicketController extends Controller
     public function index()
     {
         // Ambil ticket dengan hitungan reply yang belum dibaca (is_read = false) dari sisi user (role user)
+        // Ditambah dengan status is_read dari tiket itu sendiri
         $tickets = Ticket::with(['user'])
-            ->withCount(['replies as unread_count' => function ($query) {
-                $query->where('is_read', false)
-                    ->whereHas('user', function ($q) {
-                        $q->where('role', 'user');
-                    });
-            }])
+            ->withCount(['replies as unread_replies_count' => function ($query) {
+            $query->where('is_read', false)
+                ->whereHas('user', function ($q) {
+                $q->where('role', 'user');
+            }
+            );
+        }])
             ->latest()
             ->get();
+
+        $tickets->map(function ($ticket) {
+            $ticket->unread_count = $ticket->unread_replies_count + ($ticket->is_read ? 0 : 1);
+            return $ticket;
+        });
+
         return view('pages.tickets.index', compact('tickets'));
     }
 
@@ -44,12 +52,17 @@ class TicketController extends Controller
 
     public function edit(Ticket $ticket)
     {
+        // Tandai tiket itu sendiri sebagai terbaca
+        if (!$ticket->is_read) {
+            $ticket->update(['is_read' => true]);
+        }
+
         // Tandai semua pesan dari user (bukan admin) sebagai terbaca
         $ticket->replies()
             ->where('is_read', false)
             ->whereHas('user', function ($query) {
-                $query->where('role', 'user');
-            })
+            $query->where('role', 'user');
+        })
             ->update(['is_read' => true]);
 
         return view('pages.tickets.edit', compact('ticket'));
@@ -69,11 +82,11 @@ class TicketController extends Controller
         $formattedReplies = $newReplies->map(function ($reply) {
             $isMe = $reply->user_id == Auth::id();
             return [
-                'id' => $reply->id,
-                'message' => $reply->message,
-                'sender' => $isMe ? 'You (Admin)' : ($reply->user->name ?? 'User'),
-                'date' => $reply->created_at->format('d M, H:i'),
-                'is_me' => $isMe,
+            'id' => $reply->id,
+            'message' => $reply->message,
+            'sender' => $isMe ? 'You (Admin)' : ($reply->user->name ?? 'User'),
+            'date' => $reply->created_at->format('d M, H:i'),
+            'is_me' => $isMe,
             ];
         });
 
@@ -110,14 +123,14 @@ class TicketController extends Controller
         $user = User::find($ticket->user_id);
         if ($user && !empty($user->fcm_token)) {
             $this->firebase->sendToTokens(
-                [$user->fcm_token],
+            [$user->fcm_token],
                 'Tiket #' . $ticket->ticket_number,
                 'Admin: ' . Str::limit($request->message, 50),
-                [
-                    'id' => (string) $ticket->id,
-                    'type' => 'ticket_response',
-                    'status' => $ticket->status,
-                ]
+            [
+                'id' => (string)$ticket->id,
+                'type' => 'ticket_response',
+                'status' => $ticket->status,
+            ]
             );
         }
 
@@ -144,14 +157,14 @@ class TicketController extends Controller
 
         if ($user && !empty($user->fcm_token)) {
             $this->firebase->sendToTokens(
-                [$user->fcm_token],
+            [$user->fcm_token],
                 'Tiket #' . $ticket->ticket_number, // TITLE
                 'Admin telah menanggapi: ' . Str::limit($request->admin_response, 50), // BODY
-                [
-                    'id' => (string) $ticket->id,
-                    'type' => 'ticket_response', // 👈 buat routing di Flutter
-                    'status' => $ticket->status,
-                ]
+            [
+                'id' => (string)$ticket->id,
+                'type' => 'ticket_response', // 👈 buat routing di Flutter
+                'status' => $ticket->status,
+            ]
             );
         }
 
@@ -187,22 +200,26 @@ class TicketController extends Controller
 
     public function getUnreadData()
     {
-        $tickets = Ticket::withCount(['replies as unread_count' => function ($query) {
+        $tickets = Ticket::withCount(['replies as unread_replies_count' => function ($query) {
             $query->where('is_read', false)
                 ->whereHas('user', function ($q) {
-                    $q->where('role', 'user');
-                });
-        }])->get(['id', 'status']);
+                $q->where('role', 'user');
+            }
+            );
+        }])->get(['id', 'status', 'is_read']);
+
+        $totalTicketsCount = Ticket::count();
 
         return response()->json([
             'status' => 'success',
+            'total_tickets_count' => $totalTicketsCount,
             'data' => $tickets->map(function ($ticket) {
-                return [
+            return [
                     'id' => $ticket->id,
-                    'unread_count' => $ticket->unread_count,
+                    'unread_count' => $ticket->unread_replies_count + ($ticket->is_read ? 0 : 1),
                     'status' => $ticket->status,
                 ];
-            })
+        })
         ]);
     }
 }

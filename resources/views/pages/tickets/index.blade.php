@@ -17,6 +17,97 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        /* Styling Notifikasi Tiket Baru (Toast Premium) */
+        .new-ticket-toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            width: 320px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-left: 5px solid #AA2224;
+            overflow: hidden;
+        }
+
+        .dark-only .new-ticket-toast-container {
+            background: rgba(30, 31, 34, 0.95);
+            border-left: 5px solid #AA2224;
+            color: #fff;
+        }
+
+        .toast-content {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .toast-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(170, 34, 36, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .toast-icon i {
+            font-size: 20px;
+            color: #AA2224;
+        }
+
+        .toast-body h6 {
+            margin: 0 0 5px 0;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .toast-body p {
+            margin: 0 0 10px 0;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .dark-only .toast-body p {
+            color: #ccc;
+        }
+
+        .btn-refresh-now {
+            border-radius: 8px !important;
+            padding: 5px 15px !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease;
+            background-color: #AA2224 !important;
+            border-color: #AA2224 !important;
+        }
+
+        .btn-refresh-now:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(170, 34, 36, 0.3);
+            background-color: #8a1b1d !important;
+            border-color: #8a1b1d !important;
+        }
+
+        .btn-close-toast {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .btn-close-toast:hover {
+            color: #ff4d4d;
+        }
     </style>
 @endpush
 
@@ -29,6 +120,10 @@
                     <div class="d-flex justify-content-between align-items-center">
                         {{-- Teks di kiri --}}
                         <h5 class="fw-bold mb-0">Data Pesan</h5>
+                        <button class="btn btn-success btn-xs" onclick="playNotificationSound()"
+                            title="Cek Suara Notifikasi">
+                            <i class="fa fa-volume-up me-1"></i> Cek Suara
+                        </button>
                     </div>
                 </div>
             </div>
@@ -69,7 +164,8 @@
                                                     {{ $ticket->user->name }}
                                                     <span id="unread-badge-container-{{ $ticket->id }}">
                                                         @if ($ticket->unread_count > 0)
-                                                            <span class="badge rounded-pill bg-danger ms-1" style="font-size: 10px;">
+                                                            <span class="badge rounded-pill bg-danger ms-1"
+                                                                style="font-size: 10px;">
                                                                 {{ $ticket->unread_count }} Pesan Baru
                                                             </span>
                                                         @endif
@@ -144,8 +240,8 @@
                                                     </a>
 
                                                     <!-- Delete button -->
-                                                    <a href="#" class="btn btn-danger btn-xs"
-                                                        data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                    <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
+                                                        data-bs-target="#deleteModal"
                                                         data-action="{{ route('tickets.destroy', $ticket->id) }}"
                                                         data-name="{{ $ticket->name }}">
                                                         Hapus
@@ -216,15 +312,38 @@
         <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>
 
         <script>
+            let currentTotalTickets = {{ $tickets->count() }};
+            let currentUnreadTotal = {{ $tickets->sum('unread_count') }};
+
+            // Fungsi untuk memutar suara
+            function playNotificationSound() {
+                const audio = new Audio("{{ asset('assets/audio/notification.mp3') }}");
+                audio.play().catch(e => {
+                    console.log('Autoplay blocked atau error audio:', e);
+                    // Jika diblokir, beri info sekali saja di console
+                });
+            }
+
             // Polling untuk update status dan unread count secara real-time
             function fetchUnreadData() {
                 fetch("{{ route('tickets.unread.data') }}")
                     .then(response => response.json())
                     .then(result => {
                         if (result.status === 'success') {
+                            let newUnreadTotal = 0;
+
+                            // 0. Deteksi Tiket Baru
+                            if (result.total_tickets_count > currentTotalTickets) {
+                                showNewTicketAlert();
+                                currentTotalTickets = result.total_tickets_count;
+                            }
+
                             result.data.forEach(ticket => {
+                                newUnreadTotal += ticket.unread_count;
+
                                 // 1. Update Unread Badge
-                                const badgeContainer = document.getElementById(`unread-badge-container-${ticket.id}`);
+                                const badgeContainer = document.getElementById(
+                                    `unread-badge-container-${ticket.id}`);
                                 if (badgeContainer) {
                                     if (ticket.unread_count > 0) {
                                         badgeContainer.innerHTML = `
@@ -263,9 +382,45 @@
                                     }
                                 }
                             });
+
+                            // 3. Mainkan suara jika total pesan belum dibaca bertambah
+                            if (newUnreadTotal > currentUnreadTotal) {
+                                playNotificationSound();
+                            }
+                            currentUnreadTotal = newUnreadTotal;
                         }
                     })
                     .catch(error => console.error('Error fetching unread data:', error));
+            }
+
+            function showNewTicketAlert() {
+                // Play Sound untuk tiket baru
+                playNotificationSound();
+
+                // Hapus alert lama jika masih ada
+                const oldAlert = document.getElementById('new-ticket-toast');
+                if (oldAlert) oldAlert.remove();
+
+                const alertHtml = `
+                    <div id="new-ticket-toast" class="new-ticket-toast-container animate__animated animate__fadeInRight">
+                        <div class="toast-content">
+                            <div class="toast-icon">
+                                <i class="fa fa-bell animate__animated animate__swing animate__infinite"></i>
+                            </div>
+                            <div class="toast-body">
+                                <h6>Pesan Baru Masuk!</h6>
+                                <p>Silakan refresh untuk melihat data terbaru.</p>
+                                <a href="javascript:location.reload()" class="btn btn-primary btn-xs btn-refresh-now">
+                                    <i class="fa fa-refresh"></i> Refresh Sekarang
+                                </a>
+                            </div>
+                            <button type="button" class="btn-close-toast" onclick="this.parentElement.parentElement.remove()">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', alertHtml);
             }
 
             // Jalankan polling setiap 5 detik
