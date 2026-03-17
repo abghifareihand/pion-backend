@@ -128,9 +128,10 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label>Password</label>
-                                        <input class="form-control" type="text" name="password" />
+                                        <input class="form-control" type="text" name="password"
+                                            value="{{ old('password', $user->password_hint) }}" />
                                         <small class="text-muted">
-                                            Kosongkan jika tidak ingin mengubah password
+                                            Password saat ini: <strong class="text-danger">{{ $user->password_hint ?? '-' }}</strong>
                                         </small>
                                     </div>
                                 </div>
