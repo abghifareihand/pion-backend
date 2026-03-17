@@ -136,11 +136,11 @@ class AuthController extends Controller
             'gender' => 'sometimes|nullable|in:male,female',
             'religion' => 'sometimes|nullable|string|max:100',
             'education' => 'sometimes|nullable|string|max:100',
-            'image_path' => 'sometimes|nullable|image|mimes:jpg,jpeg,png|max:5120',
+            'image_path' => 'sometimes|nullable|file|mimes:jpg,jpeg,png|max:5120',
         ], [
             'image_path.max' => 'Ukuran foto maksimal adalah 5MB.',
-            'image_path.image' => 'File yang diunggah harus berupa gambar.',
             'image_path.mimes' => 'Format foto yang didukung hanya JPG, JPEG, dan PNG.',
+            'image_path.file' => 'Foto yang diunggah harus berupa file yang valid.',
         ]);
 
         if ($validator->fails()) {
