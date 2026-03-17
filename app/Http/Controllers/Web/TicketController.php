@@ -124,7 +124,7 @@ class TicketController extends Controller
         if ($user && !empty($user->fcm_token)) {
             $this->firebase->sendToTokens(
             [$user->fcm_token],
-                'Tiket #' . $ticket->ticket_number,
+                'Pesan',
                 'Admin: ' . Str::limit($request->message, 50),
             [
                 'id' => (string)$ticket->id,
@@ -158,7 +158,7 @@ class TicketController extends Controller
         if ($user && !empty($user->fcm_token)) {
             $this->firebase->sendToTokens(
             [$user->fcm_token],
-                'Tiket #' . $ticket->ticket_number, // TITLE
+                'Pesan',
                 'Admin telah menanggapi: ' . Str::limit($request->admin_response, 50), // BODY
             [
                 'id' => (string)$ticket->id,
