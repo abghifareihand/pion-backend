@@ -216,7 +216,7 @@
     <div class="ticket-header" style="margin-top: 15px;">
         <h3 style="text-align: center; text-transform: uppercase;">
             @if ($ticket->type == 'report')
-                Pesan
+                Pengaduan
             @elseif($ticket->type == 'question')
                 Pertanyaan
             @elseif($ticket->type == 'suggestion')
@@ -243,7 +243,7 @@
                 <td>:</td>
                 <td>
                     @if ($ticket->type == 'report')
-                        Laporan
+                        Pengaduan
                     @elseif($ticket->type == 'question')
                         Pertanyaan
                     @elseif($ticket->type == 'suggestion')
