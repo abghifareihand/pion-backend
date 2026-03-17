@@ -23,7 +23,16 @@ class TicketController extends Controller
 
     public function index()
     {
-        $tickets = Ticket::with('user')->latest()->get();
+        // Ambil ticket dengan hitungan reply yang belum dibaca (is_read = false) dari sisi user (role user)
+        $tickets = Ticket::with(['user'])
+            ->withCount(['replies as unread_count' => function ($query) {
+                $query->where('is_read', false)
+                    ->whereHas('user', function ($q) {
+                        $q->where('role', 'user');
+                    });
+            }])
+            ->latest()
+            ->get();
         return view('pages.tickets.index', compact('tickets'));
     }
 
@@ -35,6 +44,14 @@ class TicketController extends Controller
 
     public function edit(Ticket $ticket)
     {
+        // Tandai semua pesan dari user (bukan admin) sebagai terbaca
+        $ticket->replies()
+            ->where('is_read', false)
+            ->whereHas('user', function ($query) {
+                $query->where('role', 'user');
+            })
+            ->update(['is_read' => true]);
+
         return view('pages.tickets.edit', compact('ticket'));
     }
 
@@ -166,5 +183,26 @@ class TicketController extends Controller
         $pdf->setPaper('a4', 'portrait');
 
         return $pdf->stream('Laporan-Tiket-' . $ticket->ticket_number . '.pdf');
+    }
+
+    public function getUnreadData()
+    {
+        $tickets = Ticket::withCount(['replies as unread_count' => function ($query) {
+            $query->where('is_read', false)
+                ->whereHas('user', function ($q) {
+                    $q->where('role', 'user');
+                });
+        }])->get(['id', 'status']);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $tickets->map(function ($ticket) {
+                return [
+                    'id' => $ticket->id,
+                    'unread_count' => $ticket->unread_count,
+                    'status' => $ticket->status,
+                ];
+            })
+        ]);
     }
 }

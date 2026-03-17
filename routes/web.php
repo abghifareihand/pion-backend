@@ -136,6 +136,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Tickets Routes
     Route::prefix('tickets')->name('tickets.')->group(function () {
+        Route::get('/unread-data', [TicketController::class, 'getUnreadData'])->name('unread.data');
         Route::get('/', [TicketController::class, 'index'])->name('index');
         Route::get('/{ticket}', [TicketController::class, 'show'])->name('show');
         Route::get('/{ticket}/edit', [TicketController::class, 'edit'])->name('edit');

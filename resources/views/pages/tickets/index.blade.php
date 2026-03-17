@@ -63,9 +63,18 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($tickets as $ticket)
-                                            <tr>
+                                            <tr id="ticket-row-{{ $ticket->id }}">
                                                 <td class="dt-col-no">{{ $loop->iteration }}</td>
-                                                <td>{{ $ticket->user->name }}</td>
+                                                <td>
+                                                    {{ $ticket->user->name }}
+                                                    <span id="unread-badge-container-{{ $ticket->id }}">
+                                                        @if ($ticket->unread_count > 0)
+                                                            <span class="badge rounded-pill bg-danger ms-1" style="font-size: 10px;">
+                                                                {{ $ticket->unread_count }} Pesan Baru
+                                                            </span>
+                                                        @endif
+                                                    </span>
+                                                </td>
 
                                                 {{-- Badge untuk TYPE --}}
                                                 <td>
@@ -80,7 +89,7 @@
 
 
                                                 {{-- Badge untuk STATUS --}}
-                                                <td>
+                                                <td id="status-container-{{ $ticket->id }}">
                                                     @switch($ticket->status)
                                                         @case('pending')
                                                             <span class="badge badge-pending">Pending</span>
@@ -205,5 +214,62 @@
 
         <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>
+
+        <script>
+            // Polling untuk update status dan unread count secara real-time
+            function fetchUnreadData() {
+                fetch("{{ route('tickets.unread.data') }}")
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.status === 'success') {
+                            result.data.forEach(ticket => {
+                                // 1. Update Unread Badge
+                                const badgeContainer = document.getElementById(`unread-badge-container-${ticket.id}`);
+                                if (badgeContainer) {
+                                    if (ticket.unread_count > 0) {
+                                        badgeContainer.innerHTML = `
+                                            <span class="badge rounded-pill bg-danger ms-1" style="font-size: 10px;">
+                                                ${ticket.unread_count} Pesan Baru
+                                            </span>
+                                        `;
+                                    } else {
+                                        badgeContainer.innerHTML = '';
+                                    }
+                                }
+
+                                // 2. Update Status Badge
+                                const statusContainer = document.getElementById(`status-container-${ticket.id}`);
+                                if (statusContainer) {
+                                    let statusHtml = '';
+                                    switch (ticket.status) {
+                                        case 'pending':
+                                            statusHtml = '<span class="badge badge-pending">Pending</span>';
+                                            break;
+                                        case 'responded':
+                                            statusHtml = '<span class="badge badge-responded">Responded</span>';
+                                            break;
+                                        case 'processed':
+                                            statusHtml = '<span class="badge badge-processed">Processed</span>';
+                                            break;
+                                        case 'done':
+                                            statusHtml = '<span class="badge badge-done">Done</span>';
+                                            break;
+                                        case 'rejected':
+                                            statusHtml = '<span class="badge badge-rejected">Rejected</span>';
+                                            break;
+                                    }
+                                    if (statusHtml && statusContainer.innerHTML !== statusHtml) {
+                                        statusContainer.innerHTML = statusHtml;
+                                    }
+                                }
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error fetching unread data:', error));
+            }
+
+            // Jalankan polling setiap 5 detik
+            setInterval(fetchUnreadData, 5000);
+        </script>
     @endpush
 @endsection
