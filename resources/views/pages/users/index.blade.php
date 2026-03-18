@@ -137,10 +137,10 @@
 
                                                 <td>{{ $user->name }}</td>
 
-                                                <td>{{ $user->nik_ktp }}</td>
+                                                <td>{{ $user->nik_ktp ?? '-' }}</td>
                                                 <td>{{ $user->nik_karyawan }}</td>
                                                 <td>{{ $user->kta_number ?? '-' }}</td>
-                                                <td>{{ $user->department ?? '-' }}</td>
+                                                <td>{{ $user->department }}</td>
                                                 <td>{{ $user->joint_date ? \Carbon\Carbon::parse($user->joint_date)->format('d-m-Y') : '-' }}
                                                 <td>
                                                     @if ($user->gender == 'male')
@@ -155,7 +155,7 @@
                                                 <td>{{ $user->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('d-m-Y') : '-' }}
                                                 </td>
 
-                                                <td>{{ $user->phone }}</td>
+                                                <td>{{ $user->phone ?? '-' }}</td>
 
                                                 <td>
                                                     <!-- Edit button -->
