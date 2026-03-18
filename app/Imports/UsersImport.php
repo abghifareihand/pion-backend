@@ -77,15 +77,15 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation
 
         return new User([
             'name' => $row['nama'],
-            'nik_ktp' => (string)($row['ktp'] ?? ''),
+            'nik_ktp' => $row['ktp'] ?? null,
             'nik_karyawan' => (string)($row['nik'] ?? ''),
-            'username' => (string)($row['ktp'] ?? ''),
-            'kta_number' => (string)($row['kta'] ?? ''),
-            'barcode_number' => (string)($row['barcode'] ?? ''),
+            'username' => $row['ktp'] ?? null,
+            'kta_number' => $row['kta'] ?? null,
+            'barcode_number' => $row['barcode'] ?? null,
             'email' => $row['email'] ?? null,
             'department' => $row['bagian'] ?? null,
-            'phone' => (string)$phone,
-            'birth_place' => $row['tempat_lahir'] ?? null, // Tempat lahir was removed from template as per header list
+            'phone' => $phone ? (string)$phone : null,
+            'birth_place' => $row['tempat_lahir'] ?? null,
             'birth_date' => $birthDate,
             'joint_date' => $jointDate,
             'gender' => $gender,
