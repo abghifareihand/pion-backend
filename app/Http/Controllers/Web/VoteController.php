@@ -96,7 +96,7 @@ class VoteController extends Controller
     {
         // Hitung suara per opsi secara otomatis dan load relasi user (kandidat)
         $vote->load(['options' => function ($query) {
-            $query->with(['user'])->withCount('results')->orderBy('results_count', 'desc');
+            $query->with(['user'])->withCount('results')->orderBy('label', 'asc');
         }]);
 
         return view('pages.votes.show', compact('vote'));
@@ -105,7 +105,7 @@ class VoteController extends Controller
     public function getResults(Vote $vote)
     {
         $vote->load(['options' => function ($query) {
-            $query->withCount('results')->orderBy('results_count', 'desc');
+            $query->withCount('results')->orderBy('label', 'asc');
         }]);
 
         $totalVotesCount = $vote->options->sum('results_count');
