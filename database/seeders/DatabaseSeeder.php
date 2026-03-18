@@ -60,6 +60,7 @@ class DatabaseSeeder extends Seeder
                     'department' => 'Staff Operasional',
                     'birth_place' => fake()->randomElement(['Jakarta', 'Bandung', 'Surabaya', 'Medan', 'Semarang', 'Palembang']),
                     'birth_date' => fake()->date('Y-m-d', '2000-01-01'),
+                    'joint_date' => fake()->dateTimeBetween('2023-01-01', '2025-12-31')->format('Y-m-d'),
                     'address' => $u['address'],
                     'gender' => ($index % 2 == 0) ? 'male' : 'female',
                     'religion' => fake()->randomElement(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha']),

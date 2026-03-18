@@ -157,19 +157,26 @@
                         <div class="d-flex justify-content-end gap-2 mt-2">
                             <a href="{{ route('members.pdf', $member->id) }}" class="btn btn-primary px-4"
                                 target="_blank">
-                                <i class="fa fa-file-text me-2"></i> Preview PDF
+                                <i class="fa fa-file-text me-2"></i> Lihat PDF
                             </a>
 
                             @if ($member->status == 'pending')
+                                <form action="{{ route('members.reject', $member->id) }}" method="POST" id="rejectForm">
+                                    @csrf
+                                    <button type="button" class="btn btn-danger px-4" onclick="confirmReject()">
+                                        <i class="fa fa-times me-2"></i> Tolak
+                                    </button>
+                                </form>
+
                                 <form action="{{ route('members.approve', $member->id) }}" method="POST" id="approveForm">
                                     @csrf
                                     <button type="button" class="btn btn-success px-4" onclick="confirmApprove()">
-                                        <i class="fa fa-check me-2"></i> Setujui & Buat Akun
+                                        <i class="fa fa-check me-2"></i> Setujui
                                     </button>
                                 </form>
                             @else
                                 <button class="btn btn-info px-4" disabled>
-                                    <i class="fa fa-check me-2"></i> Member Sudah Aktif
+                                    <i class="fa fa-info-circle me-2"></i> Status : {{ ucfirst($member->status) }}
                                 </button>
                             @endif
                         </div>
@@ -186,7 +193,7 @@
                 Swal.fire({
                     title: 'Konfirmasi Persetujuan',
                     html: "Member akan dibuatkan akun otomatis dengan <br> Password: <strong class='text-danger'>password123</strong> dan PIN: <strong class='text-danger'>123456</strong>",
-                    icon: 'question',
+                    icon: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#28a745',
                     cancelButtonColor: '#6c757d',
@@ -196,6 +203,24 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         document.getElementById('approveForm').submit();
+                    }
+                })
+            }
+
+            function confirmReject() {
+                Swal.fire({
+                    title: 'Konfirmasi Penolakan',
+                    text: 'Apakah Anda yakin ingin menolak pendaftaran member ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, Tolak!',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('rejectForm').submit();
                     }
                 })
             }

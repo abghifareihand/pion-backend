@@ -34,7 +34,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'nik_ktp' => 'required|string|max:255|unique:users,nik_ktp',
+            'nik_ktp' => 'nullable|string|max:255|unique:users,nik_ktp',
             'nik_karyawan' => 'required|string|max:255|unique:users,nik_karyawan',
             'kta_number' => 'required|string|max:255|unique:users,kta_number',
             'barcode_number' => 'required|string|max:255|unique:users,barcode_number',
@@ -43,6 +43,7 @@ class UserController extends Controller
             'department' => 'nullable|string',
             'birth_place' => 'nullable|string',
             'birth_date' => 'nullable|date_format:d/m/Y',
+            'joint_date' => 'nullable|date_format:d/m/Y',
             'gender' => 'nullable|in:male,female',
             'religion' => 'nullable|string',
             'education' => 'nullable|string',
@@ -51,7 +52,6 @@ class UserController extends Controller
             'password' => 'required|string|min:6',
         ], [
             'name.required' => 'Nama wajib diisi.',
-            'nik_ktp.required' => 'NIK KTP wajib diisi.',
             'nik_ktp.unique' => 'NIK KTP sudah digunakan.',
             'nik_karyawan.required' => 'NIK Karyawan wajib diisi.',
             'nik_karyawan.unique' => 'NIK Karyawan sudah digunakan.',
@@ -64,6 +64,7 @@ class UserController extends Controller
         ]);
 
         $birthDate = $request->birth_date ?\Carbon\Carbon::createFromFormat('d/m/Y', $request->birth_date)->format('Y-m-d') : null;
+        $jointDate = $request->joint_date ?\Carbon\Carbon::createFromFormat('d/m/Y', $request->joint_date)->format('Y-m-d') : null;
 
         User::create([
             'name' => $request->name,
@@ -77,6 +78,7 @@ class UserController extends Controller
             'department' => $request->department,
             'birth_place' => $request->birth_place,
             'birth_date' => $birthDate,
+            'joint_date' => $jointDate,
             'gender' => $request->gender,
             'religion' => $request->religion,
             'education' => $request->education,
@@ -114,6 +116,7 @@ class UserController extends Controller
             'department' => 'nullable|string',
             'birth_place' => 'nullable|string',
             'birth_date' => 'nullable|date_format:d/m/Y',
+            'joint_date' => 'nullable|date_format:d/m/Y',
             'gender' => 'nullable|in:male,female',
             'religion' => 'nullable|string',
             'education' => 'nullable|string',
@@ -122,7 +125,6 @@ class UserController extends Controller
             'password' => 'nullable|string|min:6',
         ], [
             'name.required' => 'Nama wajib diisi.',
-            'nik_ktp.required' => 'NIK KTP wajib diisi.',
             'nik_ktp.unique' => 'NIK KTP sudah digunakan.',
             'nik_karyawan.required' => 'NIK Karyawan wajib diisi.',
             'nik_karyawan.unique' => 'NIK Karyawan sudah digunakan.',
@@ -136,6 +138,7 @@ class UserController extends Controller
 
         // Update data profil
         $birthDate = $request->birth_date ?\Carbon\Carbon::createFromFormat('d/m/Y', $request->birth_date)->format('Y-m-d') : null;
+        $jointDate = $request->joint_date ?\Carbon\Carbon::createFromFormat('d/m/Y', $request->joint_date)->format('Y-m-d') : null;
 
         $user->fill([
             'name' => $request->name,
@@ -148,6 +151,7 @@ class UserController extends Controller
             'department' => $request->department,
             'birth_place' => $request->birth_place,
             'birth_date' => $birthDate,
+            'joint_date' => $jointDate,
             'gender' => $request->gender,
             'religion' => $request->religion,
             'education' => $request->education,

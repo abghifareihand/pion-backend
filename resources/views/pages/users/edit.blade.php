@@ -72,8 +72,7 @@
                                 <label>NIK KTP</label>
                                 <input class="form-control" type="text" name="nik_ktp"
                                     value="{{ old('nik_ktp', $user->nik_ktp) }}" maxlength="20" pattern="\d*"
-                                    inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                    required />
+                                    inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
                             </div>
 
                             <!-- Input NIK Karyawan -->
@@ -126,6 +125,18 @@
                                     value="{{ old('email', $user->email) }}" />
                             </div>
 
+                            <!-- Input Tanggal Join -->
+                            <div class="mb-3">
+                                <label>Tanggal Join</label>
+                                <div class="input-group">
+                                    <input class="birth-datepicker form-control" type="text" name="joint_date"
+                                        value="{{ old('joint_date', $user->joint_date ? \Carbon\Carbon::parse($user->joint_date)->format('d/m/Y') : '') }}"
+                                        autocomplete="off" placeholder="-- Pilih Tanggal Join --"
+                                        style="cursor: pointer;" />
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+
                             <!-- Input Jenis Kelamin -->
                             <div class="mb-3">
                                 <label>Jenis Kelamin</label>
@@ -157,6 +168,7 @@
                                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                 </div>
                             </div>
+
 
                             <!-- Input Agama -->
                             <div class="mb-3">

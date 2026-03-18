@@ -94,6 +94,7 @@ class MemberRegistrationController extends Controller
             'department'    => $member->department,
             'birth_place'   => $member->birth_place,
             'birth_date'    => $member->birth_date,
+            'joint_date'    => now()->format('Y-m-d'),
             'address'       => $member->address,
             'gender'        => $member->gender,
             'religion'      => $member->religion,
@@ -141,5 +142,20 @@ class MemberRegistrationController extends Controller
 
         // 5. Stream ke browser
         return $pdf->stream('Laporan-Pendaftaran-' . $member->nik_ktp . '.pdf');
+    }
+
+    public function reject(MemberRegistration $member)
+    {
+        $member->update([
+            'status' => 'rejected'
+        ]);
+
+        return redirect()->route('members.index')->with('success', 'Pendaftaran member berhasil ditolak.');
+    }
+
+    public function destroy(MemberRegistration $member)
+    {
+        $member->delete();
+        return redirect()->route('members.index')->with('success', 'Data registrasi member berhasil dihapus.');
     }
 }

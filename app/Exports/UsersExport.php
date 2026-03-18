@@ -105,7 +105,7 @@ class UsersExport extends DefaultValueBinder implements FromCollection, WithHead
             (string)$user->nik_karyawan,
             (string)$user->kta_number,
             $user->name,
-            $user->created_at ? $user->created_at->translatedFormat('d F Y') : '-',
+            $user->joint_date ?\Carbon\Carbon::parse($user->joint_date)->format('d-m-Y') : '-',
             (string)$user->nik_ktp,
             $user->address,
             $user->birth_place,

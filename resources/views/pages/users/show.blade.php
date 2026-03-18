@@ -39,7 +39,7 @@
                         <div class="mb-3">
                             <label>NIK KTP</label>
                             <div class="form-control-plaintext py-0">
-                                {{ $user->nik_ktp }}
+                                {{ $user->nik_ktp ?? '-' }}
                             </div>
                         </div>
 
@@ -79,12 +79,20 @@
                         </div>
 
                         <div class="mb-3">
+                            <label>Tanggal Join</label>
+                            <div class="form-control-plaintext py-0">
+                                {{ $user->joint_date ? \Carbon\Carbon::parse($user->joint_date)->translatedFormat('j F Y') : '-' }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
                             <label>Tempat, Tanggal Lahir</label>
                             <div class="form-control-plaintext py-0">
                                 {{ $user->birth_place ?? '-' }},
                                 {{ $user->birth_date ? \Carbon\Carbon::parse($user->birth_date)->translatedFormat('j F Y') : '-' }}
                             </div>
                         </div>
+
 
                         <div class="mb-3">
                             <label>Jenis Kelamin</label>

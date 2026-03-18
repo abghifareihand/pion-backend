@@ -56,7 +56,7 @@
                                             <th>Jenis Kelamin</th>
                                             <th>Status</th>
                                             <th>Pendaftar</th>
-                                            <th>Tanggal Daftar</th>
+                                            <th>Tanggal Registrasi</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -111,6 +111,17 @@
                                                         class="btn btn-primary btn-xs">
                                                         Cetak PDF
                                                     </a>
+
+                                                    <!-- Delete button -->
+                                                    @if($member->status == 'approved' || $member->status == 'rejected')
+                                                        <a href="#" class="btn btn-danger btn-xs"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#deleteModal"
+                                                            data-action="{{ route('members.destroy', $member->id) }}"
+                                                            data-name="{{ $member->name }}">
+                                                            Hapus
+                                                        </a>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

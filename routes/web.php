@@ -154,6 +154,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{member}/edit', [MemberRegistrationController::class, 'edit'])->name('edit');
         Route::put('/{member}', [MemberRegistrationController::class, 'update'])->name('update');
         Route::post('/{member}/approve', [MemberRegistrationController::class, 'approve'])->name('approve');
+        Route::post('/{member}/reject', [MemberRegistrationController::class, 'reject'])->name('reject');
+        Route::delete('/{member}', [MemberRegistrationController::class, 'destroy'])->name('destroy');
         Route::get('/{member}/pdf-preview', [MemberRegistrationController::class, 'previewPdf'])->name('pdf');
     });
 

@@ -122,11 +122,11 @@
                                             <th>NIK Karyawan</th>
                                             <th>KTA</th>
                                             <th>Departemen</th>
+                                            <th>Tanggal Join</th>
                                             <th>Jenis Kelamin</th>
                                             <th>Tempat Lahir</th>
                                             <th>Tanggal Lahir</th>
                                             <th>No Telepon</th>
-                                            <th>Tanggal Daftar</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -141,6 +141,7 @@
                                                 <td>{{ $user->nik_karyawan }}</td>
                                                 <td>{{ $user->kta_number ?? '-' }}</td>
                                                 <td>{{ $user->department ?? '-' }}</td>
+                                                <td>{{ $user->joint_date ? \Carbon\Carbon::parse($user->joint_date)->format('d-m-Y') : '-' }}
                                                 <td>
                                                     @if ($user->gender == 'male')
                                                         <span class="badge badge-male">Laki-laki</span>
@@ -155,7 +156,6 @@
                                                 </td>
 
                                                 <td>{{ $user->phone }}</td>
-                                                <td>{{ $user->created_at->format('d/m/y H:i') }}</td>
 
                                                 <td>
                                                     <!-- Edit button -->

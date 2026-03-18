@@ -56,14 +56,30 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation
             $gender = (str_contains($val, 'laki')) ? 'male' : 'female';
         }
 
+        // --- Proses Joint Date ---
+        $jointDate = null;
+        if (!empty($row['joint_date'])) {
+            try {
+                if (is_numeric($row['joint_date'])) {
+                    $jointDate = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['joint_date']))->format('Y-m-d');
+                }
+                else {
+                    $jointDate = Carbon::parse($row['joint_date'])->format('Y-m-d');
+                }
+            }
+            catch (\Exception $e) {
+                $jointDate = null;
+            }
+        }
+
         // --- Proses Nomor Telepon ---
         $phone = $row['no_telepon'] ?? $row['no_telp_wa'] ?? null;
 
         return new User([
             'name' => $row['nama'],
-            'nik_ktp' => (string)$row['ktp'],
+            'nik_ktp' => (string)($row['ktp'] ?? ''),
             'nik_karyawan' => (string)($row['nik'] ?? ''),
-            'username' => (string)$row['ktp'],
+            'username' => (string)($row['ktp'] ?? ''),
             'kta_number' => (string)($row['kta'] ?? ''),
             'barcode_number' => (string)($row['barcode'] ?? ''),
             'email' => $row['email'] ?? null,
@@ -71,6 +87,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation
             'phone' => (string)$phone,
             'birth_place' => $row['tempat_lahir'] ?? null, // Tempat lahir was removed from template as per header list
             'birth_date' => $birthDate,
+            'joint_date' => $jointDate,
             'gender' => $gender,
             'religion' => $row['agama'] ?? null,
             'education' => $row['pendidikan'] ?? null,
@@ -90,18 +107,43 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation
          * rules ini tidak dijalankan untuk baris tersebut.
          */
         return [
+            'nik' => 'sometimes|required',
+            'kta' => 'sometimes|required',
             'nama' => 'sometimes|required|string|max:255',
-            'ktp' => 'sometimes|required',
+            'ktp' => 'sometimes|nullable|string|max:255',
+            'alamat' => 'sometimes|required',
+            'tempat_lahir' => 'sometimes|required',
+            'tanggal_lahir' => 'sometimes|required',
+            'joint_date' => 'sometimes|required',
+            'jenis_kelamin' => 'sometimes|required',
+            'bagian' => 'sometimes|required',
+            'agama' => 'sometimes|required',
+            'email' => 'sometimes|nullable',
+            'pendidikan' => 'sometimes|required',
+            'no_telepon' => 'sometimes|nullable',
+            'barcode' => 'sometimes|required',
             'pin' => 'sometimes|required',
+            'password' => 'sometimes|required',
         ];
     }
 
     public function customValidationMessages()
     {
         return [
-            'nama.required' => 'Baris :index: NAMA wajib diisi.',
-            'ktp.required' => 'Baris :index: KTP wajib diisi.',
-            'pin.required' => 'Baris :index: PIN wajib diisi.',
+            'nik.required' => 'NIK wajib diisi.',
+            'kta.required' => 'KTA wajib diisi.',
+            'nama.required' => 'NAMA wajib diisi.',
+            'alamat.required' => 'ALAMAT wajib diisi.',
+            'tempat_lahir.required' => 'TEMPAT LAHIR wajib diisi.',
+            'tanggal_lahir.required' => 'TANGGAL LAHIR wajib diisi.',
+            'joint_date.required' => 'JOINT DATE wajib diisi.',
+            'jenis_kelamin.required' => 'JENIS KELAMIN wajib diisi.',
+            'bagian.required' => 'BAGIAN wajib diisi.',
+            'agama.required' => 'AGAMA wajib diisi.',
+            'pendidikan.required' => 'PENDIDIKAN wajib diisi.',
+            'barcode.required' => 'BARCODE wajib diisi.',
+            'pin.required' => 'PIN wajib diisi.',
+            'password.required' => 'PASSWORD wajib diisi.',
         ];
     }
 }

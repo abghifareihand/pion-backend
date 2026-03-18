@@ -38,34 +38,17 @@ class UserTemplateExport extends DefaultValueBinder implements FromCollection, W
      */
     public function collection()
     {
-        return collect([
-            [
-                '2024001',                       // NIK
-                '12345001',                      // KTA
-                'John Doe',                      // NAMA
-                '1234567890123456',              // KTP
-                'Jl. Mawar No. 123, Jakarta',   // ALAMAT
-                'Jakarta',                       // TEMPAT LAHIR
-                '01-01-1990',                    // TANGGAL LAHIR
-                'Laki-Laki',                     // JENIS KELAMIN
-                'IT Department',                 // BAGIAN
-                'Islam',                         // AGAMA
-                'john@example.com',              // EMAIL
-                'S1',                            // PENDIDIKAN
-                '081234567890',                  // NO TELEPON
-                '123456789',                     // BARCODE
-                '123456',                        // PIN (6 Digit)
-                'password123'                    // PASSWORD
-            ]
-        ]);
+        return collect([]);
     }
 
     public function headings(): array
     {
         return [
+            'NO',
             'NIK',
             'KTA',
             'NAMA',
+            'JOINT DATE',
             'KTP',
             'ALAMAT',
             'TEMPAT LAHIR',
@@ -85,22 +68,24 @@ class UserTemplateExport extends DefaultValueBinder implements FromCollection, W
     public function columnWidths(): array
     {
         return [
-            'A' => 20, // NIK
-            'B' => 20, // KTA
-            'C' => 35, // NAMA
-            'D' => 20, // KTP
-            'E' => 80, // ALAMAT
-            'F' => 20, // TEMPAT LAHIR
-            'G' => 20, // TANGGAL LAHIR
-            'H' => 20, // JENIS KELAMIN
-            'I' => 25, // BAGIAN
-            'J' => 15, // AGAMA
-            'K' => 30, // EMAIL
-            'L' => 15, // PENDIDIKAN
-            'M' => 20, // NO TELEPON
-            'N' => 20, // BARCODE
-            'O' => 10, // PIN
-            'P' => 25, // PASSWORD
+            'A' => 5,  // NO
+            'B' => 20, // NIK
+            'C' => 20, // KTA
+            'D' => 35, // NAMA
+            'E' => 20, // JOINT DATE
+            'F' => 20, // KTP
+            'G' => 80, // ALAMAT
+            'H' => 20, // TEMPAT LAHIR
+            'I' => 20, // TANGGAL LAHIR
+            'J' => 20, // JENIS KELAMIN
+            'K' => 25, // BAGIAN
+            'L' => 15, // AGAMA
+            'M' => 30, // EMAIL
+            'N' => 15, // PENDIDIKAN
+            'O' => 20, // NO TELEPON
+            'P' => 20, // BARCODE
+            'Q' => 10, // PIN
+            'R' => 25, // PASSWORD
         ];
     }
 
@@ -111,7 +96,7 @@ class UserTemplateExport extends DefaultValueBinder implements FromCollection, W
                 $sheet = $event->sheet->getDelegate();
 
                 // Style Header (Baris 1)
-                $headerRange = 'A1:P1';
+                $headerRange = 'A1:R1';
                 $sheet->getStyle($headerRange)->applyFromArray([
                     'font' => [
                         'bold' => true,
@@ -127,44 +112,48 @@ class UserTemplateExport extends DefaultValueBinder implements FromCollection, W
                 $sheet->getRowDimension(1)->setRowHeight(-1);
 
                 // Format kolom numerik sebagai TEXT agar angka panjang tidak berubah
-                // A: NIK, B: KTA, D: KTP, M: NO TELEPON, N: BARCODE, O: PIN
-                $sheet->getStyle('A2:B1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
-                $sheet->getStyle('D2:D1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
-                $sheet->getStyle('M2:O1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+                // B: NIK, C: KTA, F: KTP, O: NO TELEPON, P: BARCODE, Q: PIN
+                $sheet->getStyle('B2:C1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+                $sheet->getStyle('F2:F1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+                $sheet->getStyle('O2:Q1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
 
-                // Format TANGGAL LAHIR (G) sebagai TEXT agar tidak diubah Excel
-                $sheet->getStyle('G2:G1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+                // Format TANGGAL LAHIR (I) dan JOINT DATE (E) sebagai TEXT agar tidak diubah Excel
+                $sheet->getStyle('E2:E1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+                $sheet->getStyle('I2:I1000')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
 
                 // Rata kiri untuk semua data
-                $sheet->getStyle('A2:P1000')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+                $sheet->getStyle('A2:R1000')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
 
-                // Validasi NIK (Kolom A - Wajib Angka)
-                $nikValidation = $this->createNumericOnlyValidation('A', 'NIK harus berupa angka');
-                $sheet->setDataValidation('A2:A1000', $nikValidation);
+                // Kolom NO (A) rata tengah
+                $sheet->getStyle('A2:A1000')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-                // Validasi KTA (Kolom B - Wajib Angka)
-                $ktaValidation = $this->createNumericOnlyValidation('B', 'KTA harus berupa angka');
-                $sheet->setDataValidation('B2:B1000', $ktaValidation);
+                // Validasi NIK (Kolom B - Wajib Angka)
+                $nikValidation = $this->createNumericOnlyValidation('B', 'NIK harus berupa angka');
+                $sheet->setDataValidation('B2:B1000', $nikValidation);
 
-                // Validasi KTP (Kolom D - Wajib Angka)
-                $ktpValidation = $this->createNumericOnlyValidation('D', 'KTP harus berupa angka');
-                $sheet->setDataValidation('D2:D1000', $ktpValidation);
+                // Validasi KTA (Kolom C - Wajib Angka)
+                $ktaValidation = $this->createNumericOnlyValidation('C', 'KTA harus berupa angka');
+                $sheet->setDataValidation('C2:C1000', $ktaValidation);
 
-                // Validasi PIN (Kolom O - Harus 6 Karakter & Angka)
-                $pinValidation = $this->createCustomLengthValidation('O', 6, 'PIN harus 6 digit angka', true);
-                $sheet->setDataValidation('O2:O1000', $pinValidation);
+                // Validasi KTP (Kolom F - Angka)
+                $ktpValidation = $this->createNumericOnlyValidation('F', 'KTP harus berupa angka');
+                $sheet->setDataValidation('F2:F1000', $ktpValidation);
 
-                // Gender Dropdown (Kolom H - JENIS KELAMIN)
+                // Validasi PIN (Kolom Q - Harus 6 Karakter & Angka)
+                $pinValidation = $this->createCustomLengthValidation('Q', 6, 'PIN harus 6 digit angka', true);
+                $sheet->setDataValidation('Q2:Q1000', $pinValidation);
+
+                // Gender Dropdown (Kolom J - JENIS KELAMIN)
                 $genders = '"Laki-Laki,Perempuan"';
-                $sheet->setDataValidation('H2:H1000', $this->createValidation($genders));
+                $sheet->setDataValidation('J2:J1000', $this->createValidation($genders));
 
-                // Religion Dropdown (Kolom J - AGAMA)
+                // Religion Dropdown (Kolom L - AGAMA)
                 $religions = '"Islam,Kristen,Katolik,Hindu,Buddha,Khonghucu,Lainnya"';
-                $sheet->setDataValidation('J2:J1000', $this->createValidation($religions));
+                $sheet->setDataValidation('L2:L1000', $this->createValidation($religions));
 
-                // Education Dropdown (Kolom L - PENDIDIKAN)
+                // Education Dropdown (Kolom N - PENDIDIKAN)
                 $educations = '"SD,SMP,SMA/SMK,D3,S1,S2,S3"';
-                $sheet->setDataValidation('L2:L1000', $this->createValidation($educations));
+                $sheet->setDataValidation('N2:N1000', $this->createValidation($educations));
             },
         ];
     }
