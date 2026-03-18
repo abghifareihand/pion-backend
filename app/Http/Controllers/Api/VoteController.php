@@ -103,6 +103,7 @@ class VoteController extends Controller
                     'nik_ktp' => $candidate->nik_ktp,
                     'nik_karyawan' => $candidate->nik_karyawan,
                     'department' => $candidate->department,
+                    'email' => $candidate->email,
                     'phone' => $candidate->phone,
                     'birth_place' => $candidate->birth_place,
                     'birth_date' => $candidate->birth_date,
@@ -122,9 +123,10 @@ class VoteController extends Controller
                 'id' => $vote->id,
                 'title' => $vote->title,
                 'description' => $vote->description,
-                'results_count' => (int)$vote->results_count,
+                'total_votes_count' => (int)$vote->results_count,
+                'total_eligible_users' => (int)$totalUsers,
                 'is_voted' => $vote->is_voted,
-                'participation_percentage' => $vote->participation_percentage,
+                'participation_percentage' => (float)$vote->participation_percentage,
                 'options' => $options
             ]
         ]);
