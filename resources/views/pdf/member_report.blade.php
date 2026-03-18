@@ -227,7 +227,7 @@
         </div>
     </div>
 
-    <div class="section" style="margin-top: 70px;">
+    <div class="section" style="margin-top: 50px;">
         <div class="title-bold">
             SURAT KUASA<br>
             PEMOTONGAN UPAH UNTUK IURAN ANGGOTA<br>
@@ -267,24 +267,16 @@
 
         <p class="no-indent">Adalah anggota SP PION PT. PUNGKOOK INDONESIA GROBOGAN Berdasarkan :</p>
         <table style="margin-left: 20px;">
-            <tr>
-                <td width="20">1.</td>
-                <td>UU No. 21 Tahun 2000 Ttg SP/SB Jo. Kepmennakertrans RI No. 187/MEN/2004 Ttg Iuran Anggota SP/SB.
-                </td>
-            </tr>
-            <tr>
-                <td>2.</td>
-                <td>Bab IX Pasal 26 AD & Bab V Pasal 12 dan 13 ART. SP PION hasil Musyawarah Tahun 2018 Tentang Keuangan
-                    Organisasi SP PION.</td>
-            </tr>
+            @foreach($dasarHukum as $i => $poin)
+                <tr>
+                    <td width="20">{{ $i + 1 }}.</td>
+                    <td>{{ $poin }}</td>
+                </tr>
+            @endforeach
         </table>
 
-        <div class="content-text" margin-bottom: 5px;">
-            Dengan ini saya memberikan kuasa khusus kepada Pengurus SERIKAT PEKERJA PUNGKOOK INDONESIA GROBOGAN untuk
-            memotong upah kami masing-masing sebesar 1 % dari UMK yang berlaku pada tahun berjalan sebagai Uang pangkal
-            (pasal 12 ART) sebanyak 1 x diawal, dan iuran bulanan (pasal 13 ART) sebesar {{ $iuranNominal }} ({{ $iuranTerbilang }})
-            dibulan berikutnya sampai berakhirnya Status keanggotaan melalui bagian keuangan perusahaan PT. Pungkook
-            Indonesia Grobogan yang ditransfer ke rekening organisasi.
+        <div class="content-text" style="margin-bottom: 5px;">
+            {{ $kuasaTeks }}
         </div>
 
         <p style="text-indent: 40px; text-align: justify; margin-top: 5px;">

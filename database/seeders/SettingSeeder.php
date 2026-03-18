@@ -11,19 +11,22 @@ class SettingSeeder extends Seeder
     {
         $settings = [
             [
-                'key'   => 'iuran_bulanan_nominal',
-                'label' => 'Nominal Iuran Bulanan',
-                'value' => 'Rp 5.000,00',
-            ],
-            [
-                'key'   => 'iuran_bulanan_terbilang',
-                'label' => 'Terbilang Iuran Bulanan',
-                'value' => 'Lima Ribu Rupiah',
-            ],
-            [
                 'key'   => 'email_organisasi',
-                'label' => 'Email SP PION',
+                'label' => 'Email SP PION (Kop PDF)',
                 'value' => 'sppion18@gmail.com',
+            ],
+            [
+                'key'   => 'dasar_hukum',
+                'label' => 'Dasar Hukum (PDF Surat Kuasa)',
+                'value' => json_encode([
+                    'UU No. 21 Tahun 2000 Ttg SP/SB Jo. Kepmennakertrans RI No. 187/MEN/2004 Ttg Iuran Anggota SP/SB.',
+                    'Bab IX Pasal 26 AD & Bab V Pasal 12 dan 13 ART. SP PION hasil Musyawarah Tahun 2018 Tentang Keuangan Organisasi SP PION.',
+                ]),
+            ],
+            [
+                'key'   => 'kuasa_teks',
+                'label' => 'Teks Kuasa Pemotongan Upah (PDF Surat Kuasa)',
+                'value' => 'Dengan ini saya memberikan kuasa khusus kepada Pengurus SERIKAT PEKERJA PUNGKOOK INDONESIA GROBOGAN untuk memotong upah kami masing-masing sebesar 1 % dari UMK yang berlaku pada tahun berjalan sebagai Uang pangkal (pasal 12 ART) sebanyak 1 x diawal, dan iuran bulanan (pasal 13 ART) sebesar Rp 5.000,00 (Lima Ribu Rupiah) dibulan berikutnya sampai berakhirnya Status keanggotaan melalui bagian keuangan perusahaan PT. Pungkook Indonesia Grobogan yang ditransfer ke rekening organisasi.',
             ],
         ];
 

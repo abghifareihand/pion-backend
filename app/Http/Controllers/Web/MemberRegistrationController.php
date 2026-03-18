@@ -124,18 +124,20 @@ class MemberRegistrationController extends Controller
 
         // 2. Ambil semua setting yang dibutuhkan dalam 1 query
         $keys = [
-            Setting::IURAN_BULANAN_NOMINAL,
-            Setting::IURAN_BULANAN_TERBILANG,
-            // tambahkan key baru di sini saja jika dibutuhkan
+            Setting::EMAIL_ORGANISASI,
+            Setting::DASAR_HUKUM,
+            Setting::KUASA_TEKS,
         ];
         $settings = Setting::whereIn('key', $keys)->pluck('value', 'key');
 
-        $iuranNominal   = $settings[Setting::IURAN_BULANAN_NOMINAL]   ?? 'Rp 5.000,00';
-        $iuranTerbilang = $settings[Setting::IURAN_BULANAN_TERBILANG] ?? 'Lima Ribu Rupiah';
-        $emailOrganisasi = Setting::get(Setting::EMAIL_ORGANISASI, 'sppion18@gmail.com');
+        $emailOrganisasi = $settings[Setting::EMAIL_ORGANISASI] ?? 'sppion18@gmail.com';
+        $dasarHukum      = json_decode($settings[Setting::DASAR_HUKUM] ?? '[]', true) ?? [];
+        $kuasaTeks       = $settings[Setting::KUASA_TEKS] ?? '';
 
         // 3. Generate PDF dari view
-        $pdf = Pdf::loadView('pdf.member_report', compact('member', 'iuranNominal', 'iuranTerbilang', 'emailOrganisasi'));
+        $pdf = Pdf::loadView('pdf.member_report', compact(
+            'member', 'emailOrganisasi', 'dasarHukum', 'kuasaTeks'
+        ));
 
         // 4. Atur ukuran kertas (A4 Portrait)
         $pdf->setPaper('a4', 'portrait');

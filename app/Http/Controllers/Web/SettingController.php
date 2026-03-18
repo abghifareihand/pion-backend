@@ -21,6 +21,12 @@ class SettingController extends Controller
         ]);
 
         foreach ($request->settings as $key => $value) {
+            // Jika nilainya array (contoh: dasar_hukum), simpan sebagai JSON
+            if (is_array($value)) {
+                // Hapus item kosong
+                $value = array_values(array_filter($value, fn($v) => trim($v) !== ''));
+                $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+            }
             Setting::where('key', $key)->update(['value' => $value]);
         }
 

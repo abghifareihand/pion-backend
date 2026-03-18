@@ -40,26 +40,68 @@
                                     <div class="d-flex justify-content-between align-items-center mb-1">
                                         <label class="form-label fw-semibold mb-0">{{ $setting->label }}</label>
                                     </div>
-                                    <input
-                                        type="text"
-                                        class="form-control mb-1"
-                                        name="settings[{{ $key }}]"
-                                        value="{{ $setting->value }}"
-                                        placeholder="Masukkan nilai..."
-                                    >
-                                    <small class="text-muted italic">
+
+                                    @if ($setting->key === \App\Models\Setting::DASAR_HUKUM)
+                                        {{-- Dynamic add/remove list for Dasar Hukum --}}
+                                        @php
+                                            $poinList = json_decode($setting->value, true) ?? [];
+                                        @endphp
+                                        <div id="dasarHukumList">
+                                            @foreach($poinList as $i => $poin)
+                                                <div class="d-flex align-items-center gap-2 mb-2 dasar-hukum-row">
+                                                    <span class="badge bg-primary fs-6" style="width:32px; text-align:center; display:inline-block;">{{ $i + 1 }}</span>
+                                                    <input type="text" class="form-control"
+                                                        name="settings[dasar_hukum][]"
+                                                        value="{{ $poin }}"
+                                                        placeholder="Teks dasar hukum...">
+                                                    @if($i >= 2)
+                                                        <button type="button" class="btn btn-danger btn-sm btn-remove-poin flex-shrink-0"
+                                                            onclick="removePoin(this)" title="Hapus">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mt-2">
+                                            <small class="text-muted">
+                                                <i class="fa fa-info-circle me-1"></i>
+                                                Digunakan pada: <strong>PDF Surat Kuasa Member</strong>
+                                            </small>
+                                            <button type="button" class="btn btn-primary btn-sm"
+                                                onclick="addPoin()">
+                                                <i class="fa fa-plus me-1"></i> Tambah Poin
+                                            </button>
+                                        </div>
+
+                                    @elseif ($setting->key === \App\Models\Setting::KUASA_TEKS)
+                                        <textarea class="form-control mb-1"
+                                            name="settings[{{ $key }}]"
+                                            rows="5"
+                                            placeholder="Masukkan teks kuasa...">{{ $setting->value }}</textarea>
+
+                                    @else
+                                        <input type="text" class="form-control mb-1"
+                                            name="settings[{{ $key }}]"
+                                            value="{{ $setting->value }}"
+                                            placeholder="Masukkan nilai...">
+                                    @endif
+
+                                    @if ($setting->key !== \App\Models\Setting::DASAR_HUKUM)
+                                    <small class="text-muted">
                                         <i class="fa fa-info-circle me-1"></i>
-                                        Digunakan pada: 
+                                        Digunakan pada:
                                         <strong>
-                                            @if ($setting->key == \App\Models\Setting::IURAN_BULANAN_NOMINAL || $setting->key == \App\Models\Setting::IURAN_BULANAN_TERBILANG)
-                                                PDF Member (Surat Kuasa)
-                                            @elseif($setting->key == \App\Models\Setting::EMAIL_ORGANISASI)
+                                            @if ($setting->key === \App\Models\Setting::EMAIL_ORGANISASI)
                                                 Header Kop PDF (Member & Pesan)
+                                            @elseif ($setting->key === \App\Models\Setting::KUASA_TEKS)
+                                                PDF Surat Kuasa Member
                                             @else
                                                 Sistem
                                             @endif
                                         </strong>
                                     </small>
+                                    @endif
                                 </div>
                             @endforeach
 
@@ -75,4 +117,40 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            function addPoin() {
+                const list = document.getElementById('dasarHukumList');
+                const rows = list.querySelectorAll('.dasar-hukum-row');
+                const newIndex = rows.length + 1;
+                const div = document.createElement('div');
+                div.className = 'd-flex align-items-center gap-2 mb-2 dasar-hukum-row';
+                div.innerHTML = `
+                    <span class="badge bg-primary fs-6" style="width:32px; text-align:center; display:inline-block;">${newIndex}</span>
+                    <input type="text" class="form-control" name="settings[dasar_hukum][]"
+                        placeholder="Teks dasar hukum...">
+                    <button type="button" class="btn btn-danger btn-sm btn-remove-poin flex-shrink-0"
+                        onclick="removePoin(this)" title="Hapus">
+                        <i class="fa fa-times"></i>
+                    </button>
+                `;
+                list.appendChild(div);
+                renumberPoin();
+            }
+
+            function removePoin(btn) {
+                btn.closest('.dasar-hukum-row').remove();
+                renumberPoin();
+            }
+
+            function renumberPoin() {
+                const rows = document.querySelectorAll('#dasarHukumList .dasar-hukum-row');
+                rows.forEach((row, i) => {
+                    const badge = row.querySelector('.badge');
+                    if (badge) badge.textContent = i + 1;
+                });
+            }
+        </script>
+    @endpush
 @endsection

@@ -12,6 +12,8 @@ class Setting extends Model
     const IURAN_BULANAN_NOMINAL     = 'iuran_bulanan_nominal';
     const IURAN_BULANAN_TERBILANG   = 'iuran_bulanan_terbilang';
     const EMAIL_ORGANISASI          = 'email_organisasi';
+    const DASAR_HUKUM               = 'dasar_hukum';
+    const KUASA_TEKS                = 'kuasa_teks';
     // =========================================================
 
     protected $fillable = ['key', 'label', 'value'];
