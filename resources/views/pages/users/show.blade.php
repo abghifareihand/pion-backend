@@ -134,6 +134,23 @@
                         </div>
 
                         <hr>
+                        {{-- Kartu Tanda Anggota --}}
+                        <div class="mb-3">
+                            <label class="fw-bold text-uppercase mb-2 d-block">Kartu Tanda Anggota (KTA)</label>
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('users.kta', $user->id) }}"
+                                   target="_blank"
+                                   class="btn btn-primary btn-sm">
+                                    <i class="fa fa-eye me-1"></i> Preview KTA
+                                </a>
+                                <a href="{{ route('users.kta', $user->id) }}?mode=download"
+                                   class="btn btn-success btn-sm">
+                                    <i class="fa fa-download me-1"></i> Download KTA
+                                </a>
+                            </div>
+                        </div>
+
+                        <hr>
                         <div class="mb-2">
                             <label class="fw-bold text-uppercase mb-3">Informasi Keamanan</label>
                             <div class="row">

@@ -49,7 +49,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
         Route::put('/{user}', [UserController::class, 'update'])->name('update');
         Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
-        
+
+        // KTA Route
+        Route::get('/{user}/kta', [UserController::class, 'generateKta'])->name('kta');
+
         // Excel Routes
         Route::get('/excel/export', [UserController::class, 'export'])->name('export');
         Route::get('/excel/template', [UserController::class, 'downloadTemplate'])->name('template');

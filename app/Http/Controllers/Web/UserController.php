@@ -16,6 +16,7 @@ use App\Exports\UserTemplateExport;
 use App\Imports\UsersImport;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class UserController extends Controller
 {
@@ -206,6 +207,20 @@ class UserController extends Controller
         });
 
         return redirect()->route('users.index')->with('success', 'User dan semua data terkait berhasil dihapus.');
+    }
+
+    public function generateKta(User $user, \Illuminate\Http\Request $request)
+    {
+        $pdf = Pdf::loadView('pdf.kta', compact('user'))
+            ->setPaper([0, 0, 242.36, 317.09], 'portrait'); // 85.6mm x ~111.96mm dalam points
+
+        $filename = 'KTA_' . str_replace(' ', '_', $user->name) . '_' . ($user->kta_number ?? 'nonum') . '.pdf';
+
+        if ($request->query('mode') === 'download') {
+            return $pdf->download($filename);
+        }
+
+        return $pdf->stream($filename);
     }
 
     public function export()
