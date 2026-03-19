@@ -11,7 +11,7 @@
         @page {
             margin: 0;
             padding: 0;
-            size: 85.6mm 111.96mm;
+            size: 85.6mm 110mm; /* Pas 2 kartu atas dan bawah (109.96mm) */
         }
 
         * {
@@ -26,16 +26,30 @@
             width: 85.6mm;
         }
 
+        /* ===== WRAPPER ATAS BAWAH ===== */
+        .kta-container {
+            position: relative;
+            width: 85.6mm;
+            height: 110mm;
+            overflow: hidden;
+            display: block;
+        }
+
         /* ===== CARD WRAPPER ===== */
         .card {
-            position: relative;
+            position: absolute;
+            left: 0;
             width: 85.6mm;
             height: 53.98mm;
             overflow: hidden;
         }
 
-        .card-gap {
-            height: 4mm;
+        .card.front {
+            top: 0;
+        }
+
+        .card.back {
+            top: 55.98mm; /* 53.98mm + 2mm margin tengah */
         }
 
         .card-bg {
@@ -172,13 +186,14 @@
             position: absolute;
             bottom: 2mm;
             left: 6mm;
+            width: 32mm; /* Lebar wadah diperbesar agar barcode direntangkan lebih lebar */
             text-align: center;
         }
 
         .card-barcode img {
             display: block;
-            width: 28mm;
-            height: auto;
+            width: 100%; /* Selalu menyebar mengikuti lebar wadah */
+            height: 6mm; /* Tingginya 6mm (sesuai editanmu) */
         }
 
         /* ===== SEKRETARIAT ===== */
@@ -197,8 +212,10 @@
     Render 4 lapisan warna putih sedikit bergeser, lalu teks hitam di atas
 --}}
 
-    {{-- ===== KARTU DEPAN ===== --}}
-    <div class="card">
+    <div class="kta-container">
+
+        {{-- ===== KARTU DEPAN ===== --}}
+        <div class="card front">
         {{-- Background KTA Depan --}}
         <img class="card-bg"
              src="{{ public_path('assets/images/pion/kta_front.png') }}"
@@ -302,17 +319,16 @@
                 <span class="f">SP PION</span>
             </div>
         </div>
-    </div><!-- /.card -->
+        </div><!-- /.card.front -->
 
-    {{-- Gap antar kartu --}}
-    <div class="card-gap"></div>
-
-    {{-- ===== KARTU BELAKANG ===== --}}
-    <div class="card">
+        {{-- ===== KARTU BELAKANG ===== --}}
+        <div class="card back">
         <img class="card-bg"
              src="{{ public_path('assets/images/pion/kta_back.png') }}"
              alt="KTA Belakang">
     </div>
+
+    </div><!-- /.kta-container -->
 
 </body>
 </html>

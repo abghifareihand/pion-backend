@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class AuthController extends Controller
@@ -117,6 +118,24 @@ class AuthController extends Controller
             'message' => 'Data profil berhasil diambil',
             'data' => $data
         ]);
+    }
+
+    public function downloadKta(Request $request)
+    {
+        $user = $request->user();
+
+        // Generate KTA on-the-fly (tanpa menyimpan di storage)
+        // 85.6mm x 110.0mm (2 Kartu atas-bawah ngepas tanpa celah bawah) -> 242.64pt x 311.81pt
+        $pdf = Pdf::loadView('pdf.kta', compact('user'))
+            ->setPaper([0, 0, 242.64, 311.81], 'portrait');
+
+        $filename = 'KTA_' . str_replace(' ', '_', $user->name) . '_' . ($user->kta_number) . '.pdf';
+
+        if ($request->query('mode') === 'view') {
+            return $pdf->stream($filename);
+        }
+
+        return $pdf->download($filename);
     }
 
     public function updateProfile(Request $request)

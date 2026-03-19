@@ -211,8 +211,9 @@ class UserController extends Controller
 
     public function generateKta(User $user, \Illuminate\Http\Request $request)
     {
+        // 85.6mm x 110.0mm (2 Kartu atas-bawah ngepas tanpa celah bawah) -> 242.64pt x 311.81pt
         $pdf = Pdf::loadView('pdf.kta', compact('user'))
-            ->setPaper([0, 0, 242.36, 317.09], 'portrait'); // 85.6mm x ~111.96mm dalam points
+            ->setPaper([0, 0, 242.64, 311.81], 'portrait');
 
         $filename = 'KTA_' . str_replace(' ', '_', $user->name) . '_' . ($user->kta_number ?? 'nonum') . '.pdf';
 
