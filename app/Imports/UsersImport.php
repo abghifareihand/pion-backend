@@ -4,107 +4,156 @@ namespace App\Imports;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Illuminate\Support\Collection;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 
-class UsersImport implements ToModel, WithHeadingRow, WithValidation
+class UsersImport implements ToCollection, WithHeadingRow, WithValidation, SkipsEmptyRows, WithChunkReading
 {
     /**
-     * TRICK UTAMA: Membersihkan data sebelum divalidasi.
-     * Jika baris kosong atau baris contoh, kita gagalkan validasinya secara halus
-     * agar tidak muncul pesan error "Wajib diisi".
+     * Cache hashes to avoid repeated slow hashing of default values
      */
-    public function prepareForValidation($data, $index)
+    protected $passwordCache = [];
+
+    public function collection(Collection $rows)
     {
-        // Jika Nama atau NIK kosong, atau ini baris contoh 'John Doe', kita kembalikan array kosong
-        if (empty($data['nama']) || $data['nama'] == 'John Doe' || $data['nama'] == 'NAMA') {
-            return [];
-        }
+        // 1. Kumpulkan semua identifier (KTP, NIK, KTA) dari file untuk pengecekan bulk
+        $nikKtps = $rows->pluck('ktp')->filter()->toArray();
+        $nikKaryawans = $rows->pluck('nik')->filter()->map(function($v) {
+            return (string)$v;
+        })->toArray();
+        $ktaNumbers = $rows->pluck('kta')->filter()->toArray();
 
-        return $data;
-    }
+        // 2. Ambil data existing dari DB dalam satu query (Bulk Fetch) untuk efisiensi
+        $existingUsers = User::whereIn('nik_ktp', $nikKtps)
+            ->orWhereIn('nik_karyawan', $nikKaryawans)
+            ->orWhereIn('kta_number', $ktaNumbers)
+            ->get();
 
-    public function model(array $row)
-    {
-        // Pengamanan tambahan: jika data kosong setelah dibersihkan prepareForValidation
-        if (empty($row['nama'])) {
-            return null;
-        }
+        // Map existing untuk pencarian cepat (O(1) lookup)
+        $existingKtps = $existingUsers->pluck('nik_ktp')->filter()->flip()->toArray();
+        $existingNiks = $existingUsers->pluck('nik_karyawan')->filter()->flip()->toArray();
+        $existingKtas = $existingUsers->pluck('kta_number')->filter()->flip()->toArray();
 
-        // --- Proses Tanggal Lahir (Handle Excel Serial Date & String) ---
-        $birthDate = null;
-        if (!empty($row['tanggal_lahir'])) {
-            try {
-                if (is_numeric($row['tanggal_lahir'])) {
-                    $birthDate = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['tanggal_lahir']))->format('Y-m-d');
+        // Gunakan Transaction untuk mempercepat banyak operasi INSERT
+        DB::transaction(function () use ($rows, &$existingKtps, &$existingNiks, &$existingKtas) {
+            foreach ($rows as $row) {
+                // Skip jika nama kosong (baris kosong di bawah data)
+                if (empty($row->get('nama'))) {
+                    continue;
                 }
-                else {
-                    $birthDate = Carbon::parse($row['tanggal_lahir'])->format('Y-m-d');
+
+                // --- Check if exists in DB or already processed in this batch ---
+                $ktp = $row->get('ktp');
+                $nik = (string)($row->get('nik') ?? '');
+                $kta = $row->get('kta');
+
+                // Logika "Skip if exists"
+                if (
+                    ($ktp && isset($existingKtps[$ktp])) ||
+                    ($nik && isset($existingNiks[$nik])) ||
+                    ($kta && isset($existingKtas[$kta]))
+                ) {
+                    continue; 
                 }
-            }
-            catch (\Exception $e) {
+
+                // Tambahkan ke map "existing" agar baris duplikat di DALAM file yang sama juga ter-skip
+                if ($ktp) $existingKtps[$ktp] = true;
+                if ($nik) $existingNiks[$nik] = true;
+                if ($kta) $existingKtas[$kta] = true;
+
+                // --- Proses Tanggal Lahir ---
                 $birthDate = null;
-            }
-        }
-
-        // --- Proses Jenis Kelamin ---
-        $gender = null;
-        if (!empty($row['jenis_kelamin'])) {
-            $val = strtolower($row['jenis_kelamin']);
-            $gender = (str_contains($val, 'laki')) ? 'male' : 'female';
-        }
-
-        // --- Proses Joint Date ---
-        $jointDate = null;
-        if (!empty($row['joint_date'])) {
-            try {
-                if (is_numeric($row['joint_date'])) {
-                    $jointDate = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['joint_date']))->format('Y-m-d');
+                $tanggalLahir = $row->get('tanggal_lahir');
+                if (!empty($tanggalLahir)) {
+                    try {
+                        if (is_numeric($tanggalLahir)) {
+                            $birthDate = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tanggalLahir))->format('Y-m-d');
+                        } else {
+                            $birthDate = Carbon::parse($tanggalLahir)->format('Y-m-d');
+                        }
+                    } catch (\Exception $e) {
+                        $birthDate = null;
+                    }
                 }
-                else {
-                    $jointDate = Carbon::parse($row['joint_date'])->format('Y-m-d');
+
+                // --- Proses Jenis Kelamin ---
+                $gender = null;
+                $jenisKelamin = $row->get('jenis_kelamin');
+                if (!empty($jenisKelamin)) {
+                    $val = strtolower($jenisKelamin);
+                    $gender = (str_contains($val, 'laki')) ? 'male' : 'female';
                 }
-            }
-            catch (\Exception $e) {
+
+                // --- Proses Joint Date ---
                 $jointDate = null;
+                $jd = $row->get('joint_date');
+                if (!empty($jd)) {
+                    try {
+                        if (is_numeric($jd)) {
+                            $jointDate = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($jd))->format('Y-m-d');
+                        } else {
+                            $jointDate = Carbon::parse($jd)->format('Y-m-d');
+                        }
+                    } catch (\Exception $e) {
+                        $jointDate = null;
+                    }
+                }
+
+                // --- Proses Hash (OPTIMIZED: Cache hashes) ---
+                $pinRaw = (string)($row->get('pin') ?? '123456');
+                $passRaw = (string)($row->get('password') ?? 'password123');
+                
+                if (!isset($this->passwordCache['pin_'.$pinRaw])) {
+                    $this->passwordCache['pin_'.$pinRaw] = Hash::make($pinRaw);
+                }
+                if (!isset($this->passwordCache['pass_'.$passRaw])) {
+                    $this->passwordCache['pass_'.$passRaw] = Hash::make($passRaw);
+                }
+
+                User::create([
+                    'name' => $row->get('nama'),
+                    'nik_ktp' => $ktp,
+                    'nik_karyawan' => $nik,
+                    'username' => $ktp,
+                    'kta_number' => $kta,
+                    'barcode_number' => $row->get('barcode'),
+                    'email' => $row->get('email'),
+                    'department' => $row->get('bagian'),
+                    'phone' => $row->get('no_telepon') ? (string)$row->get('no_telepon') : null,
+                    'birth_place' => $row->get('tempat_lahir'),
+                    'birth_date' => $birthDate,
+                    'joint_date' => $jointDate,
+                    'gender' => $gender,
+                    'religion' => $row->get('agama'),
+                    'education' => $row->get('pendidikan'),
+                    'address' => $row->get('alamat'),
+                    'role' => 'user',
+                    'pin' => $this->passwordCache['pin_'.$pinRaw],
+                    'password' => $this->passwordCache['pass_'.$passRaw],
+                    'pin_hint' => $pinRaw,
+                    'password_hint' => $passRaw,
+                ]);
             }
-        }
-
-        // --- Proses Nomor Telepon ---
-        $phone = $row['no_telepon'] ?? $row['no_telp_wa'] ?? null;
-
-        return new User([
-            'name' => $row['nama'],
-            'nik_ktp' => $row['ktp'] ?? null,
-            'nik_karyawan' => (string)($row['nik'] ?? ''),
-            'username' => $row['ktp'] ?? null,
-            'kta_number' => $row['kta'] ?? null,
-            'barcode_number' => $row['barcode'] ?? null,
-            'email' => $row['email'] ?? null,
-            'department' => $row['bagian'] ?? null,
-            'phone' => $phone ? (string)$phone : null,
-            'birth_place' => $row['tempat_lahir'] ?? null,
-            'birth_date' => $birthDate,
-            'joint_date' => $jointDate,
-            'gender' => $gender,
-            'religion' => $row['agama'] ?? null,
-            'education' => $row['pendidikan'] ?? null,
-            'address' => $row['alamat'] ?? null,
-            'role' => 'user',
-            'pin' => Hash::make((string)($row['pin'] ?? '123456')),
-            'password' => Hash::make((string)($row['password'] ?? 'password123')),
-            'pin_hint' => (string)($row['pin'] ?? '123456'),
-            'password_hint' => (string)($row['password'] ?? 'password123'),
-        ]);
+        });
     }
+
+    public function chunkSize(): int
+    {
+        return 1000;
+    }
+
 
     public function rules(): array
     {
         /**
-         * Menggunakan 'sometimes' agar jika baris dihapus di prepareForValidation,
-         * rules ini tidak dijalankan untuk baris tersebut.
+         * Menggunakan 'sometimes' agar jika baris tidak lengkap, 
+         * kita tidak menghentikan seluruh proses import.
          */
         return [
             'nik' => 'sometimes|required',

@@ -13,8 +13,8 @@ use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
@@ -27,6 +27,16 @@ class UsersExport extends DefaultValueBinder implements FromCollection, WithHead
      */
     public function bindValue(Cell $cell, $value)
     {
+        $column = $cell->getColumn();
+        // B: NIK, C: KTA, F: KTP, O: NO TELEPON, P: BARCODE, Q: PIN, R: PASSWORD
+        $forceStringColumns = ['B', 'C', 'F', 'O', 'P', 'Q', 'R'];
+        
+        if (in_array($column, $forceStringColumns)) {
+            $cell->setValueExplicit($value, DataType::TYPE_STRING);
+            return true;
+        }
+
+        // Fallback for any other long numeric strings
         if (is_numeric($value) && strlen((string)$value) > 10) {
             $cell->setValueExplicit($value, DataType::TYPE_STRING);
             return true;
@@ -105,11 +115,11 @@ class UsersExport extends DefaultValueBinder implements FromCollection, WithHead
             (string)$user->nik_karyawan,
             (string)$user->kta_number,
             $user->name,
-            $user->joint_date ?\Carbon\Carbon::parse($user->joint_date)->format('d-m-Y') : '-',
+            $user->joint_date ? \Carbon\Carbon::parse($user->joint_date)->format('d-m-Y') : '-',
             (string)$user->nik_ktp,
             $user->address,
             $user->birth_place,
-            $user->birth_date ?\Carbon\Carbon::parse($user->birth_date)->format('d-m-Y') : '-',
+            $user->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('d-m-Y') : '-',
             $user->gender == 'male' ? 'Laki-Laki' : 'Perempuan',
             $user->department,
             $user->religion,
@@ -126,14 +136,14 @@ class UsersExport extends DefaultValueBinder implements FromCollection, WithHead
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-            $sheet = $event->sheet->getDelegate();
-            $highestRow = $sheet->getHighestRow();
-            $highestColumn = $sheet->getHighestColumn();
-            $range = 'A1:' . $highestColumn . $highestRow;
+                $sheet = $event->sheet->getDelegate();
+                $highestRow = $sheet->getHighestRow();
+                $highestColumn = $sheet->getHighestColumn();
+                $range = 'A1:' . $highestColumn . $highestRow;
 
-            // Style Table Header (Baris 1)
-            $headerRange = 'A1:R1';
-            $sheet->getStyle($headerRange)->applyFromArray([
+                // Style Table Header (Baris 1)
+                $headerRange = 'A1:R1';
+                $sheet->getStyle($headerRange)->applyFromArray([
                     'font' => [
                         'bold' => true,
                         'color' => ['rgb' => '000000'],
@@ -144,8 +154,8 @@ class UsersExport extends DefaultValueBinder implements FromCollection, WithHead
                     ],
                 ]);
 
-            // Apply Borders to All Data
-            $sheet->getStyle($range)->applyFromArray([
+                // Apply Borders to All Data
+                $sheet->getStyle($range)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
@@ -154,23 +164,109 @@ class UsersExport extends DefaultValueBinder implements FromCollection, WithHead
                     ],
                 ]);
 
-            // Reset Row Height to normal
-            $sheet->getRowDimension(1)->setRowHeight(-1);
+                // Reset Row Height to normal
+                $sheet->getRowDimension(1)->setRowHeight(-1);
 
-            // Align semua data ke kiri
-            if ($highestRow > 1) {
-                $sheet->getStyle('A2:R' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+                // Align semua data ke kiri
+                if ($highestRow >= 1) {
+                    // Range untuk validasi & format (lebih banyak dari data yang ada untuk buffer editing)
+                    $validationRange = max($highestRow + 100, 500);
 
-                // Kolom NO (A) rata tengah
-                $sheet->getStyle('A2:A' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                    $sheet->getStyle('A2:R' . $validationRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+                    $sheet->getStyle('A2:A' . $validationRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                    
+                    $sheet->getStyle('B2:C' . $validationRange)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+                    $sheet->getStyle('F2:F' . $validationRange)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+                    $sheet->getStyle('O2:R' . $validationRange)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
 
-                // Format kolom numerik sebagai TEXT
-                // B: NIK, C: KTA, F: KTP, O: NO TELEPON, P: BARCODE
-                $sheet->getStyle('B2:C' . $highestRow)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
-                $sheet->getStyle('F2:F' . $highestRow)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
-                $sheet->getStyle('O2:P' . $highestRow)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
-            }
-        },
+                    // Format TANGGAL LAHIR (I) dan JOINT DATE (E) sebagai TEXT agar tidak diubah Excel
+                    $sheet->getStyle('E2:E' . $validationRange)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+                    $sheet->getStyle('I2:I' . $validationRange)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+
+                    // Dropdowns for standard fields
+                    $genders = '"Laki-Laki,Perempuan"';
+                    $sheet->setDataValidation('J2:J' . $validationRange, $this->createValidation($genders));
+
+                    $religions = '"Islam,Kristen,Katolik,Hindu,Buddha,Khonghucu,Lainnya"';
+                    $sheet->setDataValidation('L2:L' . $validationRange, $this->createValidation($religions));
+
+                    $educations = '"SD,SMP,SMA/SMK,D3,S1,S2,S3"';
+                    $sheet->setDataValidation('N2:N' . $validationRange, $this->createValidation($educations));
+
+                    // Numeric Only Validation
+                    $sheet->setDataValidation('B2:B' . $validationRange, $this->createNumericOnlyValidation('B', 'NIK harus berupa angka'));
+                    $sheet->setDataValidation('C2:C' . $validationRange, $this->createNumericOnlyValidation('C', 'KTA harus berupa angka'));
+                    $sheet->setDataValidation('F2:F' . $validationRange, $this->createNumericOnlyValidation('F', 'KTP harus berupa angka'));
+
+                    // Custom Rules
+                    $sheet->setDataValidation('Q2:Q' . $validationRange, $this->createCustomLengthValidation('Q', 6, 'PIN harus 6 digit angka', true));
+                    $sheet->setDataValidation('R2:R' . $validationRange, $this->createMinLengthValidation('R', 8, 'Password minimal 8 karakter'));
+                }
+            },
         ];
+    }
+
+    private function createMinLengthValidation($column, $minLength, $message)
+    {
+        $validation = new DataValidation();
+        $validation->setType(DataValidation::TYPE_CUSTOM);
+        $validation->setErrorStyle(DataValidation::STYLE_STOP);
+        $validation->setAllowBlank(true);
+        $validation->setShowInputMessage(true);
+        $validation->setShowErrorMessage(true);
+        $validation->setErrorTitle('Kesalahan Input');
+        $validation->setError($message);
+        $validation->setFormula1('=LEN(' . $column . '2)>=' . $minLength);
+        return $validation;
+    }
+
+    private function createCustomLengthValidation($column, $length, $message, $mustBeNumeric = false)
+    {
+        $validation = new DataValidation();
+        $validation->setType(DataValidation::TYPE_CUSTOM);
+        $validation->setErrorStyle(DataValidation::STYLE_STOP);
+        $validation->setAllowBlank(true);
+        $validation->setShowInputMessage(true);
+        $validation->setShowErrorMessage(true);
+        $validation->setErrorTitle('Kesalahan Input');
+        $validation->setError($message);
+
+        $formula = 'LEN(' . $column . '2)=' . $length;
+        if ($mustBeNumeric) {
+            $formula = 'AND(ISNUMBER(VALUE(' . $column . '2)), ' . $formula . ')';
+        }
+
+        $validation->setFormula1('=' . $formula);
+        return $validation;
+    }
+
+    private function createNumericOnlyValidation($column, $message)
+    {
+        $validation = new DataValidation();
+        $validation->setType(DataValidation::TYPE_CUSTOM);
+        $validation->setErrorStyle(DataValidation::STYLE_STOP);
+        $validation->setAllowBlank(true);
+        $validation->setShowInputMessage(true);
+        $validation->setShowErrorMessage(true);
+        $validation->setErrorTitle('Kesalahan Input');
+        $validation->setError($message);
+        $validation->setFormula1('=ISNUMBER(VALUE(' . $column . '2))');
+        return $validation;
+    }
+
+    private function createValidation($options)
+    {
+        $validation = new DataValidation();
+        $validation->setType(DataValidation::TYPE_LIST);
+        $validation->setErrorStyle(DataValidation::STYLE_INFORMATION);
+        $validation->setAllowBlank(false);
+        $validation->setShowInputMessage(true);
+        $validation->setShowErrorMessage(true);
+        $validation->setShowDropDown(true);
+        $validation->setErrorTitle('Input Error');
+        $validation->setError('Value is not in list.');
+        $validation->setFormula1($options);
+
+        return $validation;
     }
 }
