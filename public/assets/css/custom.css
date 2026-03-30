@@ -249,3 +249,61 @@
 .btn-premium-light {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
+
+/* ===============================
+   LOADING OVERLAY & SPINNER
+================================ */
+#loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: all 0.3s ease;
+}
+
+.loading-content {
+    text-align: center;
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 90%;
+}
+
+.pion-loader-spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(170, 34, 36, 0.1);
+    border-left-color: #AA2224;
+    border-radius: 50%;
+    animation: spinnerPremiumRotate 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spinnerPremiumRotate {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    color: #212529;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.loading-subtext {
+    color: #6c757d;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}

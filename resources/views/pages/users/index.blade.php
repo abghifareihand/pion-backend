@@ -249,6 +249,16 @@
         </div>
     </div>
     {{-- End Modal Import --}}
+    
+    {{-- Loading Overlay --}}
+    <div id="loading-overlay">
+        <div class="loading-content">
+            <div class="pion-loader-spinner"></div>
+            <span class="loading-text" id="loading-text">Sedang Memproses...</span>
+            <p class="loading-subtext" id="loading-subtext">Sistem sedang mengolah data Anda. Mohon tunggu sejenak dan jangan tutup halaman ini.</p>
+        </div>
+    </div>
+
 
 
     @push('scripts')
@@ -270,5 +280,33 @@
 
         <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>
+
+        <script>
+            function showLoading(text = 'Sedang Memproses...', subtext = 'Sistem sedang mengolah data Anda. Mohon tunggu sejenak dan jangan tutup halaman ini.') {
+                const overlay = document.getElementById('loading-overlay');
+                const loadingText = document.getElementById('loading-text');
+                const loadingSubtext = document.getElementById('loading-subtext');
+                
+                loadingText.innerText = text;
+                loadingSubtext.innerText = subtext;
+                overlay.style.display = 'flex';
+                
+                // Tutup modal secara paksa dan hapus backdrop agar tidak "double"
+                $('.modal').modal('hide');
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open').css('padding-right', '');
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Import Form
+                const importForm = document.querySelector('form[action="{{ route('users.import') }}"]');
+                if (importForm) {
+                    importForm.addEventListener('submit', function() {
+                        showLoading('Sedang Mengimpor Data...', 'Kami sedang memproses file Excel Anda. Ini mungkin memakan waktu beberapa saat tergantung jumlah data.');
+                    });
+                }
+            });
+        </script>
+
     @endpush
 @endsection
