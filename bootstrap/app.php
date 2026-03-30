@@ -17,9 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
          $exceptions->render(function (AuthenticationException $e, $request) {
-            return response()->json([
-                'status' => false,
-                'message' => 'TOKEN_INVALID',
-            ], 401);
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'TOKEN_INVALID',
+                ], 401);
+            }
         });
     })->create();
