@@ -36,7 +36,7 @@ class SocialController extends Controller
             [
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
-                'file' => 'required_without:image|file|mimes:pdf|max:10240',
+                'file' => 'required_without:image|file|mimes:pdf|max:512000',
                 'image' => 'required_without:file|image|mimes:jpg,jpeg,png|max:5120',
             ],
             [
@@ -44,7 +44,7 @@ class SocialController extends Controller
                 'title.max' => 'Judul maksimal 255 karakter.',
                 'file.required_without' => 'Salah satu (File PDF atau Gambar) wajib diunggah.',
                 'file.mimes' => 'File harus berupa PDF.',
-                'file.max' => 'File maksimal 10MB.',
+                'file.max' => 'File maksimal 500MB.',
                 'image.required_without' => 'Salah satu (File PDF atau Gambar) wajib diunggah.',
                 'image.mimes' => 'Image harus JPG, JPEG, atau PNG.',
                 'image.max' => 'Image maksimal 5MB.',
@@ -106,13 +106,13 @@ class SocialController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'file' => 'nullable|file|mimes:pdf|max:10240',
+            'file' => 'nullable|file|mimes:pdf|max:512000',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ], [
             'title.required' => 'Judul wajib diisi.',
             'title.max' => 'Judul maksimal 255 karakter.',
             'file.mimes' => 'File harus berupa PDF.',
-            'file.max' => 'File maksimal 10MB.',
+            'file.max' => 'File maksimal 500MB.',
             'image.mimes' => 'Image harus JPG, JPEG, atau PNG.',
             'image.max' => 'Image maksimal 5MB.',
         ]);

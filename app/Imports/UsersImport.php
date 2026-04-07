@@ -19,13 +19,53 @@ class UsersImport implements ToCollection, WithHeadingRow, WithValidation, Skips
      * Cache hashes to avoid repeated slow hashing of default values
      */
     protected $passwordCache = [];
+    protected $defaultFallbackDate;
+
+    public function __construct()
+    {
+        $this->defaultFallbackDate = now()->format('Y-m-d');
+    }
+
+    /**
+     * Parse date from various formats sensitively to avoid nulls
+     */
+    private function parseDateSafely($value)
+    {
+        if (empty($value)) {
+            return $this->defaultFallbackDate;
+        }
+
+        try {
+            if (is_numeric($value)) {
+                return Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value))->format('Y-m-d');
+            }
+
+            // Try common formats to avoid ambiguity
+            $formats = ['Y-m-d', 'd-m-Y', 'd/m/Y', 'Y/m/d', 'm/d/Y'];
+            foreach ($formats as $fmt) {
+                try {
+                    $d = Carbon::createFromFormat($fmt, (string)$value);
+                    if ($d && $d->format($fmt) === (string)$value) {
+                        return $d->format('Y-m-d');
+                    }
+                } catch (\Exception $e) {
+                    continue;
+                }
+            }
+
+            // Fallback to general parsing
+            return Carbon::parse($value)->format('Y-m-d');
+        } catch (\Exception $e) {
+            return $this->defaultFallbackDate;
+        }
+    }
 
     public function collection(Collection $rows)
     {
         // 1. Kumpulkan semua identifier (KTP, NIK, KTA) dari file untuk pengecekan bulk
         $nikKtps = $rows->pluck('ktp')->filter()->toArray();
-        $nikKaryawans = $rows->pluck('nik')->filter()->map(function($v) {
-            return (string)$v;
+        $nikKaryawans = $rows->pluck('nik')->filter()->map(function ($v) {
+            return (string) $v;
         })->toArray();
         $ktaNumbers = $rows->pluck('kta')->filter()->toArray();
 
@@ -50,7 +90,7 @@ class UsersImport implements ToCollection, WithHeadingRow, WithValidation, Skips
 
                 // --- Check if exists in DB or already processed in this batch ---
                 $ktp = $row->get('ktp');
-                $nik = (string)($row->get('nik') ?? '');
+                $nik = (string) ($row->get('nik') ?? '');
                 $kta = $row->get('kta');
 
                 // Logika "Skip if exists"
@@ -59,28 +99,19 @@ class UsersImport implements ToCollection, WithHeadingRow, WithValidation, Skips
                     ($nik && isset($existingNiks[$nik])) ||
                     ($kta && isset($existingKtas[$kta]))
                 ) {
-                    continue; 
+                    continue;
                 }
 
                 // Tambahkan ke map "existing" agar baris duplikat di DALAM file yang sama juga ter-skip
-                if ($ktp) $existingKtps[$ktp] = true;
-                if ($nik) $existingNiks[$nik] = true;
-                if ($kta) $existingKtas[$kta] = true;
+                if ($ktp)
+                    $existingKtps[$ktp] = true;
+                if ($nik)
+                    $existingNiks[$nik] = true;
+                if ($kta)
+                    $existingKtas[$kta] = true;
 
                 // --- Proses Tanggal Lahir ---
-                $birthDate = null;
-                $tanggalLahir = $row->get('tanggal_lahir');
-                if (!empty($tanggalLahir)) {
-                    try {
-                        if (is_numeric($tanggalLahir)) {
-                            $birthDate = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tanggalLahir))->format('Y-m-d');
-                        } else {
-                            $birthDate = Carbon::parse($tanggalLahir)->format('Y-m-d');
-                        }
-                    } catch (\Exception $e) {
-                        $birthDate = null;
-                    }
-                }
+                $birthDate = $this->parseDateSafely($row->get('tanggal_lahir'));
 
                 // --- Proses Jenis Kelamin ---
                 $gender = null;
@@ -91,29 +122,17 @@ class UsersImport implements ToCollection, WithHeadingRow, WithValidation, Skips
                 }
 
                 // --- Proses Joint Date ---
-                $jointDate = null;
-                $jd = $row->get('joint_date');
-                if (!empty($jd)) {
-                    try {
-                        if (is_numeric($jd)) {
-                            $jointDate = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($jd))->format('Y-m-d');
-                        } else {
-                            $jointDate = Carbon::parse($jd)->format('Y-m-d');
-                        }
-                    } catch (\Exception $e) {
-                        $jointDate = null;
-                    }
-                }
+                $jointDate = $this->parseDateSafely($row->get('joint_date'));
 
                 // --- Proses Hash (OPTIMIZED: Cache hashes) ---
-                $pinRaw = (string)($row->get('pin') ?? '123456');
-                $passRaw = (string)($row->get('password') ?? 'password123');
-                
-                if (!isset($this->passwordCache['pin_'.$pinRaw])) {
-                    $this->passwordCache['pin_'.$pinRaw] = Hash::make($pinRaw);
+                $pinRaw = (string) ($row->get('pin') ?? '123456');
+                $passRaw = (string) ($row->get('password') ?? 'password123');
+
+                if (!isset($this->passwordCache['pin_' . $pinRaw])) {
+                    $this->passwordCache['pin_' . $pinRaw] = Hash::make($pinRaw);
                 }
-                if (!isset($this->passwordCache['pass_'.$passRaw])) {
-                    $this->passwordCache['pass_'.$passRaw] = Hash::make($passRaw);
+                if (!isset($this->passwordCache['pass_' . $passRaw])) {
+                    $this->passwordCache['pass_' . $passRaw] = Hash::make($passRaw);
                 }
 
                 User::create([
@@ -125,7 +144,7 @@ class UsersImport implements ToCollection, WithHeadingRow, WithValidation, Skips
                     'barcode_number' => $row->get('barcode'),
                     'email' => $row->get('email'),
                     'department' => $row->get('bagian'),
-                    'phone' => $row->get('no_telepon') ? (string)$row->get('no_telepon') : null,
+                    'phone' => $row->get('no_telepon') ? (string) $row->get('no_telepon') : null,
                     'birth_place' => $row->get('tempat_lahir'),
                     'birth_date' => $birthDate,
                     'joint_date' => $jointDate,
@@ -134,8 +153,8 @@ class UsersImport implements ToCollection, WithHeadingRow, WithValidation, Skips
                     'education' => $row->get('pendidikan'),
                     'address' => $row->get('alamat'),
                     'role' => 'user',
-                    'pin' => $this->passwordCache['pin_'.$pinRaw],
-                    'password' => $this->passwordCache['pass_'.$passRaw],
+                    'pin' => $this->passwordCache['pin_' . $pinRaw],
+                    'password' => $this->passwordCache['pass_' . $passRaw],
                     'pin_hint' => $pinRaw,
                     'password_hint' => $passRaw,
                 ]);
