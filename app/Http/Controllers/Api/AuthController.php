@@ -293,8 +293,15 @@ class AuthController extends Controller
             'fcm_token' => 'required|string',
         ]);
 
+        $fcmToken = $request->fcm_token;
         $user = $request->user();
-        $user->fcm_token = $request->fcm_token;
+
+        // 🔍 Cari user lain yang mungkin punya token yang sama (Pencegahan double notif)
+        User::where('fcm_token', $fcmToken)
+            ->where('id', '!=', $user->id)
+            ->update(['fcm_token' => null]);
+
+        $user->fcm_token = $fcmToken;
         $user->save();
 
         return response()->json([

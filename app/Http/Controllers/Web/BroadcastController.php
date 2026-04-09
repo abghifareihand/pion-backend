@@ -63,11 +63,12 @@ class BroadcastController extends Controller
                 $broadcast->users()->attach($selectedUsers);
                 $tokens = User::whereIn('id', $selectedUsers)
                     ->whereNotNull('fcm_token')
+                    ->distinct()
                     ->pluck('fcm_token')
                     ->toArray();
             } else {
                 // Kalau tidak pilih user → broadcast ke semua
-                $tokens = User::whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
+                $tokens = User::whereNotNull('fcm_token')->distinct()->pluck('fcm_token')->toArray();
             }
 
             // Kirim notifikasi

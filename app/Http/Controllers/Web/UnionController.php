@@ -73,6 +73,7 @@ class UnionController extends Controller
         // ---------- KIRIM NOTIF KE SEMUA USER ----------
         // $tokens = User::whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
         $tokens = User::whereNotNull('fcm_token')
+            ->distinct()
             ->pluck('fcm_token')
             ->filter(fn($t) => !empty($t)) // skip null / empty
             ->toArray();
