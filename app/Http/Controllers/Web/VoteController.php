@@ -83,7 +83,7 @@ class VoteController extends Controller
                 if (!empty($tokens)) {
                     app(FirebaseService::class)->sendToTokens(
                         $tokens,
-                        'Voting',
+                        'Pemilu',
                         $vote->title
                     );
                 }

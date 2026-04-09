@@ -80,7 +80,7 @@ class FinancialController extends Controller
         if (!empty($tokens)) {
             $this->firebase->sendToTokens(
                 $tokens,
-                'Keuangan', // TITLE
+                'Laporan Keuangan', // TITLE
                 $financial->title, // BODY
                 [
                     'id' => $financial->id,
