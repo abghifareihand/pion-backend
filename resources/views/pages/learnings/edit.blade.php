@@ -1,133 +1,109 @@
 @extends('layouts.master')
 
-@section('title')
-    Edit Materi Belajar
+@section('title', 'Edit Materi Belajar')
+
+@section('breadcrumb')
+    <a href="{{ route('learnings.index') }}" class="text-slate-500 hover:text-primary-600 transition-colors">Materi Belajar</a>
+    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    <span class="text-slate-700 font-medium">Edit Materi</span>
 @endsection
 
-@push('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-@endpush
-
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Header Edit -->
-            <div class="col-md-12">
-                <div class="card p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Edit Materi Belajar</h5>
+<div class="max-w-4xl space-y-6">
 
-                        {{-- Tombol di kanan --}}
-                        <a class="btn btn-primary" href="{{ route('learnings.index') }}">
-                            <i class="fa fa-arrow-left me-1"></i> Kembali
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card Edit -->
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-
-                        {{-- Alert sukses --}}
-                        @if (session('success'))
-                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        {{-- Alert Error --}}
-                        @if ($errors->any())
-                            <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
-                                <ul class="mb-0">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        {{-- Form untuk edit learning --}}
-                        <form method="POST" action="{{ route('learnings.update', $learning->id) }}"
-                            enctype="multipart/form-data" class="form theme-form">
-                            @csrf
-                            @method('PUT')
-
-                            <!-- Input Title -->
-                            <div class="mb-3">
-                                <label>Judul</label>
-                                <input class="form-control" type="text" name="title"
-                                    value="{{ old('title', $learning->title) }}" required />
-                            </div>
-
-                            <!-- Input Description -->
-                            <div class="mb-3">
-                                <label>Deskripsi</label>
-                                <textarea class="form-control" name="description" rows="3">{{ old('description', $learning->description) }}</textarea>
-                            </div>
-
-                            <!-- Section Foto -->
-                            <div class="mb-3 p-3 border rounded">
-                                @if ($learning->image_path)
-                                    <div class="mb-3">
-                                        <label class="fw-bold">Foto Sekarang</label>
-                                        <p class="mb-0">
-                                            <a href="{{ asset('storage/' . $learning->image_path) }}" target="_blank">
-                                                <img src="{{ asset('storage/' . $learning->image_path) }}"
-                                                    alt="Current Image" style="max-width: 200px; height: auto;"
-                                                    class="img-thumbnail">
-                                            </a>
-                                        </p>
-                                    </div>
-                                @endif
-                                <div>
-                                    <label>Pilih Foto Baru (opsional)</label>
-                                    <input class="form-control" type="file" name="image"
-                                        accept=".jpg,.jpeg,.png">
-                                </div>
-                            </div>
-
-                            <!-- Section File -->
-                            <div class="mb-3 p-3 border rounded">
-                                @if ($learning->file_path)
-                                    <div class="mb-3">
-                                        <label class="fw-bold d-block mb-2">File Sekarang</label>
-                                        <div class="p-2 border rounded d-inline-block text-center" style="min-width: 200px;">
-                                            <a href="{{ asset('storage/' . $learning->file_path) }}" target="_blank" class="text-decoration-none text-dark">
-                                                <i class="fa fa-file-pdf-o fa-3x text-danger"></i>
-                                                <div class="text-muted small mt-1">Klik untuk lihat</div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                @endif
-                                <div>
-                                    <label>Pilih File Baru (opsional)</label>
-                                    <input class="form-control" type="file" name="file"
-                                        accept=".pdf,.doc,.docx">
-                                </div>
-                            </div>
-
-                            <!-- Button Update -->
-                            <div class="text-end">
-                                <button class="btn btn-success" type="submit">
-                                    <i class="fa fa-save me-1"></i> Update
-                                </button>
-                            </div>
-                        </form>
-                        {{-- End Form --}}
-
-                    </div>
-                </div>
-            </div>
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Edit Materi Belajar</h1>
+            <p class="text-slate-500 text-sm mt-0.5">Perbarui berkas atau informasi materi edukasi.</p>
         </div>
+        <a href="{{ route('learnings.index') }}" class="btn btn-sm btn-ghost gap-1.5 self-start sm:self-auto">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            <span>Kembali</span>
+        </a>
     </div>
 
-    @push('scripts')
-    @endpush
+    {{-- Alert Errors --}}
+    @if ($errors->any())
+        <x-alert type="danger" title="Terjadi Kesalahan Input">
+            <ul class="list-disc list-inside space-y-1 text-sm">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </x-alert>
+    @endif
+
+    {{-- Form Card --}}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Edit Detail Materi</h3>
+        </div>
+        <form method="POST" action="{{ route('learnings.update', $learning->id) }}" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="card-body space-y-6">
+                {{-- Judul --}}
+                <div>
+                    <label class="form-label" for="title">Judul Materi Belajar <span class="text-red-500">*</span></label>
+                    <input class="input @error('title') border-red-500 @enderror" type="text" id="title" name="title" value="{{ old('title', $learning->title) }}" required />
+                    @error('title') <p class="form-error">{{ $message }}</p> @enderror
+                </div>
+
+                {{-- Deskripsi --}}
+                <div>
+                    <label class="form-label" for="description">Deskripsi Ringkas</label>
+                    <textarea class="input @error('description') border-red-500 @enderror" id="description" name="description" rows="4">{{ old('description', $learning->description) }}</textarea>
+                    @error('description') <p class="form-error">{{ $message }}</p> @enderror
+                </div>
+
+                {{-- Section Foto --}}
+                <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3">
+                    <label class="form-label font-semibold text-slate-800">Foto Cover / Sampul</label>
+                    @if ($learning->image_path)
+                        <div class="flex items-center gap-4">
+                            <img src="{{ asset('storage/' . $learning->image_path) }}" alt="" class="w-24 h-24 object-cover rounded-lg border border-slate-200 shadow-xs" />
+                            <a href="{{ asset('storage/' . $learning->image_path) }}" target="_blank" class="text-xs font-semibold text-sky-600 hover:underline">
+                                Buka Foto &rarr;
+                            </a>
+                        </div>
+                    @endif
+                    <div>
+                        <label class="text-xs text-slate-500 mb-1 block">Unggah Foto Baru (opsional)</label>
+                        <input class="input @error('image') border-red-500 @enderror" type="file" name="image" accept=".jpg,.jpeg,.png" />
+                    </div>
+                </div>
+
+                {{-- Section File --}}
+                <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3">
+                    <label class="form-label font-semibold text-slate-800">Berkas Modul</label>
+                    @if ($learning->file_path)
+                        <div class="flex items-center gap-3">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-lg border border-emerald-100">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                Modul Saat Ini Terpasang
+                            </span>
+                            <a href="{{ asset('storage/' . $learning->file_path) }}" target="_blank" class="text-xs font-semibold text-emerald-600 hover:underline">
+                                Unduh Modul &rarr;
+                            </a>
+                        </div>
+                    @endif
+                    <div>
+                        <label class="text-xs text-slate-500 mb-1 block">Unggah Modul Baru (opsional)</label>
+                        <input class="input @error('file') border-red-500 @enderror" type="file" name="file" accept=".pdf,.doc,.docx" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer flex items-center justify-end gap-3">
+                <a href="{{ route('learnings.index') }}" class="btn btn-ghost">Batal</a>
+                <button type="submit" class="btn btn-primary shadow-primary">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <span>Simpan Perubahan</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
 @endsection

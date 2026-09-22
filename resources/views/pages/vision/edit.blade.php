@@ -1,125 +1,76 @@
 @extends('layouts.master')
 
-@section('title')
-    Edit Vision
+@section('title', 'Visi & Misi Serikat')
+
+@section('breadcrumb')
+    <span class="text-slate-700 font-medium">Visi & Misi</span>
 @endsection
 
-@push('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-    <style>
-        /* CKEditor wrapper */
-        .cke {
-            border: 1px solid #ced4da !important;
-        }
-
-        /* area dalam editor */
-        .cke_contents {
-            min-height: 150px;
-        }
-    </style>
-@endpush
-
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Header Edit -->
-            <div class="col-md-12">
-                <div class="card p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Edit Visi Misi</h5>
-                    </div>
-                </div>
-            </div>
+<div class="max-w-4xl space-y-6">
 
-            <!-- Card Edit -->
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body add-post">
-
-                        {{-- Alert sukses --}}
-                        @if (session('success'))
-                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        {{-- Alert Error --}}
-                        @if ($errors->any())
-                            <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
-                                <ul class="mb-0">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        {{-- Form untuk edit vision --}}
-                        <form method="POST" action="{{ route('vision.update') }}" class="form theme-form">
-                            @csrf
-                            @method('PUT')
-
-                            <!-- Input Vision -->
-                            {{-- <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Vision</label>
-                                        <input class="form-control" type="text" name="title"
-                                            value="{{ old('title', $vision->title) }}" required />
-                                    </div>
-                                </div>
-                            </div> --}}
-
-                            <!-- Input Mission -->
-                            {{-- <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Mission</label>
-                                        <input class="form-control" type="text" name="subtitle"
-                                            value="{{ old('subtitle', $vision->subtitle) }}" required />
-                                    </div>
-                                </div>
-                            </div> --}}
-
-                            <!-- Input Vision -->
-                            <div class="mb-3">
-                                <label>Visi</label>
-                                <textarea id="vision-editor" name="title" cols="10" rows="2" required>{{ old('title', $vision->title) }}</textarea>
-                            </div>
-
-                            <!-- Input Mission -->
-                            <div class="mb-3">
-                                <label>Misi</label>
-                                <textarea id="mision-editor" name="subtitle" cols="10" rows="2" required>{{ old('subtitle', $vision->subtitle) }}</textarea>
-                            </div>
-
-                            <!-- Button Update -->
-                            <div class="text-end">
-                                <button class="btn btn-success" type="submit">
-                                    <i class="fa fa-save me-1"></i> Update
-                                </button>
-                            </div>
-                        </form>
-                        {{-- End Form --}}
-
-                    </div>
-                </div>
-            </div>
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Visi & Misi Serikat SP PION</h1>
+            <p class="text-slate-500 text-sm mt-0.5">Atur redaksi visi dan misi resmi yang ditampilkan pada aplikasi anggota.</p>
         </div>
     </div>
 
+    {{-- Alert Errors --}}
+    @if ($errors->any())
+        <x-alert type="danger" title="Terjadi Kesalahan Input">
+            <ul class="list-disc list-inside space-y-1 text-sm">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </x-alert>
+    @endif
 
-    @push('scripts')
-        <script src="{{ asset('assets/js/editor/ckeditor/ckeditor.js') }}"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                CKEDITOR.replace('vision-editor');
-                CKEDITOR.replace('mision-editor');
-            });
-        </script>
-    @endpush
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Redaksi Visi & Misi</h3>
+        </div>
+        <form method="POST" action="{{ route('vision.update') }}">
+            @csrf
+            @method('PUT')
+            <div class="card-body space-y-6">
+                {{-- Visi --}}
+                <div>
+                    <label class="form-label" for="vision-editor">Visi Serikat <span class="text-red-500">*</span></label>
+                    <textarea id="vision-editor" name="title" rows="4" class="input" required>{{ old('title', $vision->title) }}</textarea>
+                    @error('title') <p class="form-error">{{ $message }}</p> @enderror
+                </div>
+
+                {{-- Misi --}}
+                <div>
+                    <label class="form-label" for="mision-editor">Misi Serikat <span class="text-red-500">*</span></label>
+                    <textarea id="mision-editor" name="subtitle" rows="6" class="input" required>{{ old('subtitle', $vision->subtitle) }}</textarea>
+                    @error('subtitle') <p class="form-error">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div class="card-footer flex items-center justify-end gap-3">
+                <button type="submit" class="btn btn-primary shadow-primary">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <span>Simpan Visi & Misi</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+@push('scripts')
+<script src="{{ asset('assets/js/editor/ckeditor/ckeditor.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof CKEDITOR !== 'undefined') {
+            CKEDITOR.replace('vision-editor');
+            CKEDITOR.replace('mision-editor');
+        }
+    });
+</script>
+@endpush
 @endsection

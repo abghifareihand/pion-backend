@@ -1,151 +1,84 @@
 @extends('layouts.master')
 
-@section('title')
-    Data Perangkat
+@section('title', 'Data Perangkat Aktif')
+
+@section('breadcrumb')
+    <span class="text-slate-700 font-medium">Perangkat Aktif</span>
 @endsection
 
-@push('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-    <style>
-        .table-responsive table {
-            white-space: nowrap;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-    </style>
-@endpush
-
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Header Create -->
-            <div class="col-md-12">
-                <div class="card p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Data Perangkat</h5>
-                    </div>
-                </div>
-            </div>
+<div class="space-y-6">
 
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-
-                        {{-- Alert sukses --}}
-                        @if (session('success'))
-                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        {{-- Table untuk list Member Registration --}}
-                        @if ($devices->count() > 0)
-                            <div class="table-responsive">
-                                <table class="display" id="basic-1">
-                                    <thead>
-                                        <tr>
-                                            <th class="dt-col-no">No</th>
-                                            <th>Nama</th>
-                                            <th>ID Perangkat</th>
-                                            <th>Terdaftar</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($devices as $device)
-                                            <tr>
-                                                <td class="dt-col-no">{{ $loop->iteration }}</td>
-
-                                                <td>{{ $device->user->name }}</td>
-
-                                                <td>
-                                                    <span class="badge badge-processed">
-                                                        {{ $device->device_id }}
-                                                    </span>
-                                                </td>
-
-                                                <td>
-                                                    {{ $device->created_at->format('d/m/y H:i') }}
-                                                </td>
-
-                                                <td>
-                                                    <!-- Delete button -->
-                                                    <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteModal"
-                                                        data-action="{{ route('devices.destroy', $device) }}"
-                                                        data-name="{{ $device->user->name }}">
-                                                        Hapus
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        @else
-                            <div class="text-center p-5">
-                                <span class="text-muted">Tidak ada data perangkat</span>
-                            </div>
-                        @endif
-                        {{-- End Table --}}
-                    </div>
-                </div>
-            </div>
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Perangkat Aktif</h1>
+            <p class="text-slate-500 text-sm mt-0.5">Daftar token dan ID perangkat smartphone anggota yang terhubung ke sistem PION.</p>
         </div>
     </div>
 
-    {{-- Modal Delete (global) --}}
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Konfirmasi Hapus</h5>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+    {{-- Data Table Card --}}
+    <div class="card">
+        @if ($devices->count() > 0)
+            <x-table>
+                <x-slot name="header">
+                    <th class="w-12 text-center">No</th>
+                    <th>Nama Pengguna</th>
+                    <th>ID / Token Perangkat</th>
+                    <th>Tanggal Terdaftar</th>
+                    <th class="text-right">Aksi</th>
+                </x-slot>
+
+                @foreach ($devices as $device)
+                    <tr>
+                        <td class="text-center font-medium text-slate-400 text-xs">{{ $loop->iteration }}</td>
+
+                        <td>
+                            <div class="font-semibold text-slate-800">{{ $device->user->name ?? '-' }}</div>
+                            <div class="text-xs text-slate-400">NIK: {{ $device->user->nik_karyawan ?? '-' }}</div>
+                        </td>
+
+                        <td>
+                            <code class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono break-all">
+                                {{ $device->device_id }}
+                            </code>
+                        </td>
+
+                        <td class="text-xs text-slate-500 whitespace-nowrap">
+                            {{ $device->created_at->format('d/m/Y H:i') }}
+                        </td>
+
+                        <td>
+                            <div class="flex items-center justify-end gap-1">
+                                <button
+                                    type="button"
+                                    @click="$dispatch('confirm-dialog', {
+                                        title: 'Hapus Sesi Perangkat',
+                                        message: 'Apakah Anda yakin ingin menghapus sesi perangkat untuk {{ addslashes($device->user->name ?? 'Pengguna') }}?',
+                                        confirmText: 'Ya, Putuskan Sesi',
+                                        type: 'danger',
+                                        formAction: '{{ route('devices.destroy', $device->id) }}'
+                                    })"
+                                    class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                    title="Putuskan Perangkat"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </x-table>
+        @else
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                 </div>
-                <div class="modal-body">
-                    <p>Apakah Anda yakin ingin menghapus perangkat ini dari <strong id="deleteItemName"></strong>?</p>
-                </div>
-                <div class="modal-footer">
-                    <form id="deleteForm" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-light" type="button" data-bs-dismiss="modal">Tutup</button>
-                        <button class="btn btn-danger" type="submit">Hapus</button>
-                    </form>
-                </div>
+                <h3 class="empty-state-title">Belum ada perangkat terdaftar</h3>
+                <p class="empty-state-description">Perangkat anggota yang melakukan login di aplikasi mobile akan tercatat di sini.</p>
             </div>
-        </div>
+        @endif
     </div>
-    {{-- End Modal Delete --}}
 
-
-
-    @push('scripts')
-        <!-- Script delete -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const deleteModal = document.getElementById('deleteModal');
-                const deleteForm = document.getElementById('deleteForm');
-                const deleteItemName = document.getElementById('deleteItemName');
-
-                document.querySelectorAll('.btn-danger[data-bs-target="#deleteModal"]').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        deleteForm.action = this.dataset.action;
-                        deleteItemName.textContent = this.dataset.name;
-                    });
-                });
-            });
-        </script>
-
-        <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>
-    @endpush
+</div>
 @endsection

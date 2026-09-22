@@ -1,287 +1,223 @@
 @extends('layouts.master')
 
-@section('title')
-    Buat Anggota
+@section('title', 'Buat Anggota')
+
+@section('breadcrumb')
+    <a href="{{ route('users.index') }}" class="text-slate-500 hover:text-primary-600 transition-colors">Data Anggota</a>
+    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    <span class="text-slate-700 font-medium">Buat Anggota</span>
 @endsection
 
-@push('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/date-picker.css') }}">
-@endpush
-
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Header Create -->
-            <div class="col-md-12">
-                <div class="card p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Buat Anggota</h5>
+<div class="max-w-5xl space-y-6">
 
-                        {{-- Tombol di kanan --}}
-                        <a class="btn btn-primary" href="{{ route('users.index') }}">
-                            <i class="fa fa-arrow-left me-1"></i> Kembali
-                        </a>
-                    </div>
-                </div>
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Buat Anggota Baru</h1>
+            <p class="text-slate-500 text-sm mt-0.5">Lengkapi formulir di bawah untuk menambahkan data anggota SP PION.</p>
+        </div>
+        <a href="{{ route('users.index') }}" class="btn btn-sm btn-ghost gap-1.5 self-start sm:self-auto">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            <span>Kembali</span>
+        </a>
+    </div>
+
+    {{-- Alert Errors --}}
+    @if ($errors->any())
+        <x-alert type="danger" title="Terjadi Kesalahan Input">
+            <ul class="list-disc list-inside space-y-1 text-sm">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </x-alert>
+    @endif
+
+    <form method="POST" action="{{ route('users.store') }}" class="space-y-6">
+        @csrf
+
+        {{-- Section 1: Data Identitas & Serikat --}}
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Data Identitas & Serikat</h3>
             </div>
+            <div class="card-body">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {{-- Nama Lengkap --}}
+                    <div>
+                        <label class="form-label" for="name">Nama Lengkap <span class="text-danger-500">*</span></label>
+                        <input class="input @error('name') border-danger-500 @enderror" type="text" id="name" name="name" value="{{ old('name') }}" placeholder="Masukkan nama lengkap" required />
+                        @error('name') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
 
+                    {{-- NIK KTP --}}
+                    <div>
+                        <label class="form-label" for="nik_ktp">NIK KTP</label>
+                        <input class="input @error('nik_ktp') border-danger-500 @enderror" type="text" id="nik_ktp" name="nik_ktp" value="{{ old('nik_ktp') }}" maxlength="20" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" placeholder="16 digit NIK KTP" />
+                        @error('nik_ktp') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
 
-            <!-- Card Create -->
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
+                    {{-- NIK Karyawan --}}
+                    <div>
+                        <label class="form-label" for="nik_karyawan">NIK Karyawan <span class="text-danger-500">*</span></label>
+                        <input class="input @error('nik_karyawan') border-danger-500 @enderror" type="text" id="nik_karyawan" name="nik_karyawan" value="{{ old('nik_karyawan') }}" maxlength="20" required placeholder="Nomor induk karyawan" />
+                        @error('nik_karyawan') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
 
-                        {{-- Alert sukses --}}
-                        @if (session('success'))
-                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
+                    {{-- Nomor KTA --}}
+                    <div>
+                        <label class="form-label" for="kta_number">Nomor KTA <span class="text-danger-500">*</span></label>
+                        <input class="input @error('kta_number') border-danger-500 @enderror" type="text" id="kta_number" name="kta_number" value="{{ old('kta_number') }}" maxlength="15" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required placeholder="Nomor KTA serikat" />
+                        @error('kta_number') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
 
-                        {{-- Alert Error --}}
-                        @if ($errors->any())
-                            <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
-                                <ul class="mb-0">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
+                    {{-- Nomor Barcode --}}
+                    <div>
+                        <label class="form-label" for="barcode_number">Nomor Barcode <span class="text-danger-500">*</span></label>
+                        <input class="input @error('barcode_number') border-danger-500 @enderror" type="text" id="barcode_number" name="barcode_number" value="{{ old('barcode_number') }}" maxlength="20" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required placeholder="Nomor barcode KTA" />
+                        @error('barcode_number') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
 
-                        {{-- Form untuk create user --}}
-                        <form method="POST" action="{{ route('users.store') }}" class="form theme-form">
-                            @csrf
+                    {{-- Departemen --}}
+                    <div>
+                        <label class="form-label" for="department">Departemen <span class="text-danger-500">*</span></label>
+                        <input class="input @error('department') border-danger-500 @enderror" type="text" id="department" name="department" value="{{ old('department') }}" required placeholder="Contoh: Produksi, IT, HRD" />
+                        @error('department') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
 
-                            <!-- Input Name -->
-                            <div class="mb-3">
-                                <label>Nama</label>
-                                <input class="form-control" type="text" name="name"
-                                    value="{{ old('name') }}" required />
-                            </div>
-
-                            <!-- Input NIK KTP -->
-                            <div class="mb-3">
-                                <label>NIK KTP</label>
-                                <input class="form-control" type="text" name="nik_ktp"
-                                    value="{{ old('nik_ktp') }}" maxlength="20" pattern="\d*" inputmode="numeric"
-                                    oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
-                            </div>
-
-                            <!-- Input NIK Karyawan -->
-                            <div class="mb-3">
-                                <label>NIK Karyawan</label>
-                                <input class="form-control" type="text" name="nik_karyawan"
-                                    value="{{ old('nik_karyawan') }}" maxlength="20" pattern="\d*" inputmode="numeric"
-                                    oninput="this.value = this.value.replace(/[^0-9]/g, '');" required />
-                            </div>
-
-                            <!-- Input KTA -->
-                            <div class="mb-3">
-                                <label>KTA</label>
-                                <input class="form-control" type="text" name="kta_number"
-                                    value="{{ old('kta_number') }}" maxlength="15" pattern="\d*"
-                                    inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                    required />
-                            </div>
-
-                            <!-- Input Nomor Barcode -->
-                            <div class="mb-3">
-                                <label>Nomor Barcode</label>
-                                <input class="form-control" type="text" name="barcode_number"
-                                    value="{{ old('barcode_number') }}" maxlength="20" pattern="\d*"
-                                    inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                    required />
-                            </div>
-
-                            <!-- Input Departemen -->
-                            <div class="mb-3">
-                                <label>Departemen</label>
-                                <input class="form-control" type="text" name="department"
-                                    value="{{ old('department') }}" required />
-                            </div>
-
-                            <!-- Input Phone -->
-                            <div class="mb-3">
-                                <label>No Telepon / WA</label>
-                                <input class="form-control" type="text" name="phone"
-                                    value="{{ old('phone') }}" maxlength="15" pattern="\d*" inputmode="numeric"
-                                    oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
-                            </div>
-
-                            <!-- Input Email -->
-                            <div class="mb-3">
-                                <label>Email</label>
-                                <input class="form-control" type="email" name="email"
-                                    value="{{ old('email') }}" />
-                            </div>
-
-                            <!-- Input Tanggal Join -->
-                            <div class="mb-3">
-                                <label>Tanggal Join</label>
-                                <div class="input-group">
-                                    <input class="birth-datepicker form-control" type="text" name="joint_date"
-                                        value="{{ old('joint_date') }}" autocomplete="off"
-                                        placeholder="-- Pilih Tanggal Join --" style="cursor: pointer;" />
-                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                </div>
-                            </div>
-
-                            <!-- Input Jenis Kelamin -->
-                            <div class="mb-3">
-                                <label>Jenis Kelamin</label>
-                                <select class="form-select" name="gender" required>
-                                    <option value="">-- Pilih Jenis Kelamin --</option>
-                                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>
-                                        Laki-Laki</option>
-                                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>
-                                        Perempuan</option>
-                                </select>
-                            </div>
-
-                            <!-- Input Tempat Lahir -->
-                            <div class="mb-3">
-                                <label>Tempat Lahir</label>
-                                <input class="form-control" type="text" name="birth_place"
-                                    value="{{ old('birth_place') }}" />
-                            </div>
-
-                            <!-- Input Tanggal Lahir -->
-                            <div class="mb-3">
-                                <label>Tanggal Lahir</label>
-                                <div class="input-group">
-                                    <input class="birth-datepicker form-control" type="text" name="birth_date"
-                                        value="{{ old('birth_date') }}" autocomplete="off"
-                                        placeholder="-- Pilih Tanggal Lahir --" style="cursor: pointer;" />
-                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                </div>
-                            </div>
-
-
-                            <!-- Input Agama -->
-                            <div class="mb-3">
-                                <label>Agama</label>
-                                <select class="form-select" name="religion" required>
-                                    <option value="">-- Pilih Agama --</option>
-                                    <option value="Islam" {{ old('religion') == 'Islam' ? 'selected' : '' }}>
-                                        Islam</option>
-                                    <option value="Kristen" {{ old('religion') == 'Kristen' ? 'selected' : '' }}>
-                                        Kristen</option>
-                                    <option value="Katolik" {{ old('religion') == 'Katolik' ? 'selected' : '' }}>
-                                        Katolik</option>
-                                    <option value="Hindu" {{ old('religion') == 'Hindu' ? 'selected' : '' }}>
-                                        Hindu</option>
-                                    <option value="Buddha" {{ old('religion') == 'Buddha' ? 'selected' : '' }}>
-                                        Buddha</option>
-                                    <option value="Khonghucu"
-                                        {{ old('religion') == 'Konghucu' ? 'selected' : '' }}>Konghucu</option>
-                                    <option value="Lainnya" {{ old('religion') == 'Lainnya' ? 'selected' : '' }}>
-                                        Lainnya</option>
-                                </select>
-                            </div>
-
-                            <!-- Input Pendidikan -->
-                            <div class="mb-3">
-                                <label>Pendidikan</label>
-                                <select class="form-select" name="education" required>
-                                    <option value="">-- Pilih Pendidikan --</option>
-                                    <option value="SD" {{ old('education') == 'SD' ? 'selected' : '' }}>SD</option>
-                                    <option value="SMP" {{ old('education') == 'SMP' ? 'selected' : '' }}>SMP</option>
-                                    <option value="SMA/SMK" {{ old('education') == 'SMA/SMK' ? 'selected' : '' }}>SMA/SMK</option>
-                                    <option value="D3" {{ old('education') == 'D3' ? 'selected' : '' }}>D3</option>
-                                    <option value="S1" {{ old('education') == 'S1' ? 'selected' : '' }}>S1</option>
-                                    <option value="S2" {{ old('education') == 'S2' ? 'selected' : '' }}>S2</option>
-                                    <option value="S3" {{ old('education') == 'S3' ? 'selected' : '' }}>S3</option>
-                                </select>
-                            </div>
-
-                            <!-- Input Alamat -->
-                            <div class="mb-3">
-                                <label>Alamat</label>
-                                <textarea class="form-control" name="address" rows="3" required>{{ old('address') }}</textarea>
-                            </div>
-
-                            <!-- Input PIN -->
-                            <div class="mb-3">
-                                <label>PIN</label>
-                                <input class="form-control" type="text" name="pin"
-                                    value="{{ old('pin', '123456') }}" maxlength="6" pattern="\d*"
-                                    inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                    required />
-                            </div>
-
-                            <!-- Input Password -->
-                            <div class="mb-3">
-                                <label>Password</label>
-                                <input class="form-control" type="text" name="password"
-                                    value="{{ old('password', 'password123') }}" required />
-                            </div>
-
-                            <!-- Button Submit -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="text-end">
-                                        <button class="btn btn-success" type="submit">
-                                            <i class="fa fa-save me-1"></i> Submit
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        {{-- End Form --}}
+                    {{-- Tanggal Join --}}
+                    <div>
+                        <label class="form-label" for="joint_date">Tanggal Bergabung</label>
+                        <input class="input @error('joint_date') border-danger-500 @enderror" type="date" id="joint_date" name="joint_date" value="{{ old('joint_date') }}" />
+                        @error('joint_date') <p class="form-error">{{ $message }}</p> @enderror
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
+        {{-- Section 2: Data Pribadi & Kontak --}}
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Data Pribadi & Kontak</h3>
+            </div>
+            <div class="card-body">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {{-- Jenis Kelamin --}}
+                    <div>
+                        <label class="form-label" for="gender">Jenis Kelamin <span class="text-danger-500">*</span></label>
+                        <select class="input @error('gender') border-danger-500 @enderror" id="gender" name="gender" required>
+                            <option value="">-- Pilih Jenis Kelamin --</option>
+                            <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Laki-Laki</option>
+                            <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Perempuan</option>
+                        </select>
+                        @error('gender') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
 
-    @push('scripts')
-        <script src="{{ asset('assets/js/datepicker/date-picker/datepicker.js') }}"></script>
-        <script src="{{ asset('assets/js/datepicker/date-picker/datepicker.id.js') }}"></script>
-        <script>
-            $(document).ready(function() {
-                $('.birth-datepicker').datepicker({
-                    language: 'id',
-                    view: 'years',
-                    minView: 'days',
-                    dateFormat: 'dd/mm/yyyy',
-                    autoClose: false,
-                    onShow: function(dp, animationCompleted) {
-                        if (!animationCompleted) {
-                            var $buttons = dp.$datepicker.find('.datepicker--buttons');
-                            if (!$buttons.length) {
-                                dp.$datepicker.append(
-                                    '<div class="datepicker--buttons" style="padding: 10px; border-top: 1px solid #efefef; display: flex; justify-content: center; gap: 5px;"></div>'
-                                );
-                                $buttons = dp.$datepicker.find('.datepicker--buttons');
-                            }
-                            $buttons.empty();
+                    {{-- No Telepon / WA --}}
+                    <div>
+                        <label class="form-label" for="phone">No Telepon / WhatsApp</label>
+                        <input class="input @error('phone') border-danger-500 @enderror" type="text" id="phone" name="phone" value="{{ old('phone') }}" maxlength="15" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" placeholder="08xxxxxxxxxx" />
+                        @error('phone') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
 
-                            var $cancelBtn = $(
-                                '<button type="button" class="btn btn-light btn-sm">Batal</button>');
-                            var $okBtn = $(
-                                '<button type="button" class="btn btn-primary btn-sm">OK</button>');
+                    {{-- Email --}}
+                    <div>
+                        <label class="form-label" for="email">Alamat Email</label>
+                        <input class="input @error('email') border-danger-500 @enderror" type="email" id="email" name="email" value="{{ old('email') }}" placeholder="nama@email.com" />
+                        @error('email') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
 
-                            $buttons.append($cancelBtn).append($okBtn);
+                    {{-- Tempat Lahir --}}
+                    <div>
+                        <label class="form-label" for="birth_place">Tempat Lahir</label>
+                        <input class="input @error('birth_place') border-danger-500 @enderror" type="text" id="birth_place" name="birth_place" value="{{ old('birth_place') }}" placeholder="Kota kelahiran" />
+                        @error('birth_place') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
 
-                            $cancelBtn.on('click', function() {
-                                dp.hide();
-                            });
+                    {{-- Tanggal Lahir --}}
+                    <div>
+                        <label class="form-label" for="birth_date">Tanggal Lahir</label>
+                        <input class="input @error('birth_date') border-danger-500 @enderror" type="date" id="birth_date" name="birth_date" value="{{ old('birth_date') }}" />
+                        @error('birth_date') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
 
-                            $okBtn.on('click', function() {
-                                dp.hide();
-                            });
-                        }
-                    }
-                });
-            });
-        </script>
-    @endpush
+                    {{-- Agama --}}
+                    <div>
+                        <label class="form-label" for="religion">Agama <span class="text-danger-500">*</span></label>
+                        <select class="input @error('religion') border-danger-500 @enderror" id="religion" name="religion" required>
+                            <option value="">-- Pilih Agama --</option>
+                            <option value="Islam" {{ old('religion') == 'Islam' ? 'selected' : '' }}>Islam</option>
+                            <option value="Kristen" {{ old('religion') == 'Kristen' ? 'selected' : '' }}>Kristen</option>
+                            <option value="Katolik" {{ old('religion') == 'Katolik' ? 'selected' : '' }}>Katolik</option>
+                            <option value="Hindu" {{ old('religion') == 'Hindu' ? 'selected' : '' }}>Hindu</option>
+                            <option value="Buddha" {{ old('religion') == 'Buddha' ? 'selected' : '' }}>Buddha</option>
+                            <option value="Khonghucu" {{ old('religion') == 'Khonghucu' || old('religion') == 'Konghucu' ? 'selected' : '' }}>Khonghucu</option>
+                            <option value="Lainnya" {{ old('religion') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                        </select>
+                        @error('religion') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
+
+                    {{-- Pendidikan --}}
+                    <div>
+                        <label class="form-label" for="education">Pendidikan Terakhir <span class="text-danger-500">*</span></label>
+                        <select class="input @error('education') border-danger-500 @enderror" id="education" name="education" required>
+                            <option value="">-- Pilih Pendidikan --</option>
+                            <option value="SD" {{ old('education') == 'SD' ? 'selected' : '' }}>SD</option>
+                            <option value="SMP" {{ old('education') == 'SMP' ? 'selected' : '' }}>SMP</option>
+                            <option value="SMA/SMK" {{ old('education') == 'SMA/SMK' ? 'selected' : '' }}>SMA/SMK</option>
+                            <option value="D3" {{ old('education') == 'D3' ? 'selected' : '' }}>D3</option>
+                            <option value="S1" {{ old('education') == 'S1' ? 'selected' : '' }}>S1</option>
+                            <option value="S2" {{ old('education') == 'S2' ? 'selected' : '' }}>S2</option>
+                            <option value="S3" {{ old('education') == 'S3' ? 'selected' : '' }}>S3</option>
+                        </select>
+                        @error('education') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
+
+                    {{-- Alamat --}}
+                    <div class="md:col-span-2">
+                        <label class="form-label" for="address">Alamat Domisili <span class="text-danger-500">*</span></label>
+                        <textarea class="input @error('address') border-danger-500 @enderror" id="address" name="address" rows="3" required placeholder="Alamat lengkap tempat tinggal">{{ old('address') }}</textarea>
+                        @error('address') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Section 3: Keamanan & Akses Akun --}}
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Keamanan & Kredensial Akun</h3>
+            </div>
+            <div class="card-body">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {{-- PIN --}}
+                    <div>
+                        <label class="form-label" for="pin">PIN Aplikasi (6 Digit) <span class="text-danger-500">*</span></label>
+                        <input class="input font-mono @error('pin') border-danger-500 @enderror" type="text" id="pin" name="pin" value="{{ old('pin', '123456') }}" maxlength="6" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required />
+                        <p class="form-help text-xs text-slate-500">Default: 123456 (dapat diubah anggota via aplikasi)</p>
+                        @error('pin') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
+
+                    {{-- Password --}}
+                    <div>
+                        <label class="form-label" for="password">Password Default <span class="text-danger-500">*</span></label>
+                        <input class="input @error('password') border-danger-500 @enderror" type="text" id="password" name="password" value="{{ old('password', 'password123') }}" required />
+                        <p class="form-help text-xs text-slate-500">Default: password123</p>
+                        @error('password') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+            </div>
+
+            {{-- Card Footer Submit --}}
+            <div class="card-footer flex items-center justify-end gap-3">
+                <a href="{{ route('users.index') }}" class="btn btn-ghost">Batal</a>
+                <button type="submit" class="btn btn-primary shadow-primary">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <span>Simpan Anggota</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
 @endsection

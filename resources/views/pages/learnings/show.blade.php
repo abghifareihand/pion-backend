@@ -4,72 +4,65 @@
     Detail Materi Belajar
 @endsection
 
-@push('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-@endpush
-
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Header -->
-            <div class="col-md-12">
-                <div class="card p-3 mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="fw-bold mb-0">Detail Materi Belajar</h5>
-                        <a class="btn btn-primary" href="{{ route('learnings.index') }}">
-                            <i class="fa fa-arrow-left me-1"></i> Kembali
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card Detail -->
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="col-sm-12">
-                            <div class="mb-3">
-                                <label>Judul</label>
-                                <div class="form-control-plaintext py-0">
-                                    {{ $learning->title }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12">
-                            <div class="mb-3">
-                                <label>Deskripsi</label>
-                                <div class="form-control-plaintext py-0">
-                                    {{ $learning->description ?? '-' }}
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Tampilkan Image jika ada --}}
-                        @if ($learning->image_path)
-                            <div class="col-sm-6">
-                                <div class="mb-3">
-                                    <label>Foto</label>
-                                    <div>
-                                        <img src="{{ asset('storage/' . $learning->image_path) }}"
-                                            alt="{{ $learning->title }}" style="max-width: 400px; height: auto;">
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-
-
-                        {{-- Optional: Embed PDF --}}
-                        @if (Str::endsWith($learning->file_path, '.pdf'))
-                            <iframe src="{{ asset('storage/' . $learning->file_path) }}"
-                                style="width:100%; height:800px;" frameborder="0"></iframe>
-                        @endif
-                    </div>
-                </div>
-            </div>
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <h2 class="text-2xl font-bold tracking-tight text-slate-800">Detail Materi Belajar</h2>
+            <p class="text-sm text-slate-500 mt-1">Pratinjau modul pembelajaran dan edukasi serikat.</p>
+        </div>
+        <div>
+            <a href="{{ route('learnings.index') }}" class="btn btn-secondary inline-flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Kembali
+            </a>
         </div>
     </div>
 
-    @push('scripts')
-    @endpush
+    <!-- Content Card -->
+    <x-card>
+        <div class="space-y-6 max-w-4xl">
+            <div>
+                <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400">Judul Materi</dt>
+                <dd class="mt-1 text-lg font-semibold text-slate-900">{{ $learning->title }}</dd>
+            </div>
+
+            <div class="border-t border-slate-100 pt-4">
+                <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400">Deskripsi Pembelajaran</dt>
+                <dd class="mt-1 text-sm text-slate-700 leading-relaxed whitespace-pre-line">{{ $learning->description ?? '-' }}</dd>
+            </div>
+
+            @if ($learning->image_path)
+                <div class="border-t border-slate-100 pt-4">
+                    <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Sampul Materi</dt>
+                    <dd>
+                        <div class="rounded-xl overflow-hidden border border-slate-200 inline-block shadow-sm">
+                            <img src="{{ asset('storage/' . $learning->image_path) }}" alt="{{ $learning->title }}" class="max-w-lg w-full h-auto object-cover">
+                        </div>
+                    </dd>
+                </div>
+            @endif
+
+            @if (Str::endsWith($learning->file_path, '.pdf'))
+                <div class="border-t border-slate-100 pt-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400">Lampiran Dokumen Modul (PDF)</dt>
+                        <a href="{{ asset('storage/' . $learning->file_path) }}" target="_blank" class="text-xs font-medium text-primary hover:underline inline-flex items-center gap-1">
+                            Buka di Tab Baru
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    <dd class="rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-50">
+                        <iframe src="{{ asset('storage/' . $learning->file_path) }}" class="w-full h-[750px] border-0"></iframe>
+                    </dd>
+                </div>
+            @endif
+        </div>
+    </x-card>
+</div>
 @endsection

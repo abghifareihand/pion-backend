@@ -1,82 +1,103 @@
 <!DOCTYPE html>
-<html lang="en" @if (Route::current()->getName() == 'layout-rtl') dir="rtl" @endif
-    @switch(Route::current()->getName())
-      @case('layout-rtl')
-          dir="rtl"
-          @break
-  @endswitch>
-
+<html lang="id">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="viho admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities. laravel/framework: ^8.40">
-    <meta name="keywords"
-        content="admin template, viho admin template, dashboard template, flat admin template, responsive admin template, web app">
-    <meta name="author" content="pixelstrap">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>@yield('title', 'Dashboard') - SP PION</title>
+
     <link rel="icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-icon">
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-icon">
-    <title>@yield('title')</title>
-    <!-- Google font-->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
-        rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap"
-        rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
-        rel="stylesheet">
-    <!-- Font Awesome-->
-    @includeIf('layouts.partials.css')
+
+    {{-- Fonts --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    {{-- Vite CSS & JS --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- Page / Plugin CSS --}}
+    @stack('css')
 </head>
+<body class="font-sans antialiased bg-slate-100/70 text-slate-800">
+    <div x-data="{ sidebarOpen: false }" class="min-h-screen flex">
 
-@switch(Route::current()->getName())
-    @case('boxed-layout')
+        {{-- Sidebar Component --}}
+        @include('layouts.partials.sidebar')
 
-        <body class="box-layout">
-        @break
+        {{-- Main Wrapper --}}
+        <div class="flex-1 flex flex-col min-w-0 min-h-screen bg-slate-100/70">
+            {{-- Top Navbar --}}
+            @include('layouts.partials.header')
 
-        @case('layout-rtl')
+            {{-- Main Page Content --}}
+            <main class="flex-1 p-4 lg:p-6 overflow-y-auto">
+                @yield('content')
+            </main>
 
-            <body class="rtl">
-            @break
-
-            @case('layout-dark')
-
-                <body class="dark-only">
-                @break
-
-                @default
-
-                    <body>
-                @endswitch
-                <!-- Loader starts-->
-                <div class="loader-wrapper">
-                    <div class="theme-loader"></div>
+            {{-- Footer --}}
+            <footer class="py-4 px-6 border-t border-slate-200/60 bg-white/60 text-center flex items-center justify-center text-xs text-slate-400">
+                <div>
+                    &copy; {{ date('Y') }} <span class="font-semibold text-slate-600">Serikat Pekerja PION</span>. Hak Cipta Dilindungi.
                 </div>
-                <!-- Loader ends-->
-                <!-- page-wrapper Start-->
-                <div class="page-wrapper compact-sidebar" id="pageWrapper">
-                    <!-- Page Header Start-->
-                    @includeIf('layouts.partials.header')
-                    <!-- Page Header Ends -->
-                    <!-- Page Body Start-->
-                    <div class="page-body-wrapper sidebar-icon">
-                        <!-- Page Sidebar Start-->
-                        @includeIf('layouts.partials.sidebar')
-                        <!-- Page Sidebar Ends-->
-                        <div class="page-body">
-                            <!-- Container-fluid starts-->
-                            @yield('content')
-                            <!-- Container-fluid Ends-->
-                        </div>
-                    </div>
-                </div>
-                <!-- latest jquery-->
-                @includeIf('layouts.partials.js')
-            </body>
+            </footer>
+        </div>
+    </div>
 
+    {{-- Toast System --}}
+    <x-toast />
+
+    {{-- Global Confirmation Dialog --}}
+    <x-confirm-dialog />
+
+    {{-- Core jQuery for existing DataTables & Page scripts --}}
+    <script src="{{ asset('assets/js/jquery-3.5.1.min.js') }}"></script>
+
+    {{-- Session Toast Trigger Handlers --}}
+    @if (session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            window.dispatchEvent(new CustomEvent('toast', {
+                detail: {
+                    type: 'success',
+                    title: 'Berhasil',
+                    message: "{{ session('success') }}"
+                }
+            }));
+        });
+    </script>
+    @endif
+
+    @if (session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            window.dispatchEvent(new CustomEvent('toast', {
+                detail: {
+                    type: 'danger',
+                    title: 'Gagal',
+                    message: "{{ session('error') }}"
+                }
+            }));
+        });
+    </script>
+    @endif
+
+    @if (session('status'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            window.dispatchEvent(new CustomEvent('toast', {
+                detail: {
+                    type: 'info',
+                    message: "{{ session('status') }}"
+                }
+            }));
+        });
+    </script>
+    @endif
+
+    {{-- PAGE SCRIPTS --}}
+    @stack('scripts')
+</body>
 </html>

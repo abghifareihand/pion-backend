@@ -1,134 +1,109 @@
 @extends('layouts.master')
 
-@section('title')
-    Edit Laporan Keuangan
+@section('title', 'Edit Laporan Keuangan')
+
+@section('breadcrumb')
+    <a href="{{ route('financials.index') }}" class="text-slate-500 hover:text-primary-600 transition-colors">Laporan Keuangan</a>
+    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    <span class="text-slate-700 font-medium">Edit Laporan</span>
 @endsection
 
-@push('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-@endpush
-
-
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Header Edit -->
-            <div class="col-md-12">
-                <div class="card p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Edit Laporan Keuangan</h5>
+<div class="max-w-4xl space-y-6">
 
-                        {{-- Tombol di kanan --}}
-                        <a class="btn btn-primary" href="{{ route('financials.index') }}">
-                            <i class="fa fa-arrow-left me-1"></i> Kembali
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card Edit -->
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-
-                        {{-- Alert sukses --}}
-                        @if (session('success'))
-                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        {{-- Alert Error --}}
-                        @if ($errors->any())
-                            <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
-                                <ul class="mb-0">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        {{-- Form untuk edit financial --}}
-                        <form method="POST" action="{{ route('financials.update', $financial->id) }}"
-                            enctype="multipart/form-data" class="form theme-form">
-                            @csrf
-                            @method('PUT')
-
-                            <!-- Input Title -->
-                            <div class="mb-3">
-                                <label>Judul</label>
-                                <input class="form-control" type="text" name="title"
-                                    value="{{ old('title', $financial->title) }}" required />
-                            </div>
-
-                            <!-- Input Description -->
-                            <div class="mb-3">
-                                <label>Deskripsi</label>
-                                <textarea class="form-control" name="description" rows="3">{{ old('description', $financial->description) }}</textarea>
-                            </div>
-
-                            <!-- Section Foto -->
-                            <div class="mb-3 p-3 border rounded">
-                                @if ($financial->image_path)
-                                    <div class="mb-3">
-                                        <label class="fw-bold">Foto Sekarang</label>
-                                        <p class="mb-0">
-                                            <a href="{{ asset('storage/' . $financial->image_path) }}" target="_blank">
-                                                <img src="{{ asset('storage/' . $financial->image_path) }}"
-                                                    alt="Current Image" style="max-width: 200px; height: auto;"
-                                                    class="img-thumbnail">
-                                            </a>
-                                        </p>
-                                    </div>
-                                @endif
-                                <div>
-                                    <label>Pilih Foto Baru (opsional)</label>
-                                    <input class="form-control" type="file" name="image" accept=".jpg,.jpeg,.png">
-                                </div>
-                            </div>
-
-                            <!-- Section File -->
-                            <div class="mb-3 p-3 border rounded">
-                                @if ($financial->file_path)
-                                    <div class="mb-3">
-                                        <label class="fw-bold d-block mb-2">File Sekarang</label>
-                                        <div class="p-2 border rounded d-inline-block text-center"
-                                            style="min-width: 200px;">
-                                            <a href="{{ asset('storage/' . $financial->file_path) }}" target="_blank"
-                                                class="text-decoration-none text-dark">
-                                                <i class="fa fa-file-pdf-o fa-3x text-danger"></i>
-                                                <div class="text-muted small mt-1">Klik untuk lihat</div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                @endif
-                                <div>
-                                    <label>Pilih File Baru (opsional)</label>
-                                    <input class="form-control" type="file" name="file" accept=".pdf,.doc,.docx">
-                                </div>
-                            </div>
-
-                            <!-- Button Update -->
-                            <div class="text-end">
-                                <button class="btn btn-success" type="submit">
-                                    <i class="fa fa-save me-1"></i> Update
-                                </button>
-                            </div>
-                        </form>
-                        {{-- End Form --}}
-
-                    </div>
-                </div>
-            </div>
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Edit Laporan Keuangan</h1>
+            <p class="text-slate-500 text-sm mt-0.5">Perbarui rincian, dokumen, atau bukti transaksi keuangan.</p>
         </div>
+        <a href="{{ route('financials.index') }}" class="btn btn-sm btn-ghost gap-1.5 self-start sm:self-auto">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            <span>Kembali</span>
+        </a>
     </div>
 
-    @push('scripts')
-    @endpush
+    {{-- Alert Errors --}}
+    @if ($errors->any())
+        <x-alert type="danger" title="Terjadi Kesalahan Input">
+            <ul class="list-disc list-inside space-y-1 text-sm">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </x-alert>
+    @endif
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Perbarui Laporan Keuangan</h3>
+        </div>
+
+        <form method="POST" action="{{ route('financials.update', $financial->id) }}" enctype="multipart/form-data" class="space-y-5 p-6">
+            @csrf
+            @method('PUT')
+
+            {{-- Judul --}}
+            <div>
+                <label class="form-label" for="title">Judul Laporan <span class="text-danger-500">*</span></label>
+                <input class="input @error('title') border-danger-500 @enderror" type="text" id="title" name="title" value="{{ old('title', $financial->title) }}" required />
+                @error('title') <p class="form-error">{{ $message }}</p> @enderror
+            </div>
+
+            {{-- Deskripsi --}}
+            <div>
+                <label class="form-label" for="description">Keterangan / Deskripsi</label>
+                <textarea class="input @error('description') border-danger-500 @enderror" id="description" name="description" rows="4">{{ old('description', $financial->description) }}</textarea>
+                @error('description') <p class="form-error">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2 border-t border-slate-100">
+                {{-- Foto Bukti --}}
+                <div class="space-y-3">
+                    <label class="form-label">Lampiran Foto / Bukti</label>
+                    @if ($financial->image_path)
+                        <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-3">
+                            <img src="{{ asset('storage/' . $financial->image_path) }}" alt="Bukti" class="w-16 h-16 rounded-lg object-cover border border-slate-200" />
+                            <div>
+                                <a href="{{ asset('storage/' . $financial->image_path) }}" target="_blank" class="text-xs font-semibold text-primary-600 hover:underline">
+                                    Lihat Foto Saat Ini
+                                </a>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Unggah baru jika ingin mengganti</p>
+                            </div>
+                        </div>
+                    @endif
+                    <x-file-input id="image" name="image" accept=".jpg,.jpeg,.png" />
+                </div>
+
+                {{-- Berkas Dokumen --}}
+                <div class="space-y-3">
+                    <label class="form-label">Lampiran Berkas Dokumen</label>
+                    @if ($financial->file_path)
+                        <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">
+                                DOC
+                            </div>
+                            <div class="min-w-0">
+                                <a href="{{ asset('storage/' . $financial->file_path) }}" target="_blank" class="text-xs font-semibold text-primary-600 hover:underline block truncate">
+                                    Unduh Dokumen Saat Ini
+                                </a>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Unggah baru jika ingin mengganti</p>
+                            </div>
+                        </div>
+                    @endif
+                    <x-file-input id="file" name="file" accept=".pdf,.doc,.docx" />
+                </div>
+            </div>
+
+            {{-- Card Footer --}}
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                <a href="{{ route('financials.index') }}" class="btn btn-ghost">Batal</a>
+                <button type="submit" class="btn btn-primary shadow-primary">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <span>Perbarui Laporan</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection

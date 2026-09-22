@@ -1,164 +1,144 @@
 @extends('layouts.master')
 
-@section('title')
-    Reply Pesan
-@endsection
+@section('title', 'Balas Pesan & Aspirasi')
 
-@push('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-@endpush
+@section('breadcrumb')
+    <a href="{{ route('tickets.index') }}" class="text-slate-500 hover:text-primary-600 transition-colors">Pesan & Aspirasi</a>
+    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    <span class="text-slate-700 font-medium">Balas Pesan</span>
+@endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="fw-bold mb-0">Reply Pesan</h5>
-                        <a class="btn btn-primary" href="{{ route('tickets.index') }}">
-                            <i class="fa fa-arrow-left me-1"></i> Kembali
-                        </a>
-                    </div>
-                </div>
+<div class="max-w-4xl space-y-6">
+
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Balas Aspirasi Anggota</h1>
+            <p class="text-slate-500 text-sm mt-0.5">Thread percakapan langsung dan penyelesaian keluhan anggota.</p>
+        </div>
+        <a href="{{ route('tickets.index') }}" class="btn btn-sm btn-ghost gap-1.5 self-start sm:self-auto">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            <span>Kembali</span>
+        </a>
+    </div>
+
+    {{-- Info Card --}}
+    <div class="card p-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+                <span class="text-xs text-slate-400 font-medium block">Pengirim</span>
+                <span class="text-sm font-bold text-slate-800">{{ $ticket->user->name ?? 'Anggota' }}</span>
+                <span class="text-xs text-slate-500 block">NIK: {{ $ticket->user->nik_karyawan ?? '-' }}</span>
             </div>
-
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="text-muted small">Nama</label>
-                                <p class="fw-bold">{{ $ticket->user->name }}</p>
-
-                                <label class="text-muted small">Tipe</label>
-                                <p>
-                                    @if ($ticket->type == 'report')
-                                        <span class="badge badge-report">Report</span>
-                                    @elseif($ticket->type == 'question')
-                                        <span class="badge badge-question">Question</span>
-                                    @else
-                                        <span class="badge badge-suggestion">Suggestion</span>
-                                    @endif
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="text-muted small">Judul</label>
-                                <p class="fw-bold">{{ $ticket->title ?? '-' }}</p>
-
-                                <label class="text-muted small">Tanggal</label>
-                                <p class="fw-bold">{{ $ticket->created_at->format('d M Y, H:i') }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div>
+                <span class="text-xs text-slate-400 font-medium block">Kategori</span>
+                @if ($ticket->type == 'report')
+                    <x-badge variant="danger">Laporan</x-badge>
+                @elseif ($ticket->type == 'question')
+                    <x-badge variant="info">Pertanyaan</x-badge>
+                @else
+                    <x-badge variant="primary">Saran</x-badge>
+                @endif
             </div>
-
-            <div class="col-sm-12">
-                <div class="card shadow-none border">
-                    <div class="card-header">
-                        <h6 class="mb-0 fw-bold">Riwayat Percakapan</h6>
-                    </div>
-                    <div class="card-body" id="chat-container" style="height: 450px; overflow-y: auto; background-color: #f0f2f5;">
-
-                        <div class="d-flex justify-content-start mb-4">
-                            <div class="bg-white p-3 rounded shadow-sm border" style="max-width: 75%;">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                    <span class="fw-bold text-primary">Pesan Awal</span>
-                                    <small class="text-muted ms-3">{{ $ticket->created_at->format('d M, H:i') }}</small>
-                                </div>
-                                <p class="mb-2 fw-bold text-dark">{{ $ticket->title }}</p>
-                                <p class="mb-0">{{ $ticket->description }}</p>
-
-                                @if ($ticket->attachment)
-                                    <div class="mt-2 pt-2 border-top">
-                                        <small class="text-muted d-block mb-1">Lampiran:</small>
-                                        <a href="{{ asset('storage/' . $ticket->attachment) }}" target="_blank"
-                                            class="btn-premium btn-premium-success">
-                                            <i class="fa fa-paperclip"></i> Lihat Lampiran
-                                        </a>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-
-                        @php $lastReplyId = 0; @endphp
-                        @foreach ($ticket->replies as $reply)
-                            @php 
-                                $isMe = $reply->user_id == Auth::id(); 
-                                $lastReplyId = $reply->id;
-                            @endphp
-                            <div class="d-flex {{ $isMe ? 'justify-content-end' : 'justify-content-start' }} mb-4">
-                                <div class="{{ $isMe ? 'bg-primary text-white' : 'bg-white border' }} p-3 rounded shadow-sm"
-                                    style="max-width: 75%;">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <small class="fw-bold {{ $isMe ? 'text-white-50' : 'text-primary' }}">
-                                            {{ $isMe ? 'You (Admin)' : $ticket->user->name }}
-                                        </small>
-                                        <small class="ms-3 {{ $isMe ? 'text-white-50' : 'text-muted' }}"
-                                            style="font-size: 10px;">
-                                            {{ $reply->created_at->format('d M, H:i') }}
-                                        </small>
-                                    </div>
-                                    <p class="mb-0">{{ $reply->message }}</p>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
+            <div>
+                <span class="text-xs text-slate-400 font-medium block">Status Saat Ini</span>
+                <x-badge variant="{{ $ticket->status == 'done' ? 'success' : ($ticket->status == 'pending' ? 'warning' : 'info') }}" dot>
+                    {{ ucfirst($ticket->status) }}
+                </x-badge>
             </div>
-
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        @if ($errors->any())
-                            <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
-                                <ul class="mb-0">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        <form method="POST" id="reply-form" action="{{ route('tickets.reply', $ticket->id) }}" class="form theme-form">
-                            @csrf
-                            <!-- Input Reply -->
-                            <div class="mb-3">
-                                <label class="fw-bold">Reply Pesan Kamu</label>
-                                <textarea class="form-control" name="message" id="reply-message" rows="4" placeholder="Tulis pesan balasan atau solusi..." required>{{ old('message') }}</textarea>
-                            </div>
-
-                            <!-- Status and Button -->
-                            <div class="mb-3">
-                                <label class="fw-bold">Update Status Pesan</label>
-                                <select class="form-select mb-2" name="status" required>
-                                    <option value="responded" {{ $ticket->status == 'responded' ? 'selected' : '' }}>
-                                        Responded (Masih Aktif)</option>
-                                    <option value="processed" {{ $ticket->status == 'processed' ? 'selected' : '' }}>
-                                        Processed (Sedang Ditangani)</option>
-                                    <option value="done" {{ $ticket->status == 'done' ? 'selected' : '' }}>
-                                        Done (Selesai)</option>
-                                    <option value="rejected" {{ $ticket->status == 'rejected' ? 'selected' : '' }}>
-                                        Rejected (Ditolak)</option>
-                                </select>
-                                <small class="text-muted italic d-block mb-3">* Pilih 'Done' jika tidak ada lagi yang perlu
-                                    dibahas.</small>
-                            </div>
-
-                            <div class="text-end">
-                                <button class="btn btn-success px-5 py-2" type="submit">
-                                    <i class="fa fa-paper-plane me-2"></i> Kirim Pesan
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            <div>
+                <span class="text-xs text-slate-400 font-medium block">Tanggal Masuk</span>
+                <span class="text-xs font-semibold text-slate-700">{{ $ticket->created_at->format('d M Y, H:i') }}</span>
             </div>
         </div>
+
+        @if ($ticket->attachment)
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                <span class="text-xs text-slate-500 font-medium">Lampiran dari Anggota:</span>
+                <a href="{{ asset('storage/' . $ticket->attachment) }}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-600 hover:underline">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+                    <span>Lihat Berkas Lampiran</span>
+                </a>
+            </div>
+        @endif
     </div>
-@endsection
+
+    {{-- Chat Thread Container --}}
+    <div class="card overflow-hidden">
+        <div class="card-header bg-slate-50/70 border-b border-slate-100 flex items-center justify-between py-3">
+            <h3 class="card-title text-sm font-semibold">Riwayat Percakapan</h3>
+            <span class="text-xs text-slate-400">Pembaruan otomatis tiap 5 detik</span>
+        </div>
+
+        <div id="chat-container" class="p-5 space-y-4 max-h-[460px] overflow-y-auto bg-slate-100/50">
+            {{-- Initial Message from Member --}}
+            <div class="flex justify-start">
+                <div class="bg-white p-4 rounded-2xl rounded-tl-xs shadow-xs border border-slate-200/80 max-w-xl">
+                    <div class="flex items-center justify-between gap-4 mb-1">
+                        <span class="text-xs font-bold text-slate-900">{{ $ticket->user->name ?? 'Anggota' }}</span>
+                        <span class="text-[10px] text-slate-400">{{ $ticket->created_at->format('d M, H:i') }}</span>
+                    </div>
+                    @if ($ticket->title)
+                        <h5 class="text-xs font-bold text-primary-700 mb-1">{{ $ticket->title }}</h5>
+                    @endif
+                    <p class="text-xs text-slate-700 leading-relaxed whitespace-pre-line">{{ $ticket->description }}</p>
+                </div>
+            </div>
+
+            {{-- Thread Replies --}}
+            @php $lastReplyId = 0; @endphp
+            @foreach ($ticket->replies as $reply)
+                @php 
+                    $isMe = $reply->user_id == Auth::id(); 
+                    $lastReplyId = $reply->id;
+                @endphp
+                <div class="flex {{ $isMe ? 'justify-end' : 'justify-start' }}">
+                    <div class="{{ $isMe ? 'bg-primary-600 text-white rounded-tr-xs shadow-primary/20' : 'bg-white text-slate-800 rounded-tl-xs border border-slate-200/80' }} p-4 rounded-2xl shadow-xs max-w-xl">
+                        <div class="flex items-center justify-between gap-4 mb-1">
+                            <span class="text-xs font-bold {{ $isMe ? 'text-white' : 'text-slate-900' }}">
+                                {{ $isMe ? 'Admin (Anda)' : ($ticket->user->name ?? 'Anggota') }}
+                            </span>
+                            <span class="text-[10px] {{ $isMe ? 'text-white/70' : 'text-slate-400' }}">
+                                {{ $reply->created_at->format('d M, H:i') }}
+                            </span>
+                        </div>
+                        <p class="text-xs leading-relaxed whitespace-pre-line">{{ $reply->message }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        {{-- Reply Form --}}
+        <div class="p-4 bg-white border-t border-slate-200/70">
+            <form method="POST" id="reply-form" action="{{ route('tickets.reply', $ticket->id) }}" class="space-y-4">
+                @csrf
+                <div>
+                    <label class="form-label" for="reply-message">Tulis Pesan Balasan <span class="text-red-500">*</span></label>
+                    <textarea class="input" name="message" id="reply-message" rows="3" placeholder="Ketik respon, penjelasan, atau solusi untuk anggota..." required>{{ old('message') }}</textarea>
+                </div>
+
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs font-medium text-slate-700 whitespace-nowrap">Perbarui Status:</label>
+                        <select class="input py-1.5 text-xs max-w-[200px]" name="status" required>
+                            <option value="responded" {{ $ticket->status == 'responded' ? 'selected' : '' }}>Responded (Dibalas)</option>
+                            <option value="processed" {{ $ticket->status == 'processed' ? 'selected' : '' }}>Processed (Sedang Diproses)</option>
+                            <option value="done" {{ $ticket->status == 'done' ? 'selected' : '' }}>Done (Selesai)</option>
+                            <option value="rejected" {{ $ticket->status == 'rejected' ? 'selected' : '' }}>Rejected (Ditolak)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary shadow-primary gap-1.5 self-end sm:self-auto">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                        <span>Kirim Balasan</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
 
 @push('scripts')
 <script>
@@ -167,46 +147,39 @@
         const ticketId = {{ $ticket->id }};
         const chatContainer = document.getElementById('chat-container');
 
-        // Fungsi scroll ke bawah
         function scrollToBottom() {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        // Scroll saat halaman dimuat
         scrollToBottom();
 
-        // Polling pesan baru setiap 3 detik
         setInterval(function() {
             fetch(`/tickets/${ticketId}/replies?last_id=${lastReplyId}`)
                 .then(response => response.json())
                 .then(result => {
                     if (result.status === 'success' && result.data.length > 0) {
                         result.data.forEach(reply => {
-                            // Render template chat bubble
-                            const alignmentClass = reply.is_me ? 'justify-content-end' : 'justify-content-start';
-                            const bubbleClass = reply.is_me ? 'bg-primary text-white' : 'bg-white border';
-                            const nameColorClass = reply.is_me ? 'text-white-50' : 'text-primary';
-                            const timeColorClass = reply.is_me ? 'text-white-50' : 'text-muted';
-
+                            const isMe = reply.is_me;
                             const html = `
-                                <div class="d-flex ${alignmentClass} mb-4">
-                                    <div class="${bubbleClass} p-3 rounded shadow-sm" style="max-width: 75%;">
-                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <small class="fw-bold ${nameColorClass}">${reply.sender}</small>
-                                            <small class="ms-3 ${timeColorClass}" style="font-size: 10px;">${reply.date}</small>
+                                <div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
+                                    <div class="${isMe ? 'bg-primary-600 text-white rounded-tr-xs shadow-primary/20' : 'bg-white text-slate-800 rounded-tl-xs border border-slate-200/80'} p-4 rounded-2xl shadow-xs max-w-xl">
+                                        <div class="flex items-center justify-between gap-4 mb-1">
+                                            <span class="text-xs font-bold ${isMe ? 'text-white' : 'text-slate-900'}">${reply.sender}</span>
+                                            <span class="text-[10px] ${isMe ? 'text-white/70' : 'text-slate-400'}">${reply.date}</span>
                                         </div>
-                                        <p class="mb-0">${reply.message}</p>
+                                        <p class="text-xs leading-relaxed whitespace-pre-line">${reply.message}</p>
                                     </div>
                                 </div>
                             `;
                             chatContainer.insertAdjacentHTML('beforeend', html);
-                            lastReplyId = reply.id; // Update last_id
+                            lastReplyId = reply.id;
                         });
                         scrollToBottom();
                     }
                 })
-                .catch(error => console.error('Error polling replies:', error));
+                .catch(err => console.error(err));
         }, 5000);
     });
 </script>
 @endpush
+@endsection

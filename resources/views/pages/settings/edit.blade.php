@@ -1,156 +1,140 @@
 @extends('layouts.master')
 
-@section('title')
-    Pengaturan Aplikasi
+@section('title', 'Pengaturan Sistem')
+
+@section('breadcrumb')
+    <span class="text-slate-700 font-medium">Pengaturan Sistem</span>
 @endsection
 
-@push('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-@endpush
-
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Header -->
-            <div class="col-md-12">
-                <div class="card p-3 mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="fw-bold mb-0">Pengaturan Aplikasi</h5>
-                    </div>
-                </div>
-            </div>
+<div class="max-w-4xl space-y-6">
 
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-
-                        @if (session('success'))
-                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        <form action="{{ route('settings.update') }}" method="POST">
-                            @csrf
-                            @method('PUT')
-
-                            @foreach ($settings as $key => $setting)
-                                <div class="mb-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <label class="form-label fw-semibold mb-0">{{ $setting->label }}</label>
-                                    </div>
-
-                                    @if ($setting->key === \App\Models\Setting::DASAR_HUKUM)
-                                        {{-- Dynamic add/remove list for Dasar Hukum --}}
-                                        @php
-                                            $poinList = json_decode($setting->value, true) ?? [];
-                                        @endphp
-                                        <div id="dasarHukumList">
-                                            @foreach($poinList as $i => $poin)
-                                                <div class="d-flex align-items-center gap-2 mb-2 dasar-hukum-row">
-                                                    <span class="badge bg-primary fs-6" style="width:32px; text-align:center; display:inline-block;">{{ $i + 1 }}</span>
-                                                    <input type="text" class="form-control"
-                                                        name="settings[dasar_hukum][]"
-                                                        value="{{ $poin }}"
-                                                        placeholder="Teks dasar hukum...">
-                                                    @if($i >= 2)
-                                                        <button type="button" class="btn btn-danger btn-sm btn-remove-poin flex-shrink-0"
-                                                            onclick="removePoin(this)" title="Hapus">
-                                                            <i class="fa fa-times"></i>
-                                                        </button>
-                                                    @endif
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mt-2">
-                                            <small class="text-muted">
-                                                <i class="fa fa-info-circle me-1"></i>
-                                                Digunakan pada: <strong>PDF Surat Kuasa Member</strong>
-                                            </small>
-                                            <button type="button" class="btn btn-primary btn-sm"
-                                                onclick="addPoin()">
-                                                <i class="fa fa-plus me-1"></i> Tambah Poin
-                                            </button>
-                                        </div>
-
-                                    @elseif ($setting->key === \App\Models\Setting::KUASA_TEKS)
-                                        <textarea class="form-control mb-1"
-                                            name="settings[{{ $key }}]"
-                                            rows="5"
-                                            placeholder="Masukkan teks kuasa...">{{ $setting->value }}</textarea>
-
-                                    @else
-                                        <input type="text" class="form-control mb-1"
-                                            name="settings[{{ $key }}]"
-                                            value="{{ $setting->value }}"
-                                            placeholder="Masukkan nilai...">
-                                    @endif
-
-                                    @if ($setting->key !== \App\Models\Setting::DASAR_HUKUM)
-                                    <small class="text-muted">
-                                        <i class="fa fa-info-circle me-1"></i>
-                                        Digunakan pada:
-                                        <strong>
-                                            @if ($setting->key === \App\Models\Setting::EMAIL_ORGANISASI)
-                                                Header Kop PDF (Member & Pesan)
-                                            @elseif ($setting->key === \App\Models\Setting::KUASA_TEKS)
-                                                PDF Surat Kuasa Member
-                                            @else
-                                                Sistem
-                                            @endif
-                                        </strong>
-                                    </small>
-                                    @endif
-                                </div>
-                            @endforeach
-
-                            <div class="d-flex justify-content-end mt-3">
-                                <button type="submit" class="btn btn-success px-4">
-                                    <i class="fa fa-save me-1"></i> Update
-                                </button>
-                            </div>
-                        </form>
-
-                    </div>
-                </div>
-            </div>
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Pengaturan Sistem & Dokumen</h1>
+            <p class="text-slate-500 text-sm mt-0.5">Konfigurasi variabel global, kop surat PDF, dan dasar hukum surat kuasa.</p>
         </div>
     </div>
 
-    @push('scripts')
-        <script>
-            function addPoin() {
-                const list = document.getElementById('dasarHukumList');
-                const rows = list.querySelectorAll('.dasar-hukum-row');
-                const newIndex = rows.length + 1;
-                const div = document.createElement('div');
-                div.className = 'd-flex align-items-center gap-2 mb-2 dasar-hukum-row';
-                div.innerHTML = `
-                    <span class="badge bg-primary fs-6" style="width:32px; text-align:center; display:inline-block;">${newIndex}</span>
-                    <input type="text" class="form-control" name="settings[dasar_hukum][]"
-                        placeholder="Teks dasar hukum...">
-                    <button type="button" class="btn btn-danger btn-sm btn-remove-poin flex-shrink-0"
-                        onclick="removePoin(this)" title="Hapus">
-                        <i class="fa fa-times"></i>
-                    </button>
-                `;
-                list.appendChild(div);
-                renumberPoin();
-            }
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Parameter Konfigurasi</h3>
+        </div>
+        <form action="{{ route('settings.update') }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="card-body space-y-6">
+                @foreach ($settings as $key => $setting)
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <label class="form-label font-bold text-slate-900 mb-0">{{ $setting->label }}</label>
+                            @if ($setting->key === \App\Models\Setting::DASAR_HUKUM)
+                                <button type="button" class="btn btn-sm btn-primary gap-1" onclick="addPoin()">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                    <span>Tambah Poin</span>
+                                </button>
+                            @endif
+                        </div>
 
-            function removePoin(btn) {
-                btn.closest('.dasar-hukum-row').remove();
-                renumberPoin();
-            }
+                        @if ($setting->key === \App\Models\Setting::DASAR_HUKUM)
+                            @php
+                                $poinList = json_decode($setting->value, true) ?? [];
+                            @endphp
+                            <div id="dasarHukumList" class="space-y-2 pt-2">
+                                @foreach($poinList as $i => $poin)
+                                    <div class="flex items-center gap-2 dasar-hukum-row">
+                                        <span class="w-7 h-7 rounded-lg bg-primary-600 text-white font-bold text-xs flex items-center justify-center flex-shrink-0 poin-number">
+                                            {{ $i + 1 }}
+                                        </span>
+                                        <input type="text" class="input flex-1"
+                                            name="settings[dasar_hukum][]"
+                                            value="{{ $poin }}"
+                                            placeholder="Teks dasar hukum...">
+                                        @if($i >= 2)
+                                            <button type="button" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg flex-shrink-0 transition-colors"
+                                                onclick="removePoin(this)" title="Hapus Poin">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                            </button>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                            <p class="text-xs text-slate-400 mt-2">
+                                Digunakan pada: <strong>PDF Surat Kuasa Member</strong>
+                            </p>
 
-            function renumberPoin() {
-                const rows = document.querySelectorAll('#dasarHukumList .dasar-hukum-row');
-                rows.forEach((row, i) => {
-                    const badge = row.querySelector('.badge');
-                    if (badge) badge.textContent = i + 1;
-                });
-            }
-        </script>
-    @endpush
+                        @elseif ($setting->key === \App\Models\Setting::KUASA_TEKS)
+                            <textarea class="input"
+                                name="settings[{{ $key }}]"
+                                rows="4"
+                                placeholder="Masukkan teks kuasa...">{{ $setting->value }}</textarea>
+                            <p class="text-xs text-slate-400 mt-1">
+                                Digunakan pada: <strong>PDF Surat Kuasa Member</strong>
+                            </p>
+
+                        @else
+                            <input type="text" class="input"
+                                name="settings[{{ $key }}]"
+                                value="{{ $setting->value }}"
+                                placeholder="Masukkan nilai...">
+                            <p class="text-xs text-slate-400 mt-1">
+                                Digunakan pada:
+                                <strong>
+                                    @if ($setting->key === \App\Models\Setting::EMAIL_ORGANISASI)
+                                        Header Kop PDF (Member & Pesan)
+                                    @else
+                                        Sistem Administrasi
+                                    @endif
+                                </strong>
+                            </p>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="card-footer flex items-center justify-end gap-3">
+                <button type="submit" class="btn btn-primary shadow-primary">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <span>Simpan Pengaturan</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+@push('scripts')
+<script>
+    function addPoin() {
+        const list = document.getElementById('dasarHukumList');
+        const rows = list.querySelectorAll('.dasar-hukum-row');
+        const newIndex = rows.length + 1;
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-2 dasar-hukum-row';
+        div.innerHTML = `
+            <span class="w-7 h-7 rounded-lg bg-primary-600 text-white font-bold text-xs flex items-center justify-center flex-shrink-0 poin-number">${newIndex}</span>
+            <input type="text" class="input flex-1" name="settings[dasar_hukum][]" placeholder="Teks dasar hukum...">
+            <button type="button" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg flex-shrink-0 transition-colors" onclick="removePoin(this)" title="Hapus">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        `;
+        list.appendChild(div);
+        renumberPoin();
+    }
+
+    function removePoin(btn) {
+        btn.closest('.dasar-hukum-row').remove();
+        renumberPoin();
+    }
+
+    function renumberPoin() {
+        const rows = document.querySelectorAll('#dasarHukumList .dasar-hukum-row');
+        rows.forEach((row, i) => {
+            const num = row.querySelector('.poin-number');
+            if (num) num.textContent = i + 1;
+        });
+    }
+</script>
+@endpush
 @endsection

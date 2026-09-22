@@ -1,430 +1,192 @@
 @extends('layouts.master')
 
-@section('title')
-    Data Pesan
+@section('title', 'Pesan & Aspirasi')
+
+@section('breadcrumb')
+    <span class="text-slate-700 font-medium">Pesan & Aspirasi</span>
 @endsection
 
-@push('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-    <style>
-        .table-responsive table {
-            white-space: nowrap;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* Styling Notifikasi Tiket Baru (Toast Premium) */
-        .new-ticket-toast-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 9999;
-            width: 320px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            border-left: 5px solid #AA2224;
-            overflow: hidden;
-        }
-
-        .dark-only .new-ticket-toast-container {
-            background: rgba(30, 31, 34, 0.95);
-            border-left: 5px solid #AA2224;
-            color: #fff;
-        }
-
-        .toast-content {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            position: relative;
-        }
-
-        .toast-icon {
-            width: 50px;
-            height: 50px;
-            background: rgba(170, 34, 36, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-        }
-
-        .toast-icon i {
-            font-size: 20px;
-            color: #AA2224;
-        }
-
-        .toast-body h6 {
-            margin: 0 0 5px 0;
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .toast-body p {
-            margin: 0 0 10px 0;
-            font-size: 13px;
-            color: #666;
-        }
-
-        .dark-only .toast-body p {
-            color: #ccc;
-        }
-
-        .btn-refresh-now {
-            border-radius: 8px !important;
-            padding: 5px 15px !important;
-            font-weight: 600 !important;
-            transition: all 0.3s ease;
-            background-color: #AA2224 !important;
-            border-color: #AA2224 !important;
-        }
-
-        .btn-refresh-now:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(170, 34, 36, 0.3);
-            background-color: #8a1b1d !important;
-            border-color: #8a1b1d !important;
-        }
-
-        .btn-close-toast {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            color: #999;
-            font-size: 14px;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .btn-close-toast:hover {
-            color: #ff4d4d;
-        }
-    </style>
-@endpush
-
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Header Create -->
-            <div class="col-md-12">
-                <div class="card p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Data Pesan</h5>
-                        <button class="btn btn-success btn-xs" onclick="playNotificationSound()"
-                            title="Cek Suara Notifikasi">
-                            <i class="fa fa-volume-up me-1"></i> Cek Suara
-                        </button>
-                    </div>
-                </div>
-            </div>
+<div class="space-y-6">
 
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-
-                        {{-- Alert sukses --}}
-                        @if (session('success'))
-                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        {{-- Table untuk list tickets --}}
-                        @if ($tickets->count() > 0)
-                            <div class="table-responsive">
-                                <table class="display" id="basic-1">
-                                    <thead>
-                                        <tr>
-                                            <th class="dt-col-no">No</th>
-                                            <th>Nama</th>
-                                            <th>Tipe</th>
-                                            <th>Status</th>
-                                            <th>Tanggal Pesan</th>
-                                            <th>PDF</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($tickets as $ticket)
-                                            <tr id="ticket-row-{{ $ticket->id }}">
-                                                <td class="dt-col-no">{{ $loop->iteration }}</td>
-                                                <td>
-                                                    {{ $ticket->user->name }}
-                                                    <span id="unread-badge-container-{{ $ticket->id }}">
-                                                        @if ($ticket->unread_count > 0)
-                                                            <span class="badge rounded-pill bg-danger ms-1"
-                                                                style="font-size: 10px;">
-                                                                {{ $ticket->unread_count }} Pesan Baru
-                                                            </span>
-                                                        @endif
-                                                    </span>
-                                                </td>
-
-                                                {{-- Badge untuk TYPE --}}
-                                                <td>
-                                                    @if ($ticket->type == 'report')
-                                                        <span class="badge badge-report">Report</span>
-                                                    @elseif($ticket->type == 'question')
-                                                        <span class="badge badge-question">Question</span>
-                                                    @else
-                                                        <span class="badge badge-suggestion">Suggestion</span>
-                                                    @endif
-                                                </td>
-
-
-                                                {{-- Badge untuk STATUS --}}
-                                                <td id="status-container-{{ $ticket->id }}">
-                                                    @switch($ticket->status)
-                                                        @case('pending')
-                                                            <span class="badge badge-pending">Pending</span>
-                                                        @break
-
-                                                        @case('responded')
-                                                            <span class="badge badge-responded">Responded</span>
-                                                        @break
-
-                                                        @case('processed')
-                                                            <span class="badge badge-processed">Processed</span>
-                                                        @break
-
-                                                        @case('done')
-                                                            <span class="badge badge-done">Done</span>
-                                                        @break
-
-                                                        @case('rejected')
-                                                            <span class="badge badge-rejected">Rejected</span>
-                                                        @break
-                                                    @endswitch
-                                                </td>
-
-                                                <td>{{ $ticket->created_at->format('d/m/y H:i') }}</td>
-
-
-
-                                                <td>
-                                                    <a href="{{ route('tickets.pdf', $ticket->id) }}"
-                                                        class="btn-premium btn-premium-success" target="_blank">
-                                                        <i class="fa fa-paperclip"></i> Dengan Lampiran
-                                                    </a>
-
-                                                    <a href="{{ route('tickets.pdf', $ticket->id) }}?hide_attachment=1"
-                                                        class="btn-premium btn-premium-warning" target="_blank">
-                                                        <i class="fa fa-file-text-o"></i> Tanpa Lampiran
-                                                    </a>
-
-                                                    @if ($ticket->attachment)
-                                                        <a href="{{ url('storage/' . $ticket->attachment) }}"
-                                                            target="_blank" class="btn-premium btn-premium-light">
-                                                            <i class="fa fa-eye"></i> Lihat Lampiran
-                                                        </a>
-                                                    @endif
-                                                </td>
-
-                                                <td>
-                                                    <!-- Reply button -->
-                                                    <a href="{{ route('tickets.edit', $ticket->id) }}"
-                                                        class="btn btn-success btn-xs">
-                                                        Balas
-                                                    </a>
-
-                                                    <!-- Delete button -->
-                                                    <a href="#" class="btn btn-danger btn-xs" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteModal"
-                                                        data-action="{{ route('tickets.destroy', $ticket->id) }}"
-                                                        data-name="{{ $ticket->name }}">
-                                                        Hapus
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        @else
-                            <div class="text-center p-5">
-                                <span class="text-muted">Tidak ada data pesan</span>
-                            </div>
-                        @endif
-                        {{-- End Table --}}
-                    </div>
-                </div>
-            </div>
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Pesan & Aspirasi Anggota</h1>
+            <p class="text-slate-500 text-sm mt-0.5">Kelola pertanyaan, laporan ketenagakerjaan, dan aspirasi anggota serikat.</p>
         </div>
     </div>
 
-    {{-- Modal Delete (global) --}}
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Konfirmasi Hapus</h5>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Apakah Anda yakin ingin menghapus pesan ini <strong id="deleteItemName"></strong>?</p>
-                </div>
-                <div class="modal-footer">
-                    <form id="deleteForm" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-light" type="button" data-bs-dismiss="modal">Tutup</button>
-                        <button class="btn btn-danger" type="submit">Hapus</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- End Modal Delete --}}
+    {{-- Data Table Card --}}
+    <div class="card">
+        @if ($tickets->count() > 0)
+            <x-table>
+                <x-slot name="header">
+                    <th class="w-12 text-center">No</th>
+                    <th>Nama Anggota</th>
+                    <th>Kategori</th>
+                    <th>Status</th>
+                    <th>Tanggal Masuk</th>
+                    <th>Dokumen / Lampiran</th>
+                    <th class="text-right">Aksi</th>
+                </x-slot>
 
+                @foreach ($tickets as $ticket)
+                    <tr id="ticket-row-{{ $ticket->id }}">
+                        <td class="text-center font-medium text-slate-400 text-xs">{{ $loop->iteration }}</td>
 
-
-    @push('scripts')
-        <!-- Script delete -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const deleteModal = document.getElementById('deleteModal');
-                const deleteForm = document.getElementById('deleteForm');
-                const deleteItemName = document.getElementById('deleteItemName');
-
-                document.querySelectorAll('.btn-danger[data-bs-target="#deleteModal"]').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        deleteForm.action = this.dataset.action;
-                        deleteItemName.textContent = this.dataset.name;
-                    });
-                });
-            });
-        </script>
-
-        <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>
-
-        <script>
-            let currentTotalTickets = {{ $tickets->count() }};
-            let currentUnreadTotal = {{ $tickets->sum('unread_count') }};
-
-            // Fungsi untuk memutar suara
-            function playNotificationSound() {
-                const audio = new Audio("{{ asset('assets/audio/notification.mp3') }}");
-                audio.play().catch(e => {
-                    console.log('Autoplay blocked atau error audio:', e);
-                    // Jika diblokir, beri info sekali saja di console
-                });
-            }
-
-            // Polling untuk update status dan unread count secara real-time
-            function fetchUnreadData() {
-                fetch("{{ route('tickets.unread.data') }}")
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.status === 'success') {
-                            let newUnreadTotal = 0;
-
-                            // 0. Deteksi Tiket Baru
-                            if (result.total_tickets_count > currentTotalTickets) {
-                                showNewTicketAlert();
-                                currentTotalTickets = result.total_tickets_count;
-                            }
-
-                            result.data.forEach(ticket => {
-                                newUnreadTotal += ticket.unread_count;
-
-                                // 1. Update Unread Badge
-                                const badgeContainer = document.getElementById(
-                                    `unread-badge-container-${ticket.id}`);
-                                if (badgeContainer) {
-                                    if (ticket.unread_count > 0) {
-                                        badgeContainer.innerHTML = `
-                                            <span class="badge rounded-pill bg-danger ms-1" style="font-size: 10px;">
-                                                ${ticket.unread_count} Pesan Baru
-                                            </span>
-                                        `;
-                                    } else {
-                                        badgeContainer.innerHTML = '';
-                                    }
-                                }
-
-                                // 2. Update Status Badge
-                                const statusContainer = document.getElementById(`status-container-${ticket.id}`);
-                                if (statusContainer) {
-                                    let statusHtml = '';
-                                    switch (ticket.status) {
-                                        case 'pending':
-                                            statusHtml = '<span class="badge badge-pending">Pending</span>';
-                                            break;
-                                        case 'responded':
-                                            statusHtml = '<span class="badge badge-responded">Responded</span>';
-                                            break;
-                                        case 'processed':
-                                            statusHtml = '<span class="badge badge-processed">Processed</span>';
-                                            break;
-                                        case 'done':
-                                            statusHtml = '<span class="badge badge-done">Done</span>';
-                                            break;
-                                        case 'rejected':
-                                            statusHtml = '<span class="badge badge-rejected">Rejected</span>';
-                                            break;
-                                    }
-                                    if (statusHtml && statusContainer.innerHTML !== statusHtml) {
-                                        statusContainer.innerHTML = statusHtml;
-                                    }
-                                }
-                            });
-
-                            // 3. Mainkan suara jika total pesan belum dibaca bertambah
-                            if (newUnreadTotal > currentUnreadTotal) {
-                                playNotificationSound();
-                            }
-                            currentUnreadTotal = newUnreadTotal;
-                        }
-                    })
-                    .catch(error => console.error('Error fetching unread data:', error));
-            }
-
-            function showNewTicketAlert() {
-                // Play Sound untuk tiket baru
-                playNotificationSound();
-
-                // Hapus alert lama jika masih ada
-                const oldAlert = document.getElementById('new-ticket-toast');
-                if (oldAlert) oldAlert.remove();
-
-                const alertHtml = `
-                    <div id="new-ticket-toast" class="new-ticket-toast-container animate__animated animate__fadeInRight">
-                        <div class="toast-content">
-                            <div class="toast-icon">
-                                <i class="fa fa-bell animate__animated animate__swing animate__infinite"></i>
+                        <td>
+                            <div class="font-semibold text-slate-800 flex items-center gap-1.5">
+                                <span>{{ $ticket->user->name ?? 'Anggota' }}</span>
+                                <span id="unread-badge-container-{{ $ticket->id }}">
+                                    @if ($ticket->unread_count > 0)
+                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700 animate-pulse">
+                                            {{ $ticket->unread_count }} baru
+                                        </span>
+                                    @endif
+                                </span>
                             </div>
-                            <div class="toast-body">
-                                <h6>Pesan Baru Masuk!</h6>
-                                <p>Silakan refresh untuk melihat data terbaru.</p>
-                                <a href="javascript:location.reload()" class="btn btn-primary btn-xs btn-refresh-now">
-                                    <i class="fa fa-refresh"></i> Refresh Sekarang
+                            <div class="text-xs text-slate-400">NIK: {{ $ticket->user->nik_karyawan ?? '-' }}</div>
+                        </td>
+
+                        <td>
+                            @if ($ticket->type == 'report')
+                                <x-badge variant="danger">Laporan</x-badge>
+                            @elseif ($ticket->type == 'question')
+                                <x-badge variant="info">Pertanyaan</x-badge>
+                            @else
+                                <x-badge variant="primary">Saran / Aspirasi</x-badge>
+                            @endif
+                        </td>
+
+                        <td id="status-container-{{ $ticket->id }}">
+                            @switch($ticket->status)
+                                @case('pending')
+                                    <x-badge variant="warning" dot>Menunggu</x-badge>
+                                    @break
+                                @case('responded')
+                                    <x-badge variant="info" dot>Dibalas</x-badge>
+                                    @break
+                                @case('processed')
+                                    <x-badge variant="secondary" dot>Diproses</x-badge>
+                                    @break
+                                @case('done')
+                                    <x-badge variant="success" dot>Selesai</x-badge>
+                                    @break
+                                @case('rejected')
+                                    <x-badge variant="danger" dot>Ditolak</x-badge>
+                                    @break
+                                @default
+                                    <x-badge variant="secondary">{{ ucfirst($ticket->status) }}</x-badge>
+                            @endswitch
+                        </td>
+
+                        <td class="text-xs text-slate-500 whitespace-nowrap">
+                            {{ $ticket->created_at->format('d/m/Y H:i') }}
+                        </td>
+
+                        <td>
+                            <div class="flex items-center gap-1.5">
+                                <a href="{{ route('tickets.pdf', $ticket->id) }}" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded text-xs font-semibold transition-colors" title="Download PDF Lengkap">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                    <span>PDF</span>
                                 </a>
-                            </div>
-                            <button type="button" class="btn-close-toast" onclick="this.parentElement.parentElement.remove()">
-                                <i class="fa fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                document.body.insertAdjacentHTML('beforeend', alertHtml);
-            }
 
-            // Jalankan polling setiap 5 detik
-            setInterval(fetchUnreadData, 5000);
-        </script>
-    @endpush
+                                @if ($ticket->attachment)
+                                    <a href="{{ asset('storage/' . $ticket->attachment) }}" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 bg-sky-50 text-sky-700 hover:bg-sky-100 rounded text-xs font-semibold transition-colors" title="Lihat Lampiran">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+                                        <span>File</span>
+                                    </a>
+                                @endif
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="flex items-center justify-end gap-1">
+                                <a href="{{ route('tickets.edit', $ticket->id) }}" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-primary-600 text-white rounded-lg text-xs font-semibold hover:bg-primary-700 transition-colors shadow-xs" title="Balas Pesan">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                                    <span>Balas</span>
+                                </a>
+
+                                <button
+                                    type="button"
+                                    @click="$dispatch('confirm-dialog', {
+                                        title: 'Hapus Pesan Aspirasi',
+                                        message: 'Apakah Anda yakin ingin menghapus pesan dari {{ addslashes($ticket->user->name ?? 'Anggota') }}?',
+                                        confirmText: 'Ya, Hapus',
+                                        type: 'danger',
+                                        formAction: '{{ route('tickets.destroy', $ticket->id) }}'
+                                    })"
+                                    class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                    title="Hapus"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </x-table>
+        @else
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                </div>
+                <h3 class="empty-state-title">Belum ada pesan masuk</h3>
+                <p class="empty-state-description">Aspirasi atau pertanyaan dari anggota akan otomatis masuk ke sini.</p>
+            </div>
+        @endif
+    </div>
+
+</div>
+
+@push('scripts')
+<script>
+    let currentTotalTickets = {{ $tickets->count() }};
+    let currentUnreadTotal = {{ $tickets->sum('unread_count') }};
+
+    function playNotificationSound() {
+        const audio = new Audio("{{ asset('assets/audio/notification.mp3') }}");
+        audio.play().catch(e => console.log('Audio error:', e));
+    }
+
+    function fetchUnreadData() {
+        fetch("{{ route('tickets.unread.data') }}")
+            .then(res => res.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    let newUnreadTotal = 0;
+                    if (result.total_tickets_count > currentTotalTickets) {
+                        window.dispatchEvent(new CustomEvent('toast', {
+                            detail: {
+                                type: 'info',
+                                title: 'Pesan Baru Masuk',
+                                message: 'Ada aspirasi baru dari anggota. Silakan muat ulang halaman.'
+                            }
+                        }));
+                        playNotificationSound();
+                        currentTotalTickets = result.total_tickets_count;
+                    }
+
+                    result.data.forEach(ticket => {
+                        newUnreadTotal += ticket.unread_count;
+                        const badgeContainer = document.getElementById(`unread-badge-container-${ticket.id}`);
+                        if (badgeContainer) {
+                            badgeContainer.innerHTML = ticket.unread_count > 0 ?
+                                `<span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700 animate-pulse">${ticket.unread_count} baru</span>` : '';
+                        }
+                    });
+
+                    if (newUnreadTotal > currentUnreadTotal) {
+                        playNotificationSound();
+                    }
+                    currentUnreadTotal = newUnreadTotal;
+                }
+            })
+            .catch(err => console.error(err));
+    }
+
+    setInterval(fetchUnreadData, 5000);
+</script>
+@endpush
 @endsection

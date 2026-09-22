@@ -1,163 +1,100 @@
 @extends('layouts.master')
 
-@section('title')
-    Profil Saya
+@section('title', 'Profil Akun Saya')
+
+@section('breadcrumb')
+    <span class="text-slate-700 font-medium">Profil Saya</span>
 @endsection
 
-@push('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-@endpush
-
-@push('css')
-@endpush
-
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Header Edit -->
-            <div class="col-md-12">
-                <div class="card p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        {{-- Teks di kiri --}}
-                        <h5 class="fw-bold mb-0">Edit Profile</h5>
+<div class="max-w-4xl space-y-6">
 
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Card Edit -->
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-
-                        {{-- Alert sukses --}}
-                        @if (session('success'))
-                            <div class="alert alert-soft-success alert-dismissible fade show" role="alert">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        {{-- Alert Error --}}
-                        @if ($errors->any())
-                            <div class="alert alert-soft-danger alert-dismissible fade show" role="alert">
-                                <ul class="mb-0">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        {{-- Form untuk edit profile --}}
-                        <form method="POST" action="{{ route('profile.update') }}" class="form theme-form"
-                            enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-
-
-                            <!-- Name -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Nama</label>
-                                        <input class="form-control" type="text" name="name"
-                                            value="{{ old('name', $user->name) }}" required />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Username -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Username</label>
-                                        <input class="form-control" type="text" name="username"
-                                            value="{{ old('username', $user->username) }}" required />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Email -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Email</label>
-                                        <input class="form-control" type="email" name="email"
-                                            value="{{ old('email', $user->email) }}" required />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Image -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Foto</label>
-                                        <input class="form-control @error('image_path') is-invalid @enderror" type="file"
-                                            name="image_path" accept="image/*">
-
-                                        <div class="d-flex align-items-center mt-2">
-                                            <small class="text-muted">
-                                                @if ($user->image_path)
-                                                    <span class="text-success"><i class="fa fa-check-circle"></i>
-                                                        Terunggah:</span>
-                                                    <span class="fw-medium">{{ basename($user->image_path) }}</span>
-                                                @else
-                                                    <span class="text-muted"><i>Belum ada file yang dipilih</i></span>
-                                                @endif
-                                            </small>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted">Format: <b>JPG, PNG, JPEG</b> (Maks: 5MB)</small>
-                                        </div>
-
-                                        @error('image_path')
-                                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Password -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Password</label>
-                                        <input class="form-control" type="text" name="password"
-                                            value="{{ old('password', $user->password_hint) }}" />
-                                        <small class="text-muted">
-                                            Password saat ini: <strong class="text-danger">{{ $user->password_hint ?? '-' }}</strong>
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <!-- Button Update -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="text-end">
-                                        <button class="btn btn-success" type="submit">
-                                            <i class="fa fa-save me-1"></i> Update
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        {{-- End Form --}}
-
-                    </div>
-                </div>
-            </div>
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Pengaturan Profil Pengguna</h1>
+            <p class="text-slate-500 text-sm mt-0.5">Kelola identitas akun administrator, email, foto profil, dan kata sandi.</p>
         </div>
     </div>
 
+    {{-- Alert Errors --}}
+    @if ($errors->any())
+        <x-alert type="danger" title="Terjadi Kesalahan Input">
+            <ul class="list-disc list-inside space-y-1 text-sm">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </x-alert>
+    @endif
 
-    @push('scripts')
-    @endpush
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Informasi Akun</h3>
+        </div>
+        <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="card-body space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {{-- Nama --}}
+                    <div>
+                        <label class="form-label" for="name">Nama Lengkap <span class="text-red-500">*</span></label>
+                        <input class="input @error('name') border-red-500 @enderror" type="text" id="name" name="name" value="{{ old('name', $user->name) }}" required />
+                        @error('name') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
+
+                    {{-- Username --}}
+                    <div>
+                        <label class="form-label" for="username">Username Login <span class="text-red-500">*</span></label>
+                        <input class="input @error('username') border-red-500 @enderror" type="text" id="username" name="username" value="{{ old('username', $user->username) }}" required />
+                        @error('username') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
+
+                    {{-- Email --}}
+                    <div>
+                        <label class="form-label" for="email">Alamat Email <span class="text-red-500">*</span></label>
+                        <input class="input @error('email') border-red-500 @enderror" type="email" id="email" name="email" value="{{ old('email', $user->email) }}" required />
+                        @error('email') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
+
+                    {{-- Password --}}
+                    <div>
+                        <label class="form-label" for="password">Kata Sandi Baru (Opsional)</label>
+                        <input class="input @error('password') border-red-500 @enderror" type="text" id="password" name="password" value="{{ old('password', $user->password_hint) }}" placeholder="Ketik kata sandi baru" />
+                        <p class="form-help text-xs text-slate-500">Kata sandi saat ini: <strong class="text-primary-700">{{ $user->password_hint ?? '-' }}</strong></p>
+                        @error('password') <p class="form-error">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+
+                {{-- Section Foto --}}
+                <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3">
+                    <label class="form-label font-semibold text-slate-800">Foto Profil Administrator</label>
+                    <div class="flex items-center gap-4">
+                        @if ($user->image_path)
+                            <img src="{{ asset('storage/' . $user->image_path) }}" alt="" class="w-16 h-16 rounded-xl object-cover border border-slate-200 shadow-xs" />
+                        @else
+                            <div class="w-16 h-16 rounded-xl bg-primary-600 text-white font-bold text-xl flex items-center justify-center shadow-xs">
+                                {{ strtoupper(substr($user->name ?? 'A', 0, 1)) }}
+                            </div>
+                        @endif
+                        <div class="flex-1">
+                            <x-file-input id="image_path" name="image_path" accept="image/*" />
+                            <p class="form-help text-xs text-slate-500 mt-1">Format: JPG, PNG, JPEG (Maks: 5MB)</p>
+                        </div>
+                    </div>
+                    @error('image_path') <p class="form-error">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div class="card-footer flex items-center justify-end gap-3">
+                <button type="submit" class="btn btn-primary shadow-primary">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <span>Perbarui Profil</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
 @endsection
