@@ -24,7 +24,7 @@
 
     <!-- Content Card -->
     <x-card>
-        <div class="space-y-6 max-w-4xl">
+        <div class="space-y-6 w-full">
             <div>
                 <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400">Judul Program Sosial</dt>
                 <dd class="mt-1 text-lg font-semibold text-slate-900">{{ $social->title }}</dd>

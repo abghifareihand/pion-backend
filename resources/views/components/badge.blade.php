@@ -1,5 +1,16 @@
-@props(['type' => 'primary'])
+@props([
+    'type' => null,
+    'variant' => null,
+    'dot' => false,
+])
 
-<span {{ $attributes->merge(['class' => 'badge badge-' . $type]) }}>
+@php
+    $badgeType = $variant ?? $type ?? 'primary';
+@endphp
+
+<span {{ $attributes->merge(['class' => 'badge badge-' . $badgeType]) }}>
+    @if($dot)
+        <span class="w-1.5 h-1.5 rounded-full bg-current opacity-80 shrink-0"></span>
+    @endif
     {{ $slot }}
 </span>

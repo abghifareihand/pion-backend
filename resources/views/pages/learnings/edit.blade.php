@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-<div class="max-w-4xl space-y-6">
+<div class="w-full space-y-6">
 
     {{-- Page Header --}}
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -70,7 +70,7 @@
                     @endif
                     <div>
                         <label class="text-xs text-slate-500 mb-1 block">Unggah Foto Baru (opsional)</label>
-                        <input class="input @error('image') border-red-500 @enderror" type="file" name="image" accept=".jpg,.jpeg,.png" />
+                        <x-file-input name="image" accept=".jpg,.jpeg,.png" />
                     </div>
                 </div>
 
@@ -90,7 +90,7 @@
                     @endif
                     <div>
                         <label class="text-xs text-slate-500 mb-1 block">Unggah Modul Baru (opsional)</label>
-                        <input class="input @error('file') border-red-500 @enderror" type="file" name="file" accept=".pdf,.doc,.docx" />
+                        <x-file-input name="file" accept=".pdf,.doc,.docx" />
                     </div>
                 </div>
             </div>

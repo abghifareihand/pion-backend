@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-<div class="max-w-4xl space-y-6">
+<div class="w-full space-y-6">
 
     {{-- Page Header --}}
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -60,16 +60,16 @@
                     {{-- Foto Cover --}}
                     <div>
                         <label class="form-label" for="image">Foto Sampul / Cover</label>
-                        <input class="input @error('image') border-red-500 @enderror" type="file" id="image" name="image" accept=".jpg,.jpeg,.png" />
-                        <p class="form-help text-xs text-slate-500">Format: JPG, PNG (Maks 2MB)</p>
+                        <x-file-input id="image" name="image" accept=".jpg,.jpeg,.png" />
+                        <p class="form-help text-xs text-slate-500 mt-1">Format: JPG, PNG (Maks 2MB)</p>
                         @error('image') <p class="form-error">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- File Modul --}}
                     <div>
                         <label class="form-label" for="file">Berkas Modul / Materi (PDF)</label>
-                        <input class="input @error('file') border-red-500 @enderror" type="file" id="file" name="file" accept=".pdf,.doc,.docx" />
-                        <p class="form-help text-xs text-slate-500">Format: PDF, DOC, DOCX (Maks 10MB)</p>
+                        <x-file-input id="file" name="file" accept=".pdf,.doc,.docx" />
+                        <p class="form-help text-xs text-slate-500 mt-1">Format: PDF, DOC, DOCX (Maks 10MB)</p>
                         @error('file') <p class="form-error">{{ $message }}</p> @enderror
                     </div>
                 </div>
