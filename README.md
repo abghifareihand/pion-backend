@@ -1,59 +1,103 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PION Backend System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-## About Laravel
+PION Backend is a robust and scalable administrative system built with **Laravel 12**. This system is designed to handle core business logic, user management, and various other operational integrations securely and efficiently.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🌟 Key Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **User Authentication & Authorization**: Managed securely with Laravel Sanctum.
+- **Reporting & Exporting**: Generate documents easily using PDF (`dompdf`) and Excel (`maatwebsite/excel`).
+- **Firebase Integration**: Seamless connectivity with Firebase for real-time capabilities or cloud functions.
+- **Barcode Generation**: Built-in barcode generation capabilities (`milon/barcode`).
+- **Modern Asset Bundling**: Fast compilation and HMR using Vite.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📸 Screenshots
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Here is a quick look at the user interface and features available within the system:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Overview & Dashboard
+![Screenshot 01](docs/images/screenshot-01.png)
+![Screenshot 02](docs/images/screenshot-02.png)
+![Screenshot 03](docs/images/screenshot-03.png)
 
-## Laravel Sponsors
+### Management & Data Views
+![Screenshot 04](docs/images/screenshot-04.png)
+![Screenshot 05](docs/images/screenshot-05.png)
+![Screenshot 06](docs/images/screenshot-06.png)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Forms & Details
+![Screenshot 07](docs/images/screenshot-07.png)
+![Screenshot 08](docs/images/screenshot-08.png)
+![Screenshot 09](docs/images/screenshot-09.png)
 
-### Premium Partners
+### Settings & Configuration
+![Screenshot 10](docs/images/screenshot-10.png)
+![Screenshot 11](docs/images/screenshot-11.png)
+![Screenshot 12](docs/images/screenshot-12.png)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+*(Note: You can update the titles above to better reflect the specific page shown in each screenshot)*
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🚀 Getting Started
 
-## Code of Conduct
+Follow these steps to get the project up and running on your local machine.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Prerequisites
+- **PHP** >= 8.2
+- **Composer** 
+- **Node.js** & **NPM**
 
-## Security Vulnerabilities
+### Installation
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repository-url>
+   cd pion-backend
+   ```
 
-## License
+2. **Install PHP and Node.js dependencies:**
+   ```bash
+   composer setup
+   ```
+   *Note: The `setup` script is custom-defined in `composer.json` and automatically runs composer install, copies `.env`, generates key, migrates database, and installs/builds npm packages.*
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3. **Configure Environment:**
+   Open the newly generated `.env` file and set up your database credentials and other necessary API keys (like Firebase).
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=pion_db
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+4. **Run the Development Server:**
+   To run both the Laravel server and Vite in a single command, you can use:
+   ```bash
+   composer dev
+   ```
+   Alternatively, you can run them in separate terminals:
+   ```bash
+   php artisan serve
+   npm run dev
+   ```
+
+## 📦 Core Dependencies
+
+- [Laravel Framework v12.0](https://laravel.com/)
+- [Laravel Sanctum v4.0](https://laravel.com/docs/sanctum)
+- [Laravel DOMPDF v3.1](https://github.com/barryvdh/laravel-dompdf)
+- [Maatwebsite Excel v3.1](https://docs.laravel-excel.com/)
+- [Kreait Firebase v6.2](https://firebase-php.readthedocs.io/)
+
+## 📝 License
+
+This project is proprietary and confidential. Unauthorized copying of this project, via any medium, is strictly prohibited.
