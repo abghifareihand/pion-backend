@@ -21,22 +21,16 @@ PION Backend is a robust and scalable administrative system built with **Laravel
 
 Here is a quick look at the user interface and features available within the system:
 
-### Overview & Dashboard
+### Overview
 ![Screenshot 01](docs/images/screenshot-01.png)
 ![Screenshot 02](docs/images/screenshot-02.png)
 ![Screenshot 03](docs/images/screenshot-03.png)
-
-### Management & Data Views
 ![Screenshot 04](docs/images/screenshot-04.png)
 ![Screenshot 05](docs/images/screenshot-05.png)
 ![Screenshot 06](docs/images/screenshot-06.png)
-
-### Forms & Details
 ![Screenshot 07](docs/images/screenshot-07.png)
 ![Screenshot 08](docs/images/screenshot-08.png)
 ![Screenshot 09](docs/images/screenshot-09.png)
-
-### Settings & Configuration
 ![Screenshot 10](docs/images/screenshot-10.png)
 ![Screenshot 11](docs/images/screenshot-11.png)
 ![Screenshot 12](docs/images/screenshot-12.png)
